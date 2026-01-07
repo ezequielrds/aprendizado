@@ -16,55 +16,72 @@
 
 <body>
   <div class="app">
-    <header>
-      <div class="brand">
-        <div class="logo" aria-hidden="true"><span>🔤</span></div>
-        <h1>Aprendizado</h1>
-        <select id="languageSelector" class="language-selector" title="Selecionar idioma" style="display:none;">
-          <option value="pt-BR">🇧🇷 Português</option>
-          <option value="en-US">🇺🇸 English</option>
-          <option value="es-ES">🇪🇸 Español</option>
-          <option value="de-DE">🇩🇪 Deutsch</option>
-        </select>
-        <button id="changeModeBtn" class="btn-ghost btn-sm" title="Mudar modo de jogo">🔄 Trocar</button>
-        <button id="toggleCaseBtn" class="btn-ghost btn-sm" title="Alternar Maiúsculas/Minúsculas">Aa</button>
+    <header class="app-header">
+      <!-- Row 1: Branding + Essential Controls -->
+      <div class="header-row">
+        <div class="brand">
+          <div class="logo" aria-hidden="true"><span>🔤</span></div>
+          <h1>Aprendizado</h1>
+        </div>
+        <div class="header-controls">
+          <select id="languageSelector" class="language-selector" title="Selecionar idioma" aria-label="Selecionar idioma" style="display:none;">
+            <option value="pt-BR">🇧🇷 Português</option>
+            <option value="en-US">🇺🇸 English</option>
+            <option value="es-ES">🇪🇸 Español</option>
+            <option value="de-DE">🇩🇪 Deutsch</option>
+          </select>
+          <button id="changeModeBtn" class="btn-ghost btn-sm" title="Mudar modo de jogo" aria-label="Mudar modo de jogo">🔄 Trocar</button>
+          <button id="toggleCaseBtn" class="btn-ghost btn-sm" title="Alternar Maiúsculas/Minúsculas" aria-label="Alternar maiúsculas e minúsculas">Aa</button>
+        </div>
       </div>
-      <div class="stats">
-        <div class="stat" title="Nível atual">
-          <span>Nível</span>
-          <b id="levelDisplay">1</b><span class="medal">🏅</span>
+
+      <!-- Row 2: Status Chips + Actions -->
+      <div class="status-row">
+        <div class="stats-container">
+          <div class="stats">
+            <div class="stat" title="Nível atual">
+              <span>Nível</span>
+              <b id="levelDisplay">1</b><span class="medal">🏅</span>
+            </div>
+            <div class="stat" title="Sequência atual">
+              <span>Sequência</span>
+              <b id="streakDisplay">0</b><span class="star">🔥</span>
+            </div>
+            <div class="stat" title="Recorde desta sessão">
+              <span>Recorde</span>
+              <b id="highScore">0</b><span class="star">🔥</span>
+            </div>
+          </div>
         </div>
-        <div class="stat" title="Sequência atual">
-          <span>Sequência</span>
-          <b id="streakDisplay">0</b><span class="star">🔥</span>
+        <div class="status-actions">
+          <button id="resetRecordBtn" class="btn-icon-large" title="Zerar TUDO (nível, recorde e sequência)" aria-label="Zerar nível, recorde e sequência">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+              stroke-linecap="round" stroke-linejoin="round">
+              <path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"></path>
+              <path d="M21 3v5h-5"></path>
+              <path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"></path>
+              <path d="M8 16H3v5"></path>
+            </svg>
+          </button>
+          <div id="mascot" class="mascot">🐶</div>
         </div>
-        <div class="stat" title="Recorde desta sessão">
-          <span>Recorde</span>
-          <b id="highScore">0</b><span class="star">🔥</span>
+      </div>
+
+      <!-- Row 3: Progress Bar -->
+      <div class="progress-row">
+        <div class="progress-container">
+          <div class="progress-label">
+            <span>Progresso do Nível</span>
+            <span id="progressText">0 / 4</span>
+          </div>
+          <div class="progress-bar">
+            <div id="progressFill" class="progress-fill"></div>
+          </div>
         </div>
-        <button id="resetRecordBtn" class="stat btn-icon-large" title="Zerar TUDO (nível, recorde e sequência)">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
-            stroke-linecap="round" stroke-linejoin="round">
-            <path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"></path>
-            <path d="M21 3v5h-5"></path>
-            <path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"></path>
-            <path d="M8 16H3v5"></path>
-          </svg>
-        </button>
       </div>
     </header>
 
     <section class="panel word-card" aria-live="polite">
-      <div class="progress-container">
-        <div class="progress-label">
-          <span>Progresso do Nível</span>
-          <span id="progressText">0 / 4</span>
-        </div>
-        <div class="progress-bar">
-          <div id="progressFill" class="progress-fill"></div>
-        </div>
-      </div>
-      <div id="mascot" class="mascot">🐶</div>
       <div id="wordDifficulty" class="word-difficulty">📖 Fácil</div>
       <div id="word" class="word" aria-label="Palavra atual">—</div>
       <div class="toolbar">
