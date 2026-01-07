@@ -47,7 +47,7 @@ body {
 }
 
 /* =====================================================
-   HEADER RESTRUCTURE - NEW LAYOUT
+   HEADER LAYOUT - FIXED AND IMPROVED
    ===================================================== */
 
 /* App Header Container */
@@ -131,6 +131,7 @@ body {
   transition: .3s all;
   min-height: 44px; /* Touch target minimum */
   white-space: nowrap;
+  flex-shrink: 0;
 }
 
 .stat > span:first-child {
@@ -155,13 +156,17 @@ body {
   animation: pulse 2s ease-in-out infinite;
 }
 
-/* Mascot positioning */
+/* Mascot positioning - ensure it stays in status-row */
 .mascot {
   font-size: 48px;
   transition: .3s all;
   filter: drop-shadow(0 4px 6px rgba(0, 0, 0, .3));
   cursor: pointer;
   flex-shrink: 0;
+  /* Reset any positioning that might cause it to float */
+  position: static;
+  float: none;
+  margin: 0;
 }
 
 .mascot:hover {
@@ -214,7 +219,7 @@ body {
 /* Mobile: ≤480px */
 @media (max-width: 480px) {
   .app-header {
-    gap: 16px;
+    gap: 12px;
   }
 
   .header-row {
@@ -226,17 +231,18 @@ body {
   }
 
   .header-controls {
-    flex: 1;
-    justify-content: flex-end;
+    gap: 6px;
   }
 
-  /* Status row: make stats scrollable horizontally */
+  /* Status row: stack vertically with proper spacing */
   .status-row {
     flex-direction: column;
     align-items: stretch;
     gap: 12px;
+    flex-wrap: nowrap;
   }
 
+  /* Stats container: horizontal scroll */
   .stats-container {
     width: 100%;
     overflow-x: auto;
@@ -252,6 +258,7 @@ body {
 
   .stats {
     flex-wrap: nowrap;
+    gap: 8px;
     padding-bottom: 4px;
     /* Scroll snap for better UX */
     scroll-snap-type: x mandatory;
@@ -260,21 +267,30 @@ body {
   .stat {
     flex-shrink: 0;
     scroll-snap-align: start;
+    min-width: fit-content;
   }
 
+  /* Status actions: always visible, side by side */
   .status-actions {
     width: 100%;
     justify-content: space-between;
+    flex-shrink: 0;
   }
 
   .mascot {
-    font-size: 42px;
+    font-size: 40px;
   }
 
-  /* Hide button text on very small screens, keep icon */
+  /* Smaller buttons on mobile */
   .btn-sm {
     padding: 8px 10px;
     font-size: 12px;
+  }
+
+  .btn-icon-large {
+    min-height: 40px;
+    min-width: 40px;
+    padding: 8px;
   }
 }
 
@@ -282,10 +298,15 @@ body {
 @media (min-width: 481px) and (max-width: 768px) {
   .stats {
     flex-wrap: wrap;
+    gap: 10px;
   }
 
   .status-row {
     align-items: center;
+  }
+
+  .mascot {
+    font-size: 44px;
   }
 }
 
@@ -297,10 +318,12 @@ body {
 
   .stats {
     flex-wrap: nowrap;
+    gap: 12px;
   }
 
   .status-row {
     align-items: center;
+    flex-wrap: nowrap;
   }
 }
 
@@ -852,36 +875,6 @@ footer {
 .mode-text small {
   font-size: 15px;
   color: var(--muted)
-}
-
-.btn-icon-large {
-  background: rgba(255, 255, 255, .04);
-  border: 1px solid rgba(255, 255, 255, .06);
-  color: var(--text);
-  cursor: pointer;
-  padding: 10px;
-  display: grid;
-  place-items: center;
-  border-radius: 14px;
-  transition: .3s all;
-  min-height: 44px;
-  min-width: 44px;
-  flex-shrink: 0;
-}
-
-.btn-icon-large:hover {
-  background: rgba(239, 68, 68, .2);
-  border-color: var(--danger);
-  color: var(--danger);
-  transform: translateY(-2px);
-}
-
-.btn-sm {
-  padding: 8px 12px;
-  font-size: 13px;
-  border-radius: 10px;
-  min-height: 36px;
-  font-weight: 600;
 }
 
 /* Language Selector */
