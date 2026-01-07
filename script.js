@@ -646,6 +646,7 @@ function setMode(mode) {
   // Mostrar ou ocultar seção de configuração de palavras
   if (mode === 'colors' || mode === 'numbers') {
     el.configSection.style.display = 'none';
+    el.configSection.open = false; // Garantir que está fechado
   } else {
     el.configSection.style.display = 'block';
   }
@@ -668,17 +669,12 @@ function setMode(mode) {
     for (let i = numbersRange.min; i <= numbersRange.max; i++) {
       words.push(String(i));
     }
-    el.wordsInput.value = words.join(', ');
-    el.configSummary.textContent = 'Carregar/editar lista de números';
-    el.configHelp.innerHTML = 'Separe por vírgula, ponto-e-vírgula ou quebra de linha. Ex.: <code>1</code>, <code>2</code>, <code>3</code>';
+    // Não atualizar campos de configuração para números
     el.nextBtn.textContent = 'Próximo número ➜';
   } else if (mode === 'colors') {
     // Para cores, armazenar como JSON string
     words = dbColors.map(c => JSON.stringify(c));
-    const colorNames = dbColors.map(c => getLocalizedColorName(c, selectedLanguage));
-    el.wordsInput.value = colorNames.join(', ');
-    el.configSummary.textContent = 'Carregar/editar lista de cores';
-    el.configHelp.innerHTML = 'Separe por vírgula, ponto-e-vírgula ou quebra de linha. Ex.: <code>Vermelho</code>, <code>Azul</code>, <code>Verde</code>';
+    // Não atualizar campos de configuração para cores
     el.nextBtn.textContent = 'Próxima cor ➜';
   } else {
     words = [...dbPhrases];
