@@ -13,7 +13,7 @@ const numberTranslations = {
             'onze', 'doze', 'treze', 'quatorze', 'quinze', 'dezesseis', 'dezessete', 'dezoito', 'dezenove', 'vinte'],
   'en-US': ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten',
             'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen', 'seventeen', 'eighteen', 'nineteen', 'twenty'],
-  'es-ES': ['cero', 'uno', 'dos', 'tres', 'cuatro', 'cinco', 'seis', 'siete', 'ocho', 'nueve', 'diez',
+  'es-ES': ['cero', 'uno', 'dos', 'tres', 'cuatro', 'cinco', 'siete', 'ocho', 'nueve', 'diez',
             'once', 'doce', 'trece', 'catorce', 'quince', 'dieciséis', 'diecisiete', 'dieciocho', 'diecinueve', 'veinte'],
   'de-DE': ['null', 'eins', 'zwei', 'drei', 'vier', 'fünf', 'sechs', 'sieben', 'acht', 'neun', 'zehn',
             'elf', 'zwölf', 'dreizehn', 'vierzehn', 'fünfzehn', 'sechzehn', 'siebzehn', 'achtzehn', 'neunzehn', 'zwanzig']
@@ -64,7 +64,6 @@ const el = {
   cancelNumbersBtn: document.getElementById('cancelNumbersBtn'),
   changeModeBtn: document.getElementById('changeModeBtn'),
   toggleCaseBtn: document.getElementById('toggleCaseBtn'),
-  streakDisplay: document.getElementById('streakDisplay'),
   configSummary: document.getElementById('configSummary'),
   configHelp: document.getElementById('configHelp'),
   configSection: document.getElementById('configSection'),
@@ -86,10 +85,7 @@ let level = 1; // nível atual
 // Mascotes que mudam com o nível
 const mascots = ['🐶', '🐱', '🐷', '🐘', '🐬', '🐙', '🦉', '🐉', '🦄', '👑'];
 
-
-
 el.highScore.textContent = high;
-
 el.speakBtn.style.display = 'none'; // esconder botão de ouvir inicialmente
 
 // Calcular nível baseado em palavras totais (a cada 4 palavras)
@@ -151,37 +147,34 @@ function renderWord(text, showParts) {
         if (numberTranslations[selectedLanguage] && numberTranslations[selectedLanguage][numValue]) {
           speakText = numberTranslations[selectedLanguage][numValue];
         } else {
-          // Fallback para o número mesmo se não houver tradução
           speakText = text;
         }
       } else {
-        // Para números maiores que 20, usar o número mesmo
         speakText = text;
       }
     }
     
     el.word.innerHTML = `<button class="syllable-btn" data-index="0" data-speak="${speakText}">${displayText}</button>`;
-    
-    // Ocultar botão de ajuda para letras e números
     el.helpBtn.style.display = 'none';
     
-    // adicionar listeners após DOM update
     setTimeout(() => {
       document.querySelectorAll('.syllable-btn').forEach(btn => {
         btn.addEventListener('click', handleSyllableClick);
       });
     }, 0);
-    return; // sair da função
+    return;
   } else if (gameMode === 'colors') {
-    // Para cores, mostrar retângulo colorido
     const colorData = JSON.parse(text);
     const colorName = getLocalizedColorName(colorData, selectedLanguage);
-    el.word.innerHTML = `<button class="color-box" data-index="0" data-color="${colorName}" style="background-color: ${colorData.color}; width: 200px; height: 200px; border-radius: 20px; border: 3px solid #fff; cursor: pointer; box-shadow: 0 10px 25px rgba(0,0,0,0.3); transition: transform 0.2s;"></button>`;
+    el.word.innerHTML = `
+      <div class="color-container" style="display:flex; flex-direction:column; align-items:center; gap:20px;">
+        <button class="color-box" data-index="0" data-color="${colorName}" style="background-color: ${colorData.color}; width: 200px; height: 200px; border-radius: 20px; border: 3px solid #fff; cursor: pointer; box-shadow: 0 10px 25px rgba(0,0,0,0.3); transition: transform 0.2s;"></button>
+        <div id="colorNameDisplay" style="font-size: 32px; font-weight: bold; min-height: 40px; color: var(--text); opacity: 0; transition: opacity 0.3s;">${colorName}</div>
+      </div>
+    `;
     
-    // Ocultar botão de ajuda para cores
     el.helpBtn.style.display = 'none';
     
-    // adicionar listeners após DOM update
     setTimeout(() => {
       document.querySelectorAll('.color-box').forEach(btn => {
         btn.addEventListener('click', handleSyllableClick);
@@ -193,20 +186,18 @@ function renderWord(text, showParts) {
         });
       });
     }, 0);
-    return; // sair da função
+    return;
   } else {
     parts = text.split('-');
     separator = '<span class="syllable" style="opacity:.5">-</span>';
   }
 
-  // Mostrar botão de ajuda para palavras e frases
   el.helpBtn.style.display = 'inline-block';
 
   if (showParts) {
     el.helpBtn.textContent = gameMode === 'phrases' ? 'Esconder palavras' : 'Esconder sílabas';
     el.word.innerHTML = parts.map((p, i) => `<button class="syllable-btn" data-index="${i}">${p}</button>`).join(separator);
     
-    // adicionar listeners após DOM update
     setTimeout(() => {
       document.querySelectorAll('.syllable-btn').forEach(btn => {
         btn.addEventListener('click', handleSyllableClick);
@@ -228,26 +219,28 @@ function handleSyllableClick(e) {
     parts = text.split(' ');
     syllable = parts[index];
   } else if (gameMode === 'letters') {
-    syllable = text; // letra única
+    syllable = text;
   } else if (gameMode === 'numbers') {
-    // Para números, usar data-speak se disponível
     syllable = e.target.dataset.speak || text;
   } else if (gameMode === 'colors') {
-    // Para cores, pegar o nome da cor do atributo data-color
     syllable = e.target.dataset.color;
+    const nameDisplay = document.getElementById('colorNameDisplay');
+    if (nameDisplay) {
+      nameDisplay.style.opacity = '1';
+    }
   } else {
     parts = text.split('-');
     syllable = parts[index];
   }
   
-  // Adicionar animação
   e.target.classList.add('clicked');
   setTimeout(() => e.target.classList.remove('clicked'), 400);
   
+  const langToUse = (gameMode === 'syllables' || gameMode === 'phrases') ? 'pt-BR' : selectedLanguage;
   const u = new SpeechSynthesisUtterance(syllable);
-  const v = getPtVoice();
+  const v = getVoiceForLanguage(langToUse);
   if (v) u.voice = v;
-  u.lang = selectedLanguage;
+  u.lang = langToUse;
   u.rate = 0.95;
   u.pitch = 1.0;
   u.volume = 1.0;
@@ -255,12 +248,10 @@ function handleSyllableClick(e) {
   speechSynthesis.speak(u);
   syllablesClicked.add(index);
   
-  // Para letras, números e cores, não mostrar botão de ouvir
   if (gameMode === 'letters' || gameMode === 'numbers' || gameMode === 'colors') {
-    return; // não fazer mais nada
+    return;
   }
   
-  // Para palavras e frases, mostrar botão de ouvir quando necessário
   if (!parts) {
     parts = gameMode === 'phrases' ? text.split(' ') : text.split('-');
   }
@@ -269,7 +260,6 @@ function handleSyllableClick(e) {
   }
 }
 
-// Atualizar apenas o visual/fala do item atual sem trocar de item
 function updateCurrentItemUI() {
   if (idx < 0) return;
   const w = words[deck[idx]];
@@ -289,13 +279,12 @@ function renderStreak(n) {
   if (n > 0) {
     el.streakDisplay.classList.remove('pulse');
     void el.streakDisplay.offsetWidth;
-    el.streakDisplay.classList.add('pulse'); // Reuse existing pulse animation
+    el.streakDisplay.classList.add('pulse');
   }
 }
 
 function celebrate() {
   setMessage('🎉 Uau! Você bateu seu recorde! Continue assim!', 'win');
-  // confete simples
   const colors = ['#fde047', '#60a5fa', '#f97316', '#22c55e', '#e879f9'];
   for (let i = 0; i < 60; i++) {
     const piece = document.createElement('div');
@@ -313,10 +302,8 @@ function celebrate() {
 }
 
 function updateProgress() {
-  // Progresso dentro do nível atual (0 a 4)
   const currentProgress = totalWords % 4;
   const percentage = (currentProgress / 4) * 100;
-  
   el.progressFill.style.width = percentage + '%';
   el.progressText.textContent = `${currentProgress} / 4`;
 }
@@ -331,7 +318,6 @@ function showAchievement(icon, text) {
 }
 
 function checkAchievements() {
-  // Conquistas baseadas em números totais
   if (totalWords === 5) {
     showAchievement('🌟', 'Primeira Conquista!<br/>5 acertos!');
   } else if (totalWords === 20) {
@@ -340,7 +326,6 @@ function checkAchievements() {
     showAchievement('👑', 'Campeão de Leitura!<br/>50 acertos!');
   }
   
-  // Verificar mudança de nível
   const oldLevel = level;
   calculateLevel();
   if (level > oldLevel) {
@@ -357,22 +342,17 @@ function animateMascot(type = 'happy') {
 }
 
 function playSuccessSound() {
-  // Som de sucesso simples usando Web Audio API
   if (typeof AudioContext !== 'undefined' || typeof webkitAudioContext !== 'undefined') {
     const AudioCtx = window.AudioContext || window.webkitAudioContext;
     const ctx = new AudioCtx();
     const oscillator = ctx.createOscillator();
     const gainNode = ctx.createGain();
-    
     oscillator.connect(gainNode);
     gainNode.connect(ctx.destination);
-    
     oscillator.frequency.value = 800;
     oscillator.type = 'sine';
-    
     gainNode.gain.setValueAtTime(0.3, ctx.currentTime);
     gainNode.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.3);
-    
     oscillator.start(ctx.currentTime);
     oscillator.stop(ctx.currentTime + 0.3);
   }
@@ -405,16 +385,10 @@ function getItemTypePlural(mode) {
 }
 
 function getWordDifficulty(text) {
-  if (gameMode === 'letters') {
-    return { text: '🔤 Letra', color: '#22c55e', hidden: false };
-  }
-  
-  if (gameMode === 'numbers' || gameMode === 'colors') {
-    return { text: '', color: '', hidden: true }; // sem dificuldade para números e cores
-  }
+  if (gameMode === 'letters') return { text: '🔤 Letra', color: '#22c55e', hidden: false };
+  if (gameMode === 'numbers' || gameMode === 'colors') return { text: '', color: '', hidden: true };
   
   const count = gameMode === 'phrases' ? text.split(' ').length : text.split('-').length;
-  
   if (gameMode === 'phrases') {
      if (count <= 3) return { text: '📖 Frase Curta', color: '#22c55e', hidden: false };
      if (count <= 5) return { text: '📗 Frase Média', color: '#3b82f6', hidden: false };
@@ -435,7 +409,6 @@ function loadNewWord() {
   renderWord(w, false);
   setMessage('');
   
-  // Mostrar ou ocultar dificuldade
   const difficulty = getWordDifficulty(w);
   if (difficulty.hidden) {
     el.wordDifficulty.style.display = 'none';
@@ -455,24 +428,18 @@ function updateHighScore() {
   }
 }
 
-// ---------------------- Ações dos botões ----------------------
 el.helpBtn.addEventListener('click', () => {
-  // Se clicar em ajuda, zera a sequência imediatamente
   if (!usedHelp) {
      streak = 0;
      renderStreak(0);
   }
-
-  // alterna exibição
   if (!usedHelp && (el.helpBtn.textContent.startsWith('Mostrar') || el.helpBtn.textContent.startsWith('Ouvir'))) {
-    usedHelp = true; // marcar que houve ajuda nesta palavra
+    usedHelp = true;
     renderWord(words[deck[idx]], true);
     setMessage('Ajuda ativada: este item não vale estrela.', 'warn');
   } else if (el.helpBtn.textContent.startsWith('Esconder')) {
     renderWord(words[deck[idx]], false);
-    // manter aviso de ajuda
   } else {
-    // fallback
     usedHelp = true;
     renderWord(words[deck[idx]], true);
     setMessage('Ajuda ativada: este item não vale ponto.', 'warn');
@@ -487,74 +454,50 @@ el.correctBtn.addEventListener('click', () => {
     setTimeout(loadNewWord, 650);
     return;
   }
-  
-  // Incrementar contadores
   streak++;
   totalWords++;
   sessionWords++;
   localStorage.setItem('readingTotalWords', String(totalWords));
-  
-  // Animações
   el.word.classList.add('bounce');
   setTimeout(() => el.word.classList.remove('bounce'), 600);
   animateMascot('happy');
   playSuccessSound();
-  
-  // Atualizar UI
   renderStreak(streak);
   updateProgress();
-  
-  // Mensagens especiais para combos
   let message = getEncouragingMessage() + ` +1 🎯`;
   if (streak === 3) message = '🔥 3 seguidas! Você está pegando fogo!';
   else if (streak === 5) message = '⚡ 5 seguidas! Incrível!';
   else if (streak === 10) message = '💫 10 seguidas! FENOMENAL!';
-  
   setMessage(message, 'win');
   updateHighScore();
   checkAchievements();
-  
   setTimeout(loadNewWord, 650);
 });
 
 el.nextBtn.addEventListener('click', () => {
-  // Para letras, números e cores, sempre incrementar pontuação (modo treino)
   if (gameMode === 'letters' || gameMode === 'numbers' || gameMode === 'colors') {
-    // Incrementar contadores
     streak++;
     totalWords++;
     sessionWords++;
     localStorage.setItem('readingTotalWords', String(totalWords));
-    
-    // Animações
     el.word.classList.add('bounce');
     setTimeout(() => el.word.classList.remove('bounce'), 600);
     animateMascot('happy');
     playSuccessSound();
-    
-    // Atualizar UI
     renderStreak(streak);
     updateProgress();
-    
-    // Mensagens especiais para combos
     let message = getEncouragingMessage() + ` +1 🎯`;
     if (streak === 3) message = '🔥 3 seguidas! Você está pegando fogo!';
     else if (streak === 5) message = '⚡ 5 seguidas! Incrível!';
     else if (streak === 10) message = '💫 10 seguidas! FENOMENAL!';
-    
     setMessage(message, 'win');
     updateHighScore();
     checkAchievements();
-    
     setTimeout(loadNewWord, 650);
     return;
   }
-  
-  // Para palavras e frases, comportamento original (zera sequência ao pular)
   streak = 0;
   renderStreak(0);
-  
-  // avançar sem pontuar
   if (usedHelp) {
     setMessage('Sem estrela nesta, pois a ajuda foi usada. Você consegue na próxima!');
   } else {
@@ -579,7 +522,6 @@ el.resetBtn.addEventListener('click', () => {
 
 el.resetRecordBtn.addEventListener('click', () => {
   if (confirm('Tem certeza? Isso zerará TUDO: nível, recorde e sequência.')) {
-    // Resetar tudo
     high = 0;
     streak = 0;
     level = 1;
@@ -587,13 +529,10 @@ el.resetRecordBtn.addEventListener('click', () => {
     sessionWords = 0;
     sessionStorage.removeItem('readingStarsHighScore');
     localStorage.removeItem('readingTotalWords');
-    
-    // Atualizar UI
     el.highScore.textContent = '0';
     renderStreak(0);
     calculateLevel();
     updateProgress();
-    
     setMessage('Tudo zerado! Começando do zero! 🔥', 'warn');
   }
 });
@@ -601,7 +540,6 @@ el.resetRecordBtn.addEventListener('click', () => {
 el.loadBtn.addEventListener('click', () => {
   const raw = el.wordsInput.value.trim();
   const parts = raw.split(/[\n,;]+/).map(s => s.trim()).filter(Boolean);
-  
   let onlyValid;
   if (gameMode === 'syllables') {
     onlyValid = parts.filter(w => SYLLABLE_PATTERN.test(w));
@@ -610,50 +548,40 @@ el.loadBtn.addEventListener('click', () => {
       return;
     }
   } else if (gameMode === 'letters') {
-    // No modo letras, aceita apenas letras únicas
     onlyValid = parts.filter(w => LETTER_PATTERN.test(w));
     if (!onlyValid.length) {
       setMessage('Nenhuma letra válida encontrada. Digite apenas letras individuais.', 'danger');
       return;
     }
   } else if (gameMode === 'numbers') {
-    // No modo números, aceita apenas números inteiros
     onlyValid = parts.filter(w => NUMBER_PATTERN.test(w));
     if (!onlyValid.length) {
       setMessage('Nenhum número válido encontrado. Digite apenas números.', 'danger');
       return;
     }
   } else {
-    // No modo frases, aceita qualquer texto não vazio
     onlyValid = parts.filter(w => w.length > 0);
     if (!onlyValid.length) {
       setMessage('Nenhuma frase válida encontrada. Digite pelo menos uma frase.', 'danger');
       return;
     }
   }
-  
   words = onlyValid;
   buildDeck();
   loadNewWord();
   setMessage(`Carregado ${words.length} ${getItemTypePlural(gameMode)}.`, 'muted');
 });
 
-// ---------------------- Controle de Modos ----------------------
-
-// Iniciar em maiúsculas por padrão
 document.body.classList.add('uppercase-mode');
-
 el.toggleCaseBtn.addEventListener('click', () => {
   document.body.classList.toggle('uppercase-mode');
 });
 
 function setMode(mode) {
   gameMode = mode;
-  
-  // Mostrar ou ocultar seção de configuração de palavras
   if (mode === 'colors' || mode === 'numbers') {
     el.configSection.style.display = 'none';
-    el.configSection.open = false; // Garantir que está fechado
+    el.configSection.open = false;
   } else {
     el.configSection.style.display = 'block';
   }
@@ -671,17 +599,13 @@ function setMode(mode) {
     el.configHelp.innerHTML = 'Separe por vírgula, ponto-e-vírgula ou quebra de linha. Ex.: <code>A</code>, <code>B</code>, <code>C</code>';
     el.nextBtn.textContent = 'Próxima letra ➜';
   } else if (mode === 'numbers') {
-    // Gerar números baseado no range
     words = [];
     for (let i = numbersRange.min; i <= numbersRange.max; i++) {
       words.push(String(i));
     }
-    // Não atualizar campos de configuração para números
     el.nextBtn.textContent = 'Próximo número ➜';
   } else if (mode === 'colors') {
-    // Para cores, armazenar como JSON string
     words = dbColors.map(c => JSON.stringify(c));
-    // Não atualizar campos de configuração para cores
     el.nextBtn.textContent = 'Próxima cor ➜';
   } else {
     words = [...dbPhrases];
@@ -690,7 +614,6 @@ function setMode(mode) {
     el.configHelp.innerHTML = 'Separe por quebra de linha. Ex.: <code>O gato mia</code>, <code>A lua brilha</code>';
     el.nextBtn.textContent = 'Próxima frase ➜';
   }
-  
   streak = 0;
   sessionWords = 0;
   buildDeck();
@@ -698,7 +621,6 @@ function setMode(mode) {
   renderStreak(0);
   updateProgress();
   updateLanguageSelectorVisibility();
-  
   el.modeSelection.classList.add('hidden');
 }
 
@@ -706,65 +628,50 @@ el.modeSyllablesBtn.addEventListener('click', () => setMode('syllables'));
 el.modePhrasesBtn.addEventListener('click', () => setMode('phrases'));
 el.modeLettersBtn.addEventListener('click', () => setMode('letters'));
 el.modeColorsBtn.addEventListener('click', () => setMode('colors'));
-
-// Numbers mode: show config modal first
 el.modeNumbersBtn.addEventListener('click', () => {
   el.modeSelection.classList.add('hidden');
   el.numbersConfig.classList.remove('hidden');
 });
 
-// Numbers config slider handlers
 el.minNumber.addEventListener('input', (e) => {
   const value = parseInt(e.target.value);
   el.minNumberValue.textContent = value;
-  // Ensure max is always >= min
   if (parseInt(el.maxNumber.value) < value) {
     el.maxNumber.value = value;
     el.maxNumberValue.textContent = value;
   }
 });
-
 el.maxNumber.addEventListener('input', (e) => {
   const value = parseInt(e.target.value);
   el.maxNumberValue.textContent = value;
-  // Ensure min is always <= max
   if (parseInt(el.minNumber.value) > value) {
     el.minNumber.value = value;
     el.minNumberValue.textContent = value;
   }
 });
-
 el.confirmNumbersBtn.addEventListener('click', () => {
   numbersRange.min = parseInt(el.minNumber.value);
   numbersRange.max = parseInt(el.maxNumber.value);
   el.numbersConfig.classList.add('hidden');
   setMode('numbers');
 });
-
 el.cancelNumbersBtn.addEventListener('click', () => {
   el.numbersConfig.classList.add('hidden');
   el.modeSelection.classList.remove('hidden');
 });
-
 el.changeModeBtn.addEventListener('click', () => {
   el.modeSelection.classList.remove('hidden');
 });
 
-// Language selector handler
 el.languageSelector.addEventListener('change', (e) => {
   selectedLanguage = e.target.value;
   localStorage.setItem('selectedLanguage', selectedLanguage);
-  
-  // Atualizar apenas a interface do item atual (para cores e números) sem trocar de item
   if ((gameMode === 'colors' || gameMode === 'numbers' || gameMode === 'letters') && idx >= 0) {
     updateCurrentItemUI();
   }
 });
-
-// Initialize language selector
 el.languageSelector.value = selectedLanguage;
 
-// Show/hide language selector based on game mode
 function updateLanguageSelectorVisibility() {
   if (gameMode === 'letters' || gameMode === 'numbers' || gameMode === 'colors') {
     el.languageSelector.style.display = 'inline-block';
@@ -773,28 +680,21 @@ function updateLanguageSelectorVisibility() {
   }
 }
 
-// Ouvir palavra (Web Speech API)
 let voices = [];
-
 function getVoiceForLanguage(lang) {
   if (!voices.length) voices = speechSynthesis.getVoices();
-  
-  // Map language codes to voice language patterns
   const langMap = {
     'pt-BR': /pt[-_]br|portuguese.*brazil/i,
     'en-US': /en[-_]us|english.*united.*states/i,
     'es-ES': /es[-_]es|spanish.*spain/i,
     'de-DE': /de[-_]de|german.*germany/i
   };
-  
   const pattern = langMap[lang] || /pt/i;
   return voices.find(v => pattern.test(v.lang) || pattern.test(v.name)) || voices[0];
 }
-
 function getPtVoice() {
   return getVoiceForLanguage(selectedLanguage);
 }
-
 if ('speechSynthesis' in window) {
   speechSynthesis.onvoiceschanged = () => {
     voices = speechSynthesis.getVoices();
@@ -806,10 +706,11 @@ el.speakBtn.addEventListener('click', () => {
     setMessage('Recurso de voz não suportado neste navegador.', 'warn');
     return;
   }
+  const langToUse = (gameMode === 'syllables' || gameMode === 'phrases') ? 'pt-BR' : selectedLanguage;
   const u = new SpeechSynthesisUtterance(stripHyphens(words[deck[idx]]));
-  const v = getPtVoice();
+  const v = getVoiceForLanguage(langToUse);
   if (v) u.voice = v;
-  u.lang = selectedLanguage;
+  u.lang = langToUse;
   u.rate = 0.95;
   u.pitch = 1.0;
   u.volume = 1.0;
@@ -817,7 +718,6 @@ el.speakBtn.addEventListener('click', () => {
   speechSynthesis.speak(u);
 });
 
-// Atalhos: Enter = Acertei, Espaço = Próxima, H = Ajuda
 window.addEventListener('keydown', (e) => {
   if (['INPUT', 'TEXTAREA'].includes(document.activeElement.tagName)) return;
   if (e.key === 'Enter') {
@@ -832,36 +732,24 @@ window.addEventListener('keydown', (e) => {
   }
 });
 
-// Inicialização
 async function initGame() {
   try {
     const [resWords, resPhrases, resLetters, resColors] = await Promise.all([
-      fetch('words.json'),
-      fetch('phrases.json'),
-      fetch('letters.json'),
-      fetch('colors.json')
+      fetch('words.json'), fetch('phrases.json'), fetch('letters.json'), fetch('colors.json')
     ]);
-
     if (!resWords.ok || !resPhrases.ok || !resLetters.ok || !resColors.ok) throw new Error('Erro ao carregar dados');
-
     dbSyllables = await resWords.json();
     dbPhrases = await resPhrases.json();
     dbLetters = await resLetters.json();
     dbColors = await resColors.json();
-    
-    // Inicia sem carregar jogo, espera seleção
-    el.wordsInput.value = dbSyllables.join(', '); // apenas para facilitar edição do modo padrão
-    
+    el.wordsInput.value = dbSyllables.join(', ');
   } catch (error) {
     console.error(error);
     setMessage('Erro ao carregar dados: ' + error.message, 'danger');
   }
 }
-
-// Inicialização
 initGame();
 
-// Registrar service worker para PWA
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
     navigator.serviceWorker.register('./sw.js').catch(err => {
@@ -870,7 +758,6 @@ if ('serviceWorker' in navigator) {
   });
 }
 
-// Interação com mascote
 const encouragements = [
   { text: 'Você está indo muito bem! 🎉', audio: 'audio/Você está indo muito bem.mp3' },
   { text: 'Eu acredito em você! 💪', audio: 'audio/Eu acredito em você.mp3' },
@@ -893,7 +780,6 @@ function playEncouragement() {
   }
 }
 
-// Interação com mascote
 el.mascot.addEventListener('click', () => {
   animateMascot('excited');
   playEncouragement();
