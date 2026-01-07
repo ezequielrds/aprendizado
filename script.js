@@ -67,6 +67,7 @@ const el = {
   streakDisplay: document.getElementById('streakDisplay'),
   configSummary: document.getElementById('configSummary'),
   configHelp: document.getElementById('configHelp'),
+  configSection: document.getElementById('configSection'),
   languageSelector: document.getElementById('languageSelector')
 };
 
@@ -641,6 +642,14 @@ el.toggleCaseBtn.addEventListener('click', () => {
 
 function setMode(mode) {
   gameMode = mode;
+  
+  // Mostrar ou ocultar seção de configuração de palavras
+  if (mode === 'colors' || mode === 'numbers') {
+    el.configSection.style.display = 'none';
+  } else {
+    el.configSection.style.display = 'block';
+  }
+
   if (mode === 'syllables') {
     words = [...dbSyllables];
     el.wordsInput.value = dbSyllables.join(', ');

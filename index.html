@@ -24,14 +24,17 @@
           <h1>Aprendizado</h1>
         </div>
         <div class="header-controls">
-          <select id="languageSelector" class="language-selector" title="Selecionar idioma" aria-label="Selecionar idioma" style="display:none;">
+          <select id="languageSelector" class="language-selector" title="Selecionar idioma"
+            aria-label="Selecionar idioma" style="display:none;">
             <option value="pt-BR">🇧🇷 Português</option>
             <option value="en-US">🇺🇸 English</option>
             <option value="es-ES">🇪🇸 Español</option>
             <option value="de-DE">🇩🇪 Deutsch</option>
           </select>
-          <button id="changeModeBtn" class="btn-ghost btn-sm" title="Mudar modo de jogo" aria-label="Mudar modo de jogo">🔄 Trocar</button>
-          <button id="toggleCaseBtn" class="btn-ghost btn-sm" title="Alternar Maiúsculas/Minúsculas" aria-label="Alternar maiúsculas e minúsculas">Aa</button>
+          <button id="changeModeBtn" class="btn-ghost btn-sm" title="Mudar modo de jogo"
+            aria-label="Mudar modo de jogo">🔄 Trocar</button>
+          <button id="toggleCaseBtn" class="btn-ghost btn-sm" title="Alternar Maiúsculas/Minúsculas"
+            aria-label="Alternar maiúsculas e minúsculas">Aa</button>
         </div>
       </div>
 
@@ -54,7 +57,8 @@
           </div>
         </div>
         <div class="status-actions">
-          <button id="resetRecordBtn" class="btn-icon-large" title="Zerar TUDO (nível, recorde e sequência)" aria-label="Zerar nível, recorde e sequência">
+          <button id="resetRecordBtn" class="btn-icon-large" title="Zerar TUDO (nível, recorde e sequência)"
+            aria-label="Zerar nível, recorde e sequência">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
               stroke-linecap="round" stroke-linejoin="round">
               <path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"></path>
@@ -96,7 +100,7 @@
       <div id="achievementPopup" class="achievement-popup"></div>
     </section>
 
-    <details class="config">
+    <details id="configSection" class="config">
       <summary id="configSummary">Carregar/editar lista de palavras (sílabas separadas por "-")</summary>
       <p id="configHelp" style="margin:10px 0 6px;color:var(--muted)">Separe por vírgula, ponto-e-vírgula ou quebra de
         linha. Ex.:
@@ -164,12 +168,12 @@
       <p style="color:var(--muted); margin-bottom:20px">Escolha o intervalo de números para praticar:</p>
       <div style="margin-bottom:20px">
         <label for="minNumber" style="display:block; margin-bottom:8px">Número mínimo:</label>
-        <input type="range" id="minNumber" min="0" max="100" value="0" style="width:100%">
+        <input type="range" id="minNumber" min="0" max="1000" value="0" style="width:100%">
         <div id="minNumberValue" style="text-align:center; font-size:24px; font-weight:bold; margin-top:8px">0</div>
       </div>
       <div style="margin-bottom:30px">
         <label for="maxNumber" style="display:block; margin-bottom:8px">Número máximo:</label>
-        <input type="range" id="maxNumber" min="1" max="100" value="10" style="width:100%">
+        <input type="range" id="maxNumber" min="1" max="1000" value="10" style="width:100%">
         <div id="maxNumberValue" style="text-align:center; font-size:24px; font-weight:bold; margin-top:8px">10</div>
       </div>
       <div style="display:flex; gap:10px; justify-content:center">
