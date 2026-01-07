@@ -269,6 +269,13 @@ function handleSyllableClick(e) {
   }
 }
 
+// Atualizar apenas o visual/fala do item atual sem trocar de item
+function updateCurrentItemUI() {
+  if (idx < 0) return;
+  const w = words[deck[idx]];
+  renderWord(w, usedHelp);
+}
+
 function setMessage(msg = '', kind = 'muted') {
   el.message.textContent = msg;
   if (kind === 'win') el.message.style.color = 'var(--ok)';
@@ -748,9 +755,9 @@ el.languageSelector.addEventListener('change', (e) => {
   selectedLanguage = e.target.value;
   localStorage.setItem('selectedLanguage', selectedLanguage);
   
-  // Reload current word to update display (for colors and numbers)
-  if ((gameMode === 'colors' || gameMode === 'numbers') && idx >= 0) {
-    loadNewWord();
+  // Atualizar apenas a interface do item atual (para cores e números) sem trocar de item
+  if ((gameMode === 'colors' || gameMode === 'numbers' || gameMode === 'letters') && idx >= 0) {
+    updateCurrentItemUI();
   }
 });
 
