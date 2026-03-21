@@ -1,4 +1,4 @@
-const CACHE_NAME = 'leitura-cache-v1';
+const CACHE_NAME = 'leitura-cache-v2';
 const ASSETS = [
   './',
   './index.html',
@@ -9,6 +9,7 @@ const ASSETS = [
   './phrases.json',
   './letters.json',
   './colors.json',
+  './writing.json',
   './icons/icon-192.png',
   './icons/icon-512.png',
   './audio/Aprender com você é divertido.mp3',

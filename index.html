@@ -11,7 +11,7 @@
   <title>Aprendizado</title>
   <link rel="manifest" href="manifest.webmanifest">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
-  <link rel="stylesheet" href="styles.css?v=1.0.0">
+  <link rel="stylesheet" href="styles.css?v=1.0.1">
 </head>
 
 <body>
@@ -158,6 +158,13 @@
             <small>Aprender cores</small>
           </span>
         </button>
+        <button id="modeWritingBtn" class="mode-btn">
+          <span class="mode-icon">✏️</span>
+          <span class="mode-text">
+            <strong>Escrita</strong>
+            <small>Soletrar palavras</small>
+          </span>
+        </button>
       </div>
     </div>
   </div>
@@ -183,7 +190,23 @@
     </div>
   </div>
 
-  <script src="script.js?v=1.0.4"></script>
+  <div id="writingConfig" class="mode-overlay hidden">
+    <div class="mode-card">
+      <h2>Configurar Escrita</h2>
+      <p style="color:var(--muted); margin-bottom:20px">Escolha quantas letras extras (distratoras) aparecem junto com as letras corretas:</p>
+      <div style="margin-bottom:30px">
+        <label for="extraLetters" style="display:block; margin-bottom:8px">Letras extras:</label>
+        <input type="range" id="extraLetters" min="0" max="5" value="2" style="width:100%">
+        <div id="extraLettersValue" style="text-align:center; font-size:24px; font-weight:bold; margin-top:8px">2</div>
+      </div>
+      <div style="display:flex; gap:10px; justify-content:center">
+        <button id="confirmWritingBtn" class="btn-primary" style="flex:1; max-width:200px">Confirmar</button>
+        <button id="cancelWritingBtn" class="btn-ghost" style="flex:1; max-width:200px">Cancelar</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="script.js?v=1.0.5"></script>
 </body>
 
 </html>

@@ -3,8 +3,14 @@ let dbSyllables = [];
 let dbPhrases = [];
 let dbLetters = [];
 let dbColors = [];
-let gameMode = 'syllables'; // 'syllables' | 'phrases' | 'letters' | 'numbers' | 'colors'
+let dbWriting = [];
+let gameMode = 'syllables'; // 'syllables' | 'phrases' | 'letters' | 'numbers' | 'colors' | 'writing'
 let numbersRange = { min: 0, max: 10 }; // intervalo para números
+let writingExtraLetters = 2; // letras extras no modo escrita
+let writingSlots = []; // letras colocadas nos slots
+let writingWordData = null; // dados da palavra atual no modo escrita
+let writingPool = []; // pool de letras disponíveis
+let writingUsedIndices = new Set(); // índices usados do pool
 let selectedLanguage = localStorage.getItem('selectedLanguage') || 'pt-BR'; // idioma selecionado
 
 // Traduções para números (0-100)
@@ -67,7 +73,13 @@ const el = {
   configSummary: document.getElementById('configSummary'),
   configHelp: document.getElementById('configHelp'),
   configSection: document.getElementById('configSection'),
-  languageSelector: document.getElementById('languageSelector')
+  languageSelector: document.getElementById('languageSelector'),
+  modeWritingBtn: document.getElementById('modeWritingBtn'),
+  writingConfig: document.getElementById('writingConfig'),
+  extraLetters: document.getElementById('extraLetters'),
+  extraLettersValue: document.getElementById('extraLettersValue'),
+  confirmWritingBtn: document.getElementById('confirmWritingBtn'),
+  cancelWritingBtn: document.getElementById('cancelWritingBtn')
 };
 
 // Estado do jogo
@@ -121,7 +133,7 @@ function nextFromDeck() {
 }
 
 function stripHyphens(text) {
-  if (gameMode === 'phrases' || gameMode === 'letters' || gameMode === 'numbers' || gameMode === 'colors') return text;
+  if (gameMode === 'phrases' || gameMode === 'letters' || gameMode === 'numbers' || gameMode === 'colors' || gameMode === 'writing') return text;
   return text.replace(/\s+/g, '').replace(/-/g, '');
 }
 
@@ -186,6 +198,9 @@ function renderWord(text, showParts) {
         });
       });
     }, 0);
+    return;
+  } else if (gameMode === 'writing') {
+    renderWritingUI();
     return;
   } else {
     parts = text.split('-');
@@ -379,14 +394,15 @@ function getItemTypePlural(mode) {
     'letters': 'letra(s)',
     'numbers': 'número(s)',
     'colors': 'cor(es)',
-    'syllables': 'palavra(s)'
+    'syllables': 'palavra(s)',
+    'writing': 'palavra(s)'
   };
   return types[mode] || 'item(s)';
 }
 
 function getWordDifficulty(text) {
   if (gameMode === 'letters') return { text: '🔤 Letra', color: '#22c55e', hidden: false };
-  if (gameMode === 'numbers' || gameMode === 'colors') return { text: '', color: '', hidden: true };
+  if (gameMode === 'numbers' || gameMode === 'colors' || gameMode === 'writing') return { text: '', color: '', hidden: true };
   
   const count = gameMode === 'phrases' ? text.split(' ').length : text.split('-').length;
   if (gameMode === 'phrases') {
@@ -406,9 +422,20 @@ function loadNewWord() {
   usedHelp = false;
   syllablesClicked.clear();
   el.speakBtn.style.display = 'none';
+
+  if (gameMode === 'writing') {
+    el.helpBtn.style.display = 'none';
+    el.correctBtn.style.display = 'none';
+    el.nextBtn.style.display = 'none';
+    el.speakBtn.style.display = 'none';
+  } else {
+    el.correctBtn.style.display = '';
+    el.nextBtn.style.display = '';
+  }
+
   renderWord(w, false);
   setMessage('');
-  
+
   const difficulty = getWordDifficulty(w);
   if (difficulty.hidden) {
     el.wordDifficulty.style.display = 'none';
@@ -579,7 +606,7 @@ el.toggleCaseBtn.addEventListener('click', () => {
 
 function setMode(mode) {
   gameMode = mode;
-  if (mode === 'colors' || mode === 'numbers') {
+  if (mode === 'colors' || mode === 'numbers' || mode === 'writing') {
     el.configSection.style.display = 'none';
     el.configSection.open = false;
   } else {
@@ -607,6 +634,9 @@ function setMode(mode) {
   } else if (mode === 'colors') {
     words = dbColors.map(c => JSON.stringify(c));
     el.nextBtn.textContent = 'Próxima cor ➜';
+  } else if (mode === 'writing') {
+    words = dbWriting.map(w => JSON.stringify(w));
+    el.nextBtn.textContent = 'Próxima palavra ➜';
   } else {
     words = [...dbPhrases];
     el.wordsInput.value = dbPhrases.join('\n');
@@ -659,6 +689,25 @@ el.cancelNumbersBtn.addEventListener('click', () => {
   el.numbersConfig.classList.add('hidden');
   el.modeSelection.classList.remove('hidden');
 });
+
+// Writing mode config
+el.modeWritingBtn.addEventListener('click', () => {
+  el.modeSelection.classList.add('hidden');
+  el.writingConfig.classList.remove('hidden');
+});
+el.extraLetters.addEventListener('input', (e) => {
+  el.extraLettersValue.textContent = e.target.value;
+});
+el.confirmWritingBtn.addEventListener('click', () => {
+  writingExtraLetters = parseInt(el.extraLetters.value);
+  el.writingConfig.classList.add('hidden');
+  setMode('writing');
+});
+el.cancelWritingBtn.addEventListener('click', () => {
+  el.writingConfig.classList.add('hidden');
+  el.modeSelection.classList.remove('hidden');
+});
+
 el.changeModeBtn.addEventListener('click', () => {
   el.modeSelection.classList.remove('hidden');
 });
@@ -677,6 +726,173 @@ function updateLanguageSelectorVisibility() {
     el.languageSelector.style.display = 'inline-block';
   } else {
     el.languageSelector.style.display = 'none';
+  }
+}
+
+// ======================= WRITING MODE =======================
+
+function speakWord(word) {
+  if (!('speechSynthesis' in window)) return;
+  const u = new SpeechSynthesisUtterance(word);
+  const v = getVoiceForLanguage('pt-BR');
+  if (v) u.voice = v;
+  u.lang = 'pt-BR';
+  u.rate = 0.85;
+  u.pitch = 1.0;
+  u.volume = 1.0;
+  speechSynthesis.cancel();
+  speechSynthesis.speak(u);
+}
+
+function getRandomLetters(count, excludeLetters) {
+  const vowels = 'AEIOU';
+  const consonants = 'BCDFGHJKLMNPQRSTVWXYZ';
+  const all = vowels + consonants;
+  const result = [];
+  for (let i = 0; i < count; i++) {
+    let letter;
+    let attempts = 0;
+    do {
+      letter = all[Math.floor(Math.random() * all.length)];
+      attempts++;
+    } while (excludeLetters.includes(letter) && result.includes(letter) && attempts < 50);
+    result.push(letter);
+  }
+  return result;
+}
+
+function renderWritingUI() {
+  const raw = words[deck[idx]];
+  writingWordData = JSON.parse(raw);
+  const word = writingWordData.word;
+  const letters = word.split('');
+
+  // Reset state
+  writingSlots = new Array(letters.length).fill(null);
+  writingUsedIndices.clear();
+
+  // Build pool: word letters + extra random letters
+  const extraLetters = getRandomLetters(writingExtraLetters, letters);
+  writingPool = shuffle([...letters, ...extraLetters]);
+
+  // Build HTML
+  let html = '<div style="display:flex; flex-direction:column; align-items:center; gap:16px;">';
+
+  // Image or listen button
+  if (writingWordData.image) {
+    html += `<div class="writing-image">${writingWordData.image}</div>`;
+    html += `<button class="writing-speaker-mini" onclick="speakWord('${word}')" title="Ouvir a palavra">🔈</button>`;
+  } else {
+    html += `<button class="writing-listen-btn" onclick="speakWord('${word}')" title="Ouvir a palavra">🔈</button>`;
+  }
+
+  // Slots
+  html += '<div class="writing-slots">';
+  for (let i = 0; i < letters.length; i++) {
+    html += `<div class="writing-slot" data-slot="${i}" onclick="handleSlotClick(${i})"></div>`;
+  }
+  html += '</div>';
+
+  // Letter pool
+  html += '<div class="writing-letters">';
+  for (let i = 0; i < writingPool.length; i++) {
+    html += `<button class="writing-letter-btn" data-pool="${i}" onclick="handleLetterClick(${i})">${writingPool[i]}</button>`;
+  }
+  html += '</div>';
+
+  html += '</div>';
+
+  el.word.innerHTML = html;
+  el.helpBtn.style.display = 'none';
+}
+
+function handleLetterClick(poolIndex) {
+  if (writingUsedIndices.has(poolIndex)) return;
+
+  // Find first empty slot
+  const slotIndex = writingSlots.indexOf(null);
+  if (slotIndex === -1) return;
+
+  // Place letter
+  writingSlots[slotIndex] = { letter: writingPool[poolIndex], poolIndex };
+  writingUsedIndices.add(poolIndex);
+
+  // Update UI
+  const slotEl = document.querySelector(`.writing-slot[data-slot="${slotIndex}"]`);
+  if (slotEl) {
+    slotEl.textContent = writingPool[poolIndex];
+    slotEl.classList.add('filled');
+  }
+  const btnEl = document.querySelector(`.writing-letter-btn[data-pool="${poolIndex}"]`);
+  if (btnEl) btnEl.classList.add('used');
+
+  // Check if all slots are filled
+  if (!writingSlots.includes(null)) {
+    checkWritingAnswer();
+  }
+}
+
+function handleSlotClick(slotIndex) {
+  const slotData = writingSlots[slotIndex];
+  if (!slotData) return;
+
+  // Return letter to pool
+  writingUsedIndices.delete(slotData.poolIndex);
+  const btnEl = document.querySelector(`.writing-letter-btn[data-pool="${slotData.poolIndex}"]`);
+  if (btnEl) btnEl.classList.remove('used');
+
+  // Clear slot
+  writingSlots[slotIndex] = null;
+  const slotEl = document.querySelector(`.writing-slot[data-slot="${slotIndex}"]`);
+  if (slotEl) {
+    slotEl.textContent = '';
+    slotEl.classList.remove('filled');
+  }
+}
+
+function checkWritingAnswer() {
+  const word = writingWordData.word;
+  const answer = writingSlots.map(s => s.letter).join('');
+  const slots = document.querySelectorAll('.writing-slot');
+
+  if (answer === word) {
+    // Correct!
+    slots.forEach(s => s.classList.add('correct'));
+    playSuccessSound();
+    animateMascot('happy');
+
+    streak++;
+    totalWords++;
+    sessionWords++;
+    localStorage.setItem('readingTotalWords', String(totalWords));
+    renderStreak(streak);
+    updateProgress();
+
+    let message = getEncouragingMessage() + ' +1 🎯';
+    if (streak === 3) message = '🔥 3 seguidas! Você está pegando fogo!';
+    else if (streak === 5) message = '⚡ 5 seguidas! Incrível!';
+    else if (streak === 10) message = '💫 10 seguidas! FENOMENAL!';
+    setMessage(message, 'win');
+
+    updateHighScore();
+    checkAchievements();
+
+    setTimeout(loadNewWord, 1200);
+  } else {
+    // Wrong
+    slots.forEach(s => s.classList.add('wrong'));
+    setMessage('Tente novamente! 💪', 'warn');
+
+    // Clear slots after shake animation
+    setTimeout(() => {
+      writingSlots.fill(null);
+      writingUsedIndices.clear();
+      slots.forEach(s => {
+        s.textContent = '';
+        s.classList.remove('filled', 'wrong');
+      });
+      document.querySelectorAll('.writing-letter-btn').forEach(b => b.classList.remove('used'));
+    }, 600);
   }
 }
 
@@ -720,6 +936,7 @@ el.speakBtn.addEventListener('click', () => {
 
 window.addEventListener('keydown', (e) => {
   if (['INPUT', 'TEXTAREA'].includes(document.activeElement.tagName)) return;
+  if (gameMode === 'writing') return; // writing mode has its own interaction
   if (e.key === 'Enter') {
     e.preventDefault();
     el.correctBtn.click();
@@ -734,14 +951,15 @@ window.addEventListener('keydown', (e) => {
 
 async function initGame() {
   try {
-    const [resWords, resPhrases, resLetters, resColors] = await Promise.all([
-      fetch('words.json'), fetch('phrases.json'), fetch('letters.json'), fetch('colors.json')
+    const [resWords, resPhrases, resLetters, resColors, resWriting] = await Promise.all([
+      fetch('words.json'), fetch('phrases.json'), fetch('letters.json'), fetch('colors.json'), fetch('writing.json')
     ]);
-    if (!resWords.ok || !resPhrases.ok || !resLetters.ok || !resColors.ok) throw new Error('Erro ao carregar dados');
+    if (!resWords.ok || !resPhrases.ok || !resLetters.ok || !resColors.ok || !resWriting.ok) throw new Error('Erro ao carregar dados');
     dbSyllables = await resWords.json();
     dbPhrases = await resPhrases.json();
     dbLetters = await resLetters.json();
     dbColors = await resColors.json();
+    dbWriting = await resWriting.json();
     el.wordsInput.value = dbSyllables.join(', ');
   } catch (error) {
     console.error(error);
