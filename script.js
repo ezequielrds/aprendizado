@@ -879,7 +879,9 @@ function checkWritingAnswer() {
 
     setTimeout(loadNewWord, 1200);
   } else {
-    // Wrong
+    // Wrong — reset streak
+    streak = 0;
+    renderStreak(0);
     slots.forEach(s => s.classList.add('wrong'));
     setMessage('Tente novamente! 💪', 'warn');
 
