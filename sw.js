@@ -1,4 +1,4 @@
-const CACHE_NAME = 'leitura-cache-v2';
+const CACHE_NAME = 'aprendizagem-cache-v4';
 const ASSETS = [
   './',
   './index.html',
@@ -12,6 +12,18 @@ const ASSETS = [
   './writing.json',
   './icons/icon-192.png',
   './icons/icon-512.png',
+  // Módulos JS
+  './modules/state.js',
+  './modules/deck.js',
+  './modules/ui.js',
+  './modules/audio.js',
+  './modules/speech.js',
+  './modules/scoring.js',
+  './modules/render.js',
+  './modules/writing.js',
+  './modules/game.js',
+  './modules/mode.js',
+  // Áudios
   './audio/Aprender com você é divertido.mp3',
   './audio/Cada tentativa te deixa mais forte.mp3',
   './audio/Eu acredito em você.mp3',
