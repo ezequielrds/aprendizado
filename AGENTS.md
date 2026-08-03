@@ -323,7 +323,7 @@ O shell da aplicação, o atlas único `data/world-map.js` e sua atribuição fi
 
 ```js
 // sw.js — linha 1
-const CACHE_NAME = 'aprendizagem-cache-v17'; // ← incrementar a cada deploy
+const CACHE_NAME = 'aprendizagem-cache-v18'; // ← incrementar a cada deploy
 ```
 
 Todos os módulos em `modules/*.js` e o atlas `data/world-map.js` precisam estar listados no array `APP_ASSETS` do `sw.js`.
@@ -360,7 +360,7 @@ A querystring `?v=X.Y.Z` força o browser a buscar o arquivo novamente mesmo que
 
 ```html
 <!-- index.html — linha do script de entrada -->
-<script type="module" src="script.js?v=2.1.10"></script>
+<script type="module" src="script.js?v=2.1.11"></script>
 <!--                                   ^^^^^ incrementar aqui -->
 ```
 
@@ -378,7 +378,7 @@ O Service Worker usa o nome do cache para invalidar versões antigas. Sempre inc
 
 ```js
 // sw.js — linha 1
-const CACHE_NAME = 'aprendizagem-cache-v17'; // ← incrementar aqui
+const CACHE_NAME = 'aprendizagem-cache-v18'; // ← incrementar aqui
 ```
 
 ### Resumo: o que atualizar a cada modificação em JS

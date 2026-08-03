@@ -50,6 +50,26 @@ test('cada pais possui uma bandeira SVG local associada ao proprio codigo', () =
   assert.equal(svgFiles.length, 193);
 });
 
+test('a bandeira do Peru usa o pavilhão nacional com escudo', () => {
+  const peru = countries.find(country => country.code === 'PE');
+  assert.ok(peru);
+
+  const peruFlag = fs.readFileSync(path.join(root, peru.flagAsset), 'utf8');
+  assert.match(peruFlag, /data-flag-variant="pavilhao-nacional-com-escudo"/u);
+  assert.match(peruFlag, /<title[^>]*>Pavilhão nacional do Peru com escudo nacional<\/title>/u);
+  assert.match(peruFlag, /<desc[^>]*>Faixas verticais vermelhas e branca com o escudo nacional centralizado\.<\/desc>/u);
+  assert.ok((peruFlag.match(/<(?:path|g|use)\b/gu) || []).length > 4, 'o SVG deve incluir a geometria detalhada do escudo');
+  assert.doesNotMatch(peruFlag, /(?:href|xlink:href)="https?:\/\//u, 'o SVG deve permanecer inteiramente local');
+});
+
+test('a bandeira do Peru declara um viewBox responsivo na proporção oficial de 3 por 2', () => {
+  const peru = countries.find(country => country.code === 'PE');
+  assert.ok(peru);
+
+  const peruFlag = fs.readFileSync(path.join(root, peru.flagAsset), 'utf8');
+  assert.match(peruFlag, /<svg\b[^>]*\bviewBox="0 0 900 600"/u);
+});
+
 test('uma partida seleciona exatamente 30 paises', () => {
   const selected = selectFlagCountries(countries, FLAGS_ROUND_COUNT, () => 0.42);
   assert.equal(selected.length, 30);

@@ -1,6 +1,6 @@
 # Bandeiras
 
-Os 193 arquivos SVG desta pasta são uma seleção local do pacote [flag-icons](https://github.com/lipis/flag-icons), versão **v7.5.0**, variante `flags/4x3`.
+192 dos 193 arquivos SVG desta pasta são uma seleção local do pacote [flag-icons](https://github.com/lipis/flag-icons), versão **v7.5.0**, variante `flags/4x3`.
 
 - Fonte: https://github.com/lipis/flag-icons/tree/v7.5.0/flags/4x3
 - Arquivos originais: `https://raw.githubusercontent.com/lipis/flag-icons/v7.5.0/flags/4x3/<code>.svg`
@@ -8,6 +8,15 @@ Os 193 arquivos SVG desta pasta são uma seleção local do pacote [flag-icons](
 - Copyright: Copyright (c) 2013 Panayiotis Lipiridis
 
 Os SVGs foram baixados para uso local com os nomes dos códigos ISO 3166-1 alpha-2 em minúsculas. O runtime deve referenciar somente os caminhos locais registrados em `data/countries.json`; não há dependência de URLs remotas.
+
+## Exceção: Peru com escudo nacional
+
+`pe.svg` usa o **Pavilhão Nacional do Peru com escudo**, em vez da variante civil sem escudo da coleção `flag-icons`.
+
+- Fonte: [Flag of Peru (state) 2025.svg — Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Flag_of_Peru_(state)_2025.svg)
+- Arquivo original: `https://upload.wikimedia.org/wikipedia/commons/d/d6/Flag_of_Peru_%28state%29_2025.svg`
+- Referência oficial: Lei peruana nº 32251 (2025)
+- Licença do arquivo: CC0 1.0 / domínio público; o símbolo estatal pode estar sujeito a restrições de uso não relacionadas a copyright.
 
 ## Texto da licença MIT
 
