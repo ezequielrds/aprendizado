@@ -11,7 +11,7 @@
   <title>Aprendizado</title>
   <link rel="manifest" href="manifest.webmanifest">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
-  <link rel="stylesheet" href="styles.css?v=1.0.1">
+  <link rel="stylesheet" href="styles.css?v=1.1.0">
 </head>
 
 <body>
@@ -165,6 +165,13 @@
             <small>Soletrar palavras</small>
           </span>
         </button>
+        <button id="modeFlagsBtn" class="mode-btn" disabled>
+          <span class="mode-icon">🌍</span>
+          <span class="mode-text">
+            <strong>Bandeiras do Mundo</strong>
+            <small>Descobrir países</small>
+          </span>
+        </button>
       </div>
     </div>
   </div>
@@ -206,7 +213,97 @@
     </div>
   </div>
 
-  <script type="module" src="script.js?v=2.0.0"></script>
+  <div id="flagsConfig" class="mode-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="flagsConfigTitle">
+    <div class="mode-card flags-config-card">
+      <div class="flags-config-icon" aria-hidden="true">🌍</div>
+      <h2 id="flagsConfigTitle">Bandeiras do Mundo</h2>
+      <p class="flags-config-intro">Descubra 30 países montando seus nomes com letras embaralhadas.</p>
+      <fieldset class="flags-extra-options">
+        <legend>Letras adicionais</legend>
+        <p>Escolha quantas letras distratoras aparecerão junto das letras corretas:</p>
+        <div class="flags-extra-grid">
+          <label><input type="radio" name="flagsExtraLetters" value="0"> <span>Nenhuma</span></label>
+          <label><input type="radio" name="flagsExtraLetters" value="2" checked> <span>2 letras</span></label>
+          <label><input type="radio" name="flagsExtraLetters" value="4"> <span>4 letras</span></label>
+          <label><input type="radio" name="flagsExtraLetters" value="6"> <span>6 letras</span></label>
+        </div>
+      </fieldset>
+      <div class="flags-config-actions">
+        <button id="confirmFlagsBtn" class="btn-primary">Começar partida</button>
+        <button id="cancelFlagsBtn" class="btn-ghost">Voltar</button>
+      </div>
+      <p class="flags-config-note">Cada acerto vale até 40 pontos. Dicas reduzem 10 pontos cada.</p>
+    </div>
+  </div>
+
+  <div id="flagsGame" class="flags-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="flagsGameTitle">
+    <div class="flags-shell">
+      <header class="flags-header">
+        <button id="flagsHomeBtn" class="btn-ghost flags-home-btn" type="button">← Início</button>
+        <div class="flags-title-block">
+          <span class="flags-kicker">DESAFIO</span>
+          <h2 id="flagsGameTitle">Bandeiras do Mundo</h2>
+        </div>
+        <div class="flags-round-summary" aria-live="polite">
+          <strong id="flagsProgress">Bandeira 1 de 30</strong>
+          <span>Total: <b id="flagsTotal">0</b></span>
+        </div>
+      </header>
+
+      <main id="flagsPlayingView" class="flags-playing-view">
+        <div class="flags-scorebar">
+          <div class="flags-score-chip">
+            <span>Pontos da rodada</span>
+            <strong id="flagsRoundPoints">40</strong>
+          </div>
+          <div class="flags-score-chip flags-hint-chip">
+            <span>Dicas usadas</span>
+            <strong id="flagsHintsUsed">0 / 4</strong>
+          </div>
+        </div>
+
+        <section class="flags-board panel" aria-live="polite">
+          <div class="flags-image-wrap">
+            <img id="flagsImage" class="flags-image" alt="Bandeira do país a descobrir" decoding="async">
+          </div>
+          <p id="flagsPrompt" class="flags-prompt">Monte o nome do país</p>
+          <div id="flagsAnswer" class="flags-answer" aria-label="Resposta do país"></div>
+          <p id="flagsFeedback" class="flags-feedback" role="status" aria-live="assertive"></p>
+          <div id="flagsLetters" class="flags-letters" aria-label="Letras disponíveis"></div>
+          <div class="flags-edit-actions">
+            <button id="flagsDeleteBtn" class="btn-ghost" type="button">⌫ Apagar última</button>
+            <button id="flagsClearBtn" class="btn-ghost" type="button">Limpar letras</button>
+          </div>
+          <div class="flags-help-actions">
+            <button id="flagsHintBtn" class="btn-help" type="button">💡 Usar dica <span>(0/4)</span></button>
+            <button id="flagsRevealBtn" class="flags-reveal-btn" type="button">Mostrar resposta</button>
+          </div>
+          <button id="flagsNextBtn" class="btn-primary flags-next-btn hidden" type="button">Próxima bandeira ➜</button>
+        </section>
+        <p class="flags-keyboard-tip">Teclado: digite uma letra para selecionar, <b>Backspace</b> apaga.</p>
+      </main>
+
+      <section id="flagsResultView" class="flags-result-view hidden" aria-labelledby="flagsResultTitle">
+        <div class="flags-result-icon" aria-hidden="true">🏁</div>
+        <span class="flags-kicker">PARTIDA CONCLUÍDA</span>
+        <h2 id="flagsResultTitle">Você percorreu o mundo!</h2>
+        <div class="flags-result-total"><span id="flagsResultTotal">0</span><small>de 1.200 pontos</small></div>
+        <p id="flagsResultMessage" class="flags-result-message"></p>
+        <div class="flags-result-stats">
+          <div><strong id="flagsCorrectCount">0</strong><span>acertadas</span></div>
+          <div><strong id="flagsRevealedCount">0</strong><span>reveladas</span></div>
+          <div><strong id="flagsHintCount">0</strong><span>dicas usadas</span></div>
+          <div><strong id="flagsPercent">0%</strong><span>do máximo</span></div>
+        </div>
+        <div class="flags-result-actions">
+          <button id="flagsNewGameBtn" class="btn-primary" type="button">Nova partida</button>
+          <button id="flagsResultHomeBtn" class="btn-ghost" type="button">Voltar ao início</button>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <script type="module" src="script.js?v=2.1.2"></script>
 </body>
 
 </html>

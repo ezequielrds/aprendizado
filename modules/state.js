@@ -6,9 +6,10 @@ export const state = {
   dbLetters: [],
   dbColors: [],
   dbWriting: [],
+  dbCountries: [],
 
   // Modo de jogo
-  gameMode: 'syllables', // 'syllables' | 'phrases' | 'letters' | 'numbers' | 'colors' | 'writing'
+  gameMode: 'syllables', // 'syllables' | 'phrases' | 'letters' | 'numbers' | 'colors' | 'writing' | 'flags'
   numbersRange: { min: 0, max: 10 },
 
   // Estado do modo Escrita
@@ -17,6 +18,26 @@ export const state = {
   writingWordData: null,
   writingPool: [],
   writingUsedIndices: new Set(),
+
+  // Estado da partida Bandeiras do Mundo
+  flagsExtraLetters: 2,
+  flagsCountries: [],
+  flagsIndex: -1,
+  flagsCurrentCountry: null,
+  flagsTotal: 0,
+  flagsRoundPoints: 40,
+  flagsHintsUsed: 0,
+  flagsHintCount: 0,
+  flagsCorrectCount: 0,
+  flagsRevealedCount: 0,
+  flagsRevealedIndices: new Set(),
+  flagsAnswerSlots: [],
+  flagsLetterPool: [],
+  flagsUsedIndices: new Set(),
+  flagsPreloadedAssets: new Set(),
+  flagsStatus: 'playing', // 'playing' | 'correct' | 'revealed'
+  flagsRoundScored: false,
+  flagsGameStarted: false,
 
   // Preferências
   selectedLanguage: localStorage.getItem('selectedLanguage') || 'pt-BR',
@@ -118,4 +139,34 @@ export const el = {
   extraLettersValue:document.getElementById('extraLettersValue'),
   confirmWritingBtn:document.getElementById('confirmWritingBtn'),
   cancelWritingBtn: document.getElementById('cancelWritingBtn'),
+  modeFlagsBtn:     document.getElementById('modeFlagsBtn'),
+  flagsConfig:     document.getElementById('flagsConfig'),
+  confirmFlagsBtn: document.getElementById('confirmFlagsBtn'),
+  cancelFlagsBtn:  document.getElementById('cancelFlagsBtn'),
+  flagsGame:       document.getElementById('flagsGame'),
+  flagsHomeBtn:    document.getElementById('flagsHomeBtn'),
+  flagsPlayingView:document.getElementById('flagsPlayingView'),
+  flagsResultView: document.getElementById('flagsResultView'),
+  flagsProgress:   document.getElementById('flagsProgress'),
+  flagsTotal:      document.getElementById('flagsTotal'),
+  flagsRoundPoints:document.getElementById('flagsRoundPoints'),
+  flagsHintsUsed:  document.getElementById('flagsHintsUsed'),
+  flagsImage:      document.getElementById('flagsImage'),
+  flagsPrompt:     document.getElementById('flagsPrompt'),
+  flagsAnswer:     document.getElementById('flagsAnswer'),
+  flagsFeedback:   document.getElementById('flagsFeedback'),
+  flagsLetters:    document.getElementById('flagsLetters'),
+  flagsDeleteBtn:  document.getElementById('flagsDeleteBtn'),
+  flagsClearBtn:   document.getElementById('flagsClearBtn'),
+  flagsHintBtn:    document.getElementById('flagsHintBtn'),
+  flagsRevealBtn:  document.getElementById('flagsRevealBtn'),
+  flagsNextBtn:    document.getElementById('flagsNextBtn'),
+  flagsNewGameBtn: document.getElementById('flagsNewGameBtn'),
+  flagsResultHomeBtn: document.getElementById('flagsResultHomeBtn'),
+  flagsResultTotal:  document.getElementById('flagsResultTotal'),
+  flagsCorrectCount: document.getElementById('flagsCorrectCount'),
+  flagsRevealedCount:document.getElementById('flagsRevealedCount'),
+  flagsHintCount:    document.getElementById('flagsHintCount'),
+  flagsPercent:      document.getElementById('flagsPercent'),
+  flagsResultMessage:document.getElementById('flagsResultMessage'),
 };

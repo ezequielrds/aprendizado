@@ -50,13 +50,20 @@ leitura/
 │   ├── render.js           # Renderização: renderWord, handleSyllableClick, helpBtn
 │   ├── writing.js          # Modo Escrita: handleLetterClick, handleSlotClick
 │   ├── mode.js             # Troca de modos: setMode, configs de Números/Escrita
-│   └── game.js             # Fluxo do jogo: loadNewWord, correctBtn, nextBtn, etc.
+│   ├── game.js             # Fluxo do jogo: loadNewWord, correctBtn, nextBtn, etc.
+│   ├── random.js           # Fisher-Yates compartilhado
+│   ├── flagsLogic.js       # Regras puras de Bandeiras do Mundo
+│   └── flags.js            # UI, estado e fluxo da partida de bandeiras
 │
 ├── words.json              # Lista de palavras silabadas (ex.: "ca-sa", "bo-la")
 ├── phrases.json            # Lista de frases (ex.: "O gato mia")
 ├── letters.json            # Lista de letras do alfabeto
 ├── colors.json             # Cores com nome multilíngue e valor hex
 ├── writing.json            # Palavras para o modo Escrita com emoji/imagem
+├── data/
+│   └── countries.json      # 193 Estados-membros da ONU e referências locais de bandeiras
+├── assets/
+│   └── flags/              # SVGs locais das bandeiras + SOURCE.md
 │
 ├── audio/                  # MP3s de encorajamento falados
 └── icons/                  # Ícones da PWA (192px e 512px)
@@ -70,7 +77,8 @@ As importações seguem uma hierarquia estrita **sem dependências circulares**:
 
 ```
 state.js      ← (nenhum import — base de tudo)
-deck.js       ← state
+random.js     ← (nenhum import — Fisher-Yates compartilhado)
+deck.js       ← state, random
 ui.js         ← state
 audio.js      ← ui
 speech.js     ← state, ui
@@ -79,6 +87,8 @@ render.js     ← state, deck, speech, ui
 game.js       ← state, deck, render, ui, scoring, audio, speech
 writing.js    ← state, ui, audio, scoring, game
 mode.js       ← state, deck, ui, game, render
+flagsLogic.js ← random
+flags.js      ← state, ui, flagsLogic
 script.js     ← todos os módulos acima
 ```
 
@@ -93,7 +103,7 @@ Todo o estado mutável do jogo vive em um único objeto exportado `state`. Qualq
 ### Propriedades principais
 
 ```js
-state.gameMode          // Modo ativo: 'syllables' | 'phrases' | 'letters' | 'numbers' | 'colors' | 'writing'
+state.gameMode          // Modo ativo: 'syllables' | 'phrases' | 'letters' | 'numbers' | 'colors' | 'writing' | 'flags'
 state.words             // Array de itens ativos no deck (formato interno varia por modo — ver seção 6)
 state.deck              // Array de índices embaralhados de state.words
 state.idx               // Posição atual no deck
@@ -113,12 +123,26 @@ state.dbPhrases         // Array de strings (phrases.json)
 state.dbLetters         // Array de strings (letters.json)
 state.dbColors          // Array de objetos (colors.json)
 state.dbWriting         // Array de objetos (writing.json)
+state.dbCountries       // Array de 193 países (data/countries.json)
 
 // Estado interno do modo Escrita
 state.writingWordData   // Objeto { word, image } da palavra atual
 state.writingPool       // Array de letras embaralhadas (corretas + distratoras)
 state.writingSlots      // Array de { letter, poolIndex } | null para cada slot
 state.writingUsedIndices // Set de índices do pool já usados
+
+// Estado da partida Bandeiras do Mundo
+state.flagsCountries       // 30 países sorteados sem repetição
+state.flagsIndex           // índice da bandeira atual (0–29)
+state.flagsTotal           // total de pontos da partida
+state.flagsRoundPoints     // pontos disponíveis na rodada atual
+state.flagsHintsUsed       // dicas usadas na rodada atual (0–4)
+state.flagsExtraLetters    // quantidade de extras selecionada (0, 2, 4 ou 6)
+state.flagsRevealedIndices // Set de posições reveladas por dicas
+state.flagsAnswerSlots     // letras montadas, com poolIndex/revealed
+state.flagsLetterPool      // letras corretas + extras embaralhadas
+state.flagsPreloadedAssets  // assets das proximas bandeiras ja solicitados pela UI
+state.flagsStatus           // 'playing' | 'correct' | 'revealed'
 ```
 
 O objeto `el` (também em `state.js`) contém todas as referências DOM pré-capturadas via `getElementById`. Sempre use `el.nomeDoElemento` em vez de chamar `document.getElementById` diretamente nos módulos.
@@ -268,12 +292,14 @@ Os modos `syllables` e `phrases` **sempre usam `pt-BR`** independente do idioma 
 
 O arquivo `sw.js` usa a estratégia **Cache First** com fallback para rede. Ao modificar qualquer arquivo do projeto (especialmente os módulos), **incremente o `CACHE_NAME`** (ex.: `v4` → `v5`) para que os usuários recebam a versão atualizada e o cache antigo seja descartado.
 
+O shell da aplicação é precacheado no install. As 193 bandeiras locais ficam em `FLAG_ASSETS`, separadas de `APP_ASSETS`, e são adicionadas ao cache com um loop estritamente sequencial (`await cache.add(...)`) dentro do `event.waitUntil` do install. O `skipWaiting()` só é solicitado depois que todas terminam, garantindo que a partida funcione offline mesmo para países ainda não vistos e sem requisitar bandeiras simultaneamente. A UI continua carregando a bandeira atual e, no máximo, a próxima para manter a transição visual responsiva.
+
 ```js
 // sw.js — linha 1
-const CACHE_NAME = 'aprendizagem-cache-v4'; // ← incrementar a cada deploy
+const CACHE_NAME = 'aprendizagem-cache-v9'; // ← incrementar a cada deploy
 ```
 
-Todos os módulos em `modules/*.js` precisam estar listados no array `ASSETS` do `sw.js`.
+Todos os módulos em `modules/*.js` precisam estar listados no array `APP_ASSETS` do `sw.js`.
 
 ---
 
@@ -325,7 +351,7 @@ O Service Worker usa o nome do cache para invalidar versões antigas. Sempre inc
 
 ```js
 // sw.js — linha 1
-const CACHE_NAME = 'aprendizagem-cache-v4'; // ← incrementar aqui
+const CACHE_NAME = 'aprendizagem-cache-v9'; // ← incrementar aqui
 ```
 
 ### Resumo: o que atualizar a cada modificação em JS

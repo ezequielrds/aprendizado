@@ -1,0 +1,9 @@
+{
+  "name": "aprendizado",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node --test tests/flags.test.mjs",
+    "build": "node scripts/validate-build.mjs"
+  }
+}

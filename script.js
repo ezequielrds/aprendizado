@@ -16,6 +16,7 @@ import { initRenderListeners } from './modules/render.js';
 import { initGameListeners }   from './modules/game.js';
 import { initModeListeners }   from './modules/mode.js';
 import { initWritingGlobals }  from './modules/writing.js';
+import { initFlagsListeners }  from './modules/flags.js';
 
 // ── 1. Inicialização imediata da UI ───────────────────────────────────────
 
@@ -32,20 +33,22 @@ initRenderListeners();    // Botão de ajuda (Mostrar/Esconder sílabas)
 initGameListeners();      // correctBtn, nextBtn, shuffleBtn, loadBtn, speakBtn, teclado, mascote
 initModeListeners();      // Seleção de modo, config Números, config Escrita, idioma
 initWritingGlobals();     // Expõe window.handleLetterClick e window.handleSlotClick
+initFlagsListeners();     // Configuração e partida Bandeiras do Mundo
 
 // ── 3. Carregamento assíncrono dos dados ──────────────────────────────────
 
 async function initGame() {
   try {
-    const [resWords, resPhrases, resLetters, resColors, resWriting] = await Promise.all([
+    const [resWords, resPhrases, resLetters, resColors, resWriting, resCountries] = await Promise.all([
       fetch('words.json'),
       fetch('phrases.json'),
       fetch('letters.json'),
       fetch('colors.json'),
       fetch('writing.json'),
+      fetch('data/countries.json'),
     ]);
 
-    if (!resWords.ok || !resPhrases.ok || !resLetters.ok || !resColors.ok || !resWriting.ok) {
+    if (!resWords.ok || !resPhrases.ok || !resLetters.ok || !resColors.ok || !resWriting.ok || !resCountries.ok) {
       throw new Error('Erro ao carregar dados');
     }
 
@@ -54,6 +57,8 @@ async function initGame() {
     state.dbLetters   = await resLetters.json();
     state.dbColors    = await resColors.json();
     state.dbWriting   = await resWriting.json();
+    state.dbCountries = await resCountries.json();
+    el.modeFlagsBtn.disabled = false;
 
     el.wordsInput.value = state.dbSyllables.join(', ');
   } catch (error) {

@@ -1,4 +1,5 @@
 import { state } from './state.js';
+import { fisherYates } from './random.js';
 
 // ── Utilitário de embaralhamento ───────────────────────────────────────────
 
@@ -8,11 +9,7 @@ import { state } from './state.js';
  * @returns {any[]}
  */
 export function shuffle(array) {
-  for (let i = array.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [array[i], array[j]] = [array[j], array[i]];
-  }
-  return array;
+  return fisherYates(array);
 }
 
 // ── Gestão do deck de itens ────────────────────────────────────────────────
