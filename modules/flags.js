@@ -20,12 +20,17 @@ import {
   shouldShowFlagHint,
 } from './flagsLogic.js';
 import {
+  FLAG_MAP_INITIAL_PADDING,
+  FLAG_MAP_ZOOM_MAX_LEVEL,
+  FLAG_MAP_ZOOM_MIN_LEVEL,
   calculateFlagMapViewport,
   canOpenFlagMap,
+  getFlagMapFocusPoint,
   getFlagLocationBounds,
   isTinyFlagLocation,
   isWrappedFlagLocation,
   selectFlagMapContext,
+  zoomFlagMapViewport,
 } from './flagsMapLogic.js';
 
 const LETTER_CHARACTER = /\p{L}/u;
@@ -164,14 +169,20 @@ function renderFlagMap() {
   if (!targetLocation) return;
 
   const context = selectFlagMapContext(targetCode, worldMap.locations);
-  const viewport = calculateFlagMapViewport(context, worldMap.viewBox);
+  state.flagsMapBaseViewport = calculateFlagMapViewport(
+    context,
+    worldMap.viewBox,
+    FLAG_MAP_INITIAL_PADDING,
+  );
+  state.flagsMapFocusPoint = getFlagMapFocusPoint(targetLocation, worldMap.viewBox);
+  state.flagsMapZoomLevel = 0;
   const contextWithoutTarget = context.filter(location => location.id !== targetCode);
   const locationsToRender = [...contextWithoutTarget, targetLocation];
   const countryName = country.namePtBr;
 
   el.flagsMapTitle.textContent = `Onde fica ${countryName}?`;
   el.flagsMapDescription.textContent = `O país da rodada, ${countryName}, aparece em vermelho. Os países brancos ao redor ajudam a reconhecer a região.`;
-  el.flagsMapSvg.setAttribute('viewBox', viewport.viewBox);
+  renderFlagMapZoom();
   el.flagsMapSvg.setAttribute('aria-label', `Mapa regional de ${countryName}`);
   el.flagsMapSvg.replaceChildren();
 
@@ -203,9 +214,7 @@ function renderFlagMap() {
   if (isTinyFlagLocation(targetLocation) || isWrappedFlagLocation(targetLocation)) {
     const bounds = getFlagLocationBounds(targetLocation);
     const marker = document.createElementNS(SVG_NAMESPACE, 'circle');
-    const markerX = isWrappedFlagLocation(targetLocation)
-      ? WORLD_MAP_WIDTH + Math.min(bounds.minX, WORLD_MAP_WIDTH * .2)
-      : bounds.centerX;
+    const markerX = state.flagsMapFocusPoint?.x ?? bounds.centerX;
     marker.setAttribute('class', 'flags-map-target-marker');
     marker.setAttribute('cx', markerX);
     marker.setAttribute('cy', bounds.centerY);
@@ -215,6 +224,41 @@ function renderFlagMap() {
     marker.setAttribute('aria-label', `${countryName}, marcador do país da rodada`);
     el.flagsMapSvg.append(marker);
   }
+}
+
+function renderFlagMapZoom() {
+  const baseViewport = state.flagsMapBaseViewport;
+  if (!baseViewport) return;
+
+  const viewport = zoomFlagMapViewport(
+    baseViewport,
+    worldMap.viewBox,
+    state.flagsMapZoomLevel,
+    state.flagsMapFocusPoint,
+  );
+  state.flagsMapZoomLevel = viewport.level;
+  el.flagsMapSvg.setAttribute('viewBox', viewport.viewBox);
+  el.flagsMapZoomOutBtn.disabled = viewport.level <= FLAG_MAP_ZOOM_MIN_LEVEL;
+  el.flagsMapZoomInBtn.disabled = viewport.level >= FLAG_MAP_ZOOM_MAX_LEVEL;
+
+  if (viewport.level === 0) {
+    el.flagsMapZoomStatus.textContent = 'Zoom padrão';
+  } else if (viewport.level > 0) {
+    el.flagsMapZoomStatus.textContent = `Zoom aproximado (${viewport.level}/${FLAG_MAP_ZOOM_MAX_LEVEL})`;
+  } else {
+    el.flagsMapZoomStatus.textContent = `Zoom afastado (${Math.abs(viewport.level)}/${Math.abs(FLAG_MAP_ZOOM_MIN_LEVEL)})`;
+  }
+}
+
+function changeFlagMapZoom(delta) {
+  if (!state.flagsMapOpen || !state.flagsMapBaseViewport) return;
+  const nextLevel = Math.min(
+    FLAG_MAP_ZOOM_MAX_LEVEL,
+    Math.max(FLAG_MAP_ZOOM_MIN_LEVEL, state.flagsMapZoomLevel + delta),
+  );
+  if (nextLevel === state.flagsMapZoomLevel) return;
+  state.flagsMapZoomLevel = nextLevel;
+  renderFlagMapZoom();
 }
 
 function getFlagMapFocusableElements() {
@@ -241,6 +285,9 @@ function trapFlagMapFocus(event) {
 
 function closeFlagMap({ restoreFocus = false } = {}) {
   state.flagsMapOpen = false;
+  state.flagsMapBaseViewport = null;
+  state.flagsMapFocusPoint = null;
+  state.flagsMapZoomLevel = 0;
   el.flagsMapTrigger.setAttribute('aria-expanded', 'false');
   el.flagsMapPanel.classList.add('hidden');
   el.flagsMapPanel.setAttribute('aria-hidden', 'true');
@@ -609,6 +656,8 @@ export function initFlagsListeners() {
   el.flagsRevealBtn.addEventListener('click', revealAnswer);
   el.flagsMapTrigger.addEventListener('click', openFlagMap);
   el.flagsMapCloseBtn.addEventListener('click', () => closeFlagMap({ restoreFocus: true }));
+  el.flagsMapZoomOutBtn.addEventListener('click', () => changeFlagMapZoom(-1));
+  el.flagsMapZoomInBtn.addEventListener('click', () => changeFlagMapZoom(1));
   el.flagsDeleteBtn.addEventListener('click', deleteLastPlayerLetter);
   el.flagsClearBtn.addEventListener('click', clearPlayerLetters);
 

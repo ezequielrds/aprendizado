@@ -306,6 +306,13 @@
               aria-describedby="flagsMapDescription" preserveAspectRatio="xMidYMid meet"></svg>
             <figcaption>Vermelho: país da rodada. Branco: países de contexto.</figcaption>
           </figure>
+          <div class="flags-map-zoom-controls" role="group" aria-label="Controles de zoom do mapa">
+            <button id="flagsMapZoomOutBtn" class="btn-ghost flags-map-zoom-button" type="button"
+              aria-label="Afastar o mapa" aria-controls="flagsMapSvg">− Afastar</button>
+            <p id="flagsMapZoomStatus" class="flags-map-zoom-status" role="status" aria-live="polite" aria-atomic="true">Zoom padrão</p>
+            <button id="flagsMapZoomInBtn" class="btn-ghost flags-map-zoom-button" type="button"
+              aria-label="Aproximar o mapa" aria-controls="flagsMapSvg">+ Aproximar</button>
+          </div>
           <div class="flags-map-legend" aria-label="Legenda do mapa">
             <span class="flags-map-legend-item"><i class="flags-map-swatch target" aria-hidden="true"></i>País da rodada</span>
             <span class="flags-map-legend-item"><i class="flags-map-swatch context" aria-hidden="true"></i>Países ao redor</span>
@@ -333,7 +340,7 @@
     </div>
   </div>
 
-  <script type="module" src="script.js?v=2.1.5"></script>
+  <script type="module" src="script.js?v=2.1.7"></script>
 </body>
 
 </html>

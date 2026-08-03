@@ -2,6 +2,11 @@ const MAP_NUMBER_PATTERN = /[-+]?(?:\d+(?:\.\d*)?|\.\d+)(?:[eE][-+]?\d+)?|[a-zA-
 const LOCATION_BOUNDS_CACHE = new WeakMap();
 
 export const FLAG_MAP_MIN_CONTEXT = 7;
+export const FLAG_MAP_INITIAL_PADDING = .22;
+export const FLAG_MAP_ZOOM_MIN_LEVEL = -2;
+export const FLAG_MAP_ZOOM_MAX_LEVEL = 3;
+
+const FLAG_MAP_ZOOM_SCALE_PER_LEVEL = .8;
 
 const SMALL_ISLAND_CONTEXTS = {
   nz: ['au', 'fj', 'vu', 'nc', 'pg', 'sb', 'to', 'ws', 'as'],
@@ -144,6 +149,26 @@ export function getFlagLocationBounds(location) {
   return result;
 }
 
+/**
+ * Retorna o ponto visual que representa o alvo no mapa. Países que cruzam o
+ * antimeridiano são desenhados também à direita do atlas; o foco acompanha
+ * essa cópia para que o marcador vermelho permaneça na viewport.
+ */
+export function getFlagMapFocusPoint(location, worldViewBox) {
+  const bounds = getFlagLocationBounds(location);
+  if (!bounds) return null;
+
+  const world = parseViewBox(worldViewBox);
+  if (isWrappedBounds(bounds)) {
+    return {
+      x: world.x + world.width + Math.min(bounds.minX - world.x, world.width * .2),
+      y: bounds.centerY,
+    };
+  }
+
+  return { x: bounds.centerX, y: bounds.centerY };
+}
+
 function distanceBetweenLocations(first, second) {
   const firstBounds = getFlagLocationBounds(first);
   const secondBounds = getFlagLocationBounds(second);
@@ -265,6 +290,69 @@ export function calculateFlagMapViewport(locations, worldViewBox, paddingRatio =
     contentY,
     contentWidth,
     contentHeight,
+    viewBox: [x, y, width, height].map(roundCoordinate).join(' '),
+  };
+}
+
+function clamp(value, minimum, maximum) {
+  return Math.min(maximum, Math.max(minimum, value));
+}
+
+/**
+ * Amplia ou afasta uma viewBox regional. Niveis negativos preservam o centro
+ * regional; ao aproximar, um foco opcional mantem o alvo visivel sem pan.
+ * Em ambos os casos, a viewport permanece limitada ao atlas mundial.
+ */
+export function zoomFlagMapViewport(viewport, worldViewBox, level = 0, focusPoint = null) {
+  const world = parseViewBox(worldViewBox);
+  const zoomLevel = clamp(
+    Math.round(Number(level) || 0),
+    FLAG_MAP_ZOOM_MIN_LEVEL,
+    FLAG_MAP_ZOOM_MAX_LEVEL,
+  );
+  const baseX = Number(viewport?.x);
+  const baseY = Number(viewport?.y);
+  const baseWidth = Number(viewport?.width);
+  const baseHeight = Number(viewport?.height);
+
+  if (![baseX, baseY, baseWidth, baseHeight].every(Number.isFinite) || baseWidth <= 0 || baseHeight <= 0) {
+    return {
+      x: world.x,
+      y: world.y,
+      width: world.width,
+      height: world.height,
+      level: zoomLevel,
+      viewBox: `${world.x} ${world.y} ${world.width} ${world.height}`,
+    };
+  }
+
+  const worldRight = world.x + world.width;
+  const worldBottom = world.y + world.height;
+  const baseRight = baseX + baseWidth;
+  const focusX = Number(focusPoint?.x);
+  const focusY = Number(focusPoint?.y);
+  const hasFocus = Number.isFinite(focusX) && Number.isFinite(focusY);
+  const needsExtendedRightLimit = baseRight > worldRight + .01 || (hasFocus && focusX > worldRight + .01);
+  const rightLimit = needsExtendedRightLimit ? worldRight + world.width * .2 : worldRight;
+  const maximumScale = Math.min(
+    (rightLimit - world.x) / baseWidth,
+    (worldBottom - world.y) / baseHeight,
+  );
+  const requestedScale = FLAG_MAP_ZOOM_SCALE_PER_LEVEL ** zoomLevel;
+  const scale = Math.min(requestedScale, maximumScale);
+  const width = baseWidth * scale;
+  const height = baseHeight * scale;
+  const centerX = zoomLevel > 0 && hasFocus ? focusX : baseX + baseWidth / 2;
+  const centerY = zoomLevel > 0 && hasFocus ? focusY : baseY + baseHeight / 2;
+  const x = clamp(centerX - width / 2, world.x, Math.max(world.x, rightLimit - width));
+  const y = clamp(centerY - height / 2, world.y, Math.max(world.y, worldBottom - height));
+
+  return {
+    x: roundCoordinate(x),
+    y: roundCoordinate(y),
+    width: roundCoordinate(width),
+    height: roundCoordinate(height),
+    level: zoomLevel,
     viewBox: [x, y, width, height].map(roundCoordinate).join(' '),
   };
 }

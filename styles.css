@@ -1372,8 +1372,8 @@ summary:focus-visible {
 .flags-map-svg {
   display: block;
   width: 100%;
-  height: min(62vh, 540px);
-  min-height: 250px;
+  height: min(50vh, 440px);
+  min-height: 220px;
   border-radius: 12px;
   background: #a9d2e5;
 }
@@ -1409,6 +1409,42 @@ summary:focus-visible {
   font-size: 13px;
   font-weight: 750;
   line-height: 1.4;
+}
+
+.flags-map-zoom-controls {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  align-items: center;
+  gap: 10px;
+  margin-top: 14px;
+}
+
+.flags-map-zoom-button {
+  min-height: 42px;
+  border-color: rgba(191, 219, 254, .48);
+  background: rgba(15, 23, 42, .45);
+  color: #e0f2fe;
+  font-weight: 800;
+}
+
+.flags-map-zoom-button:hover:not(:disabled) {
+  border-color: #93c5fd;
+  background: rgba(30, 64, 175, .42);
+}
+
+.flags-map-zoom-button:disabled {
+  cursor: not-allowed;
+  opacity: .5;
+}
+
+.flags-map-zoom-status {
+  min-width: 128px;
+  margin: 0;
+  color: #bfdbfe;
+  font-size: 14px;
+  font-weight: 800;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
 }
 
 .flags-map-legend {
@@ -1726,8 +1762,21 @@ summary:focus-visible {
   }
 
   .flags-map-svg {
-    height: min(55vh, 420px);
-    min-height: 210px;
+    height: min(42vh, 320px);
+    min-height: 180px;
+  }
+
+  .flags-map-zoom-controls {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .flags-map-zoom-status {
+    grid-column: 1 / -1;
+    grid-row: 1;
+  }
+
+  .flags-map-zoom-button {
+    width: 100%;
   }
 
   .flags-extra-grid {

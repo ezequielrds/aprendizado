@@ -5,9 +5,14 @@ import test from 'node:test';
 import { fileURLToPath } from 'node:url';
 import worldMap from '../data/world-map.js';
 import {
+  FLAG_MAP_INITIAL_PADDING,
+  FLAG_MAP_ZOOM_MAX_LEVEL,
+  FLAG_MAP_ZOOM_MIN_LEVEL,
   calculateFlagMapViewport,
   canOpenFlagMap,
+  getFlagMapFocusPoint,
   selectFlagMapContext,
+  zoomFlagMapViewport,
 } from '../modules/flagsMapLogic.js';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -64,6 +69,81 @@ test('o viewport do contexto e regional e inclui margem', () => {
   assert.ok(viewport.height > viewport.contentHeight);
 });
 
+test('o mapa abre com uma margem inicial mais ampla para mostrar mais contexto', () => {
+  const context = selectFlagMapContext('HU', worldMap.locations);
+  const compactViewport = calculateFlagMapViewport(context, worldMap.viewBox, .12);
+  const initialViewport = calculateFlagMapViewport(context, worldMap.viewBox, FLAG_MAP_INITIAL_PADDING);
+
+  assert.ok(FLAG_MAP_INITIAL_PADDING > .12);
+  assert.ok(initialViewport.width > compactViewport.width);
+  assert.ok(initialViewport.height > compactViewport.height);
+});
+
+test('o zoom preserva o centro e respeita os limites do mapa', () => {
+  const context = selectFlagMapContext('HU', worldMap.locations);
+  const viewport = calculateFlagMapViewport(context, worldMap.viewBox, FLAG_MAP_INITIAL_PADDING);
+  const closer = zoomFlagMapViewport(viewport, worldMap.viewBox, 1);
+  const farther = zoomFlagMapViewport(viewport, worldMap.viewBox, -1);
+  const minLevel = zoomFlagMapViewport(viewport, worldMap.viewBox, -99);
+  const maxLevel = zoomFlagMapViewport(viewport, worldMap.viewBox, 99);
+  const centerX = viewport.x + viewport.width / 2;
+  const centerY = viewport.y + viewport.height / 2;
+
+  assert.ok(closer.width < viewport.width);
+  assert.ok(closer.height < viewport.height);
+  assert.ok(farther.width > viewport.width);
+  assert.ok(farther.height > viewport.height);
+  assert.ok(Math.abs((closer.x + closer.width / 2) - centerX) < .01);
+  assert.ok(Math.abs((closer.y + closer.height / 2) - centerY) < .01);
+  assert.ok(farther.x >= 0);
+  assert.ok(farther.y >= 0);
+  assert.equal(minLevel.level, FLAG_MAP_ZOOM_MIN_LEVEL);
+  assert.equal(maxLevel.level, FLAG_MAP_ZOOM_MAX_LEVEL);
+});
+
+test('o zoom continua dentro dos limites para todos os contextos de paises', () => {
+  const [worldX, worldY, worldWidth, worldHeight] = worldMap.viewBox.split(/\s+/u).map(Number);
+
+  for (const country of countries) {
+    const context = selectFlagMapContext(country.code, worldMap.locations);
+    const baseViewport = calculateFlagMapViewport(context, worldMap.viewBox, FLAG_MAP_INITIAL_PADDING);
+
+    for (const level of [FLAG_MAP_ZOOM_MIN_LEVEL, 0, FLAG_MAP_ZOOM_MAX_LEVEL]) {
+      const viewport = zoomFlagMapViewport(baseViewport, worldMap.viewBox, level);
+      assert.ok(Number.isFinite(viewport.x), `${country.code}: x deve ser finito`);
+      assert.ok(Number.isFinite(viewport.y), `${country.code}: y deve ser finito`);
+      assert.ok(viewport.width > 0, `${country.code}: largura deve ser positiva`);
+      assert.ok(viewport.height > 0, `${country.code}: altura deve ser positiva`);
+      assert.ok(viewport.x >= worldX, `${country.code}: nao pode ultrapassar a borda oeste`);
+      assert.ok(viewport.y >= worldY, `${country.code}: nao pode ultrapassar a borda norte`);
+      assert.ok(viewport.x + viewport.width <= worldX + worldWidth * 1.2 + .01, `${country.code}: nao pode se afastar demais a leste`);
+      assert.ok(viewport.y + viewport.height <= worldY + worldHeight + .01, `${country.code}: nao pode ultrapassar a borda sul`);
+    }
+  }
+});
+
+test('o zoom mantem o marcador do pais-alvo visivel em todos os niveis de aproximacao', () => {
+  for (const country of countries) {
+    const targetLocation = worldMap.locations.find(location => location.id === country.code.toLowerCase());
+    const context = selectFlagMapContext(country.code, worldMap.locations);
+    const baseViewport = calculateFlagMapViewport(context, worldMap.viewBox, FLAG_MAP_INITIAL_PADDING);
+    const focusPoint = getFlagMapFocusPoint(targetLocation, worldMap.viewBox);
+
+    assert.ok(focusPoint, `${country.code}: foco do alvo deve existir`);
+    for (let level = 0; level <= FLAG_MAP_ZOOM_MAX_LEVEL; level += 1) {
+      const viewport = zoomFlagMapViewport(baseViewport, worldMap.viewBox, level, focusPoint);
+      assert.ok(
+        focusPoint.x >= viewport.x - .01 && focusPoint.x <= viewport.x + viewport.width + .01,
+        `${country.code}: alvo deve permanecer visivel no zoom ${level}`,
+      );
+      assert.ok(
+        focusPoint.y >= viewport.y - .01 && focusPoint.y <= viewport.y + viewport.height + .01,
+        `${country.code}: alvo deve permanecer visivel no zoom ${level}`,
+      );
+    }
+  }
+});
+
 test('cada pais possui um contexto minimo sem alterar o atlas', () => {
   const originalPaths = worldMap.locations.map(location => location.path);
   for (const country of countries) {
@@ -111,6 +191,17 @@ test('o painel interno nao declara um segundo modal', () => {
   assert.match(mapPanelTag, /aria-labelledby="flagsMapTitle"/u);
   assert.match(mapPanelTag, /aria-describedby="flagsMapDescription"/u);
   assert.doesNotMatch(mapPanelTag, /aria-modal=/u);
+});
+
+test('o painel oferece controles acessiveis para aproximar e afastar o mapa', () => {
+  assert.match(indexSource, /class="flags-map-zoom-controls"[^>]*role="group"[^>]*aria-label="Controles de zoom do mapa"/u);
+  assert.match(indexSource, /id="flagsMapZoomOutBtn"[^>]*type="button"[^>]*aria-label="Afastar o mapa"[^>]*aria-controls="flagsMapSvg"/u);
+  assert.match(indexSource, /id="flagsMapZoomInBtn"[^>]*type="button"[^>]*aria-label="Aproximar o mapa"[^>]*aria-controls="flagsMapSvg"/u);
+  assert.match(indexSource, /id="flagsMapZoomStatus"[^>]*role="status"/u);
+  assert.match(flagsSource, /calculateFlagMapViewport\([^)]*FLAG_MAP_INITIAL_PADDING/u);
+  assert.match(flagsSource, /zoomFlagMapViewport\([^)]*state\.flagsMapZoomLevel/u);
+  assert.match(flagsSource, /flagsMapZoomOutBtn\.addEventListener\('click', \(\) => changeFlagMapZoom\(-1\)\)/u);
+  assert.match(flagsSource, /flagsMapZoomInBtn\.addEventListener\('click', \(\) => changeFlagMapZoom\(1\)\)/u);
 });
 
 test('o atlas e precacheado offline sem transformar cada pais em download separado', () => {

@@ -40,6 +40,9 @@ export const state = {
   flagsGameStarted: false,
   flagsMapOpen: false,
   flagsMapReturnFocus: null,
+  flagsMapBaseViewport: null,
+  flagsMapFocusPoint: null,
+  flagsMapZoomLevel: 0,
 
   // Preferências
   selectedLanguage: localStorage.getItem('selectedLanguage') || 'pt-BR',
@@ -157,6 +160,9 @@ export const el = {
   flagsMapTrigger: document.getElementById('flagsMapTrigger'),
   flagsMapPanel:   document.getElementById('flagsMapPanel'),
   flagsMapCloseBtn:document.getElementById('flagsMapCloseBtn'),
+  flagsMapZoomOutBtn: document.getElementById('flagsMapZoomOutBtn'),
+  flagsMapZoomStatus: document.getElementById('flagsMapZoomStatus'),
+  flagsMapZoomInBtn: document.getElementById('flagsMapZoomInBtn'),
   flagsMapTitle:   document.getElementById('flagsMapTitle'),
   flagsMapDescription: document.getElementById('flagsMapDescription'),
   flagsMapSvg:     document.getElementById('flagsMapSvg'),
