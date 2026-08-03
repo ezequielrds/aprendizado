@@ -38,6 +38,8 @@ export const state = {
   flagsStatus: 'playing', // 'playing' | 'correct' | 'revealed'
   flagsRoundScored: false,
   flagsGameStarted: false,
+  flagsMapOpen: false,
+  flagsMapReturnFocus: null,
 
   // Preferências
   selectedLanguage: localStorage.getItem('selectedLanguage') || 'pt-BR',
@@ -152,6 +154,12 @@ export const el = {
   flagsRoundPoints:document.getElementById('flagsRoundPoints'),
   flagsHintsUsed:  document.getElementById('flagsHintsUsed'),
   flagsImage:      document.getElementById('flagsImage'),
+  flagsMapTrigger: document.getElementById('flagsMapTrigger'),
+  flagsMapPanel:   document.getElementById('flagsMapPanel'),
+  flagsMapCloseBtn:document.getElementById('flagsMapCloseBtn'),
+  flagsMapTitle:   document.getElementById('flagsMapTitle'),
+  flagsMapDescription: document.getElementById('flagsMapDescription'),
+  flagsMapSvg:     document.getElementById('flagsMapSvg'),
   flagsPrompt:     document.getElementById('flagsPrompt'),
   flagsAnswer:     document.getElementById('flagsAnswer'),
   flagsFeedback:   document.getElementById('flagsFeedback'),

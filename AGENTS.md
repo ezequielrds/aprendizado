@@ -53,6 +53,7 @@ leitura/
 │   ├── game.js             # Fluxo do jogo: loadNewWord, correctBtn, nextBtn, etc.
 │   ├── random.js           # Fisher-Yates compartilhado
 │   ├── flagsLogic.js       # Regras puras de Bandeiras do Mundo
+│   ├── flagsMapLogic.js    # Status permitido, contexto e viewport do mapa
 │   └── flags.js            # UI, estado e fluxo da partida de bandeiras
 │
 ├── words.json              # Lista de palavras silabadas (ex.: "ca-sa", "bo-la")
@@ -61,9 +62,11 @@ leitura/
 ├── colors.json             # Cores com nome multilíngue e valor hex
 ├── writing.json            # Palavras para o modo Escrita com emoji/imagem
 ├── data/
-│   └── countries.json      # 193 Estados-membros da ONU e referências locais de bandeiras
+│   ├── countries.json      # 193 Estados-membros da ONU e referências locais de bandeiras
+│   └── world-map.js        # Atlas ES local com 256 geometrias do @svg-maps/world
 ├── assets/
-│   └── flags/              # SVGs locais das bandeiras + SOURCE.md
+│   ├── flags/              # SVGs locais das bandeiras + SOURCE.md
+│   └── maps/               # Atribuição/licença CC-BY-4.0 do atlas cartográfico
 │
 ├── audio/                  # MP3s de encorajamento falados
 └── icons/                  # Ícones da PWA (192px e 512px)
@@ -88,7 +91,8 @@ game.js       ← state, deck, render, ui, scoring, audio, speech
 writing.js    ← state, ui, audio, scoring, game
 mode.js       ← state, deck, ui, game, render
 flagsLogic.js ← random
-flags.js      ← state, ui, flagsLogic
+flagsMapLogic.js ← (nenhum import — regras puras de mapa)
+flags.js      ← state, ui, flagsLogic, flagsMapLogic, data/world-map.js
 script.js     ← todos os módulos acima
 ```
 
@@ -143,6 +147,8 @@ state.flagsAnswerSlots     // letras montadas, com poolIndex/revealed
 state.flagsLetterPool      // letras corretas + extras embaralhadas
 state.flagsPreloadedAssets  // assets das proximas bandeiras ja solicitados pela UI
 state.flagsStatus           // 'playing' | 'correct' | 'revealed'
+state.flagsMapOpen          // se o dialogo regional esta visivel
+state.flagsMapReturnFocus   // elemento que abriu o painel e recebe o foco ao fecha-lo
 ```
 
 O objeto `el` (também em `state.js`) contém todas as referências DOM pré-capturadas via `getElementById`. Sempre use `el.nomeDoElemento` em vez de chamar `document.getElementById` diretamente nos módulos.
@@ -218,6 +224,12 @@ checkWritingAnswer()                 [writing.js]
 
 > ⚠️ `handleLetterClick`, `handleSlotClick` e `speakWord` são expostos em `window` porque o HTML gerado dinamicamente em `renderWritingUI` usa `onclick="handleLetterClick(i)"` inline. Isso é intencional e necessário.
 
+### 8.1. Mapa regional das Bandeiras
+
+Depois de `flagsStatus` mudar para `correct` ou `revealed`, o botão da bandeira habilita o diálogo regional. Em `playing`, inclusive após erro ou dica parcial, o botão permanece desabilitado. `flagsMapLogic.js` escolhe o alvo e vários países de contexto, com exceções explícitas para ilhas pequenas (incluindo Nova Zelândia + Austrália), e calcula uma `viewBox` regional a partir das paths locais. A abertura e o fechamento só alteram `state.flagsMapOpen`; não alteram pontuação, índice, resposta ou controles de próxima rodada.
+
+O SVG é criado pela UI com paths do único atlas `data/world-map.js`, sem `<script>`, `fetch` ou URL remota inserida. O país-alvo usa preenchimento vermelho e os países de contexto usam branco com borda; geometrias pequenas recebem um marcador vermelho adicional sem substituir a forma real. O diálogo possui botão de fechamento, Escape, legenda textual e mantém o foco sem movê-lo ao trocar de rodada.
+
 ---
 
 ## 9. JSONs de dados — esquemas
@@ -292,14 +304,14 @@ Os modos `syllables` e `phrases` **sempre usam `pt-BR`** independente do idioma 
 
 O arquivo `sw.js` usa a estratégia **Cache First** com fallback para rede. Ao modificar qualquer arquivo do projeto (especialmente os módulos), **incremente o `CACHE_NAME`** (ex.: `v4` → `v5`) para que os usuários recebam a versão atualizada e o cache antigo seja descartado.
 
-O shell da aplicação é precacheado no install. As 193 bandeiras locais ficam em `FLAG_ASSETS`, separadas de `APP_ASSETS`, e são adicionadas ao cache com um loop estritamente sequencial (`await cache.add(...)`) dentro do `event.waitUntil` do install. O `skipWaiting()` só é solicitado depois que todas terminam, garantindo que a partida funcione offline mesmo para países ainda não vistos e sem requisitar bandeiras simultaneamente. A UI continua carregando a bandeira atual e, no máximo, a próxima para manter a transição visual responsiva.
+O shell da aplicação, o atlas único `data/world-map.js` e sua atribuição ficam em `APP_ASSETS`. As 193 bandeiras locais ficam em `FLAG_ASSETS`, separadas de `APP_ASSETS`, e são adicionadas ao cache com um loop estritamente sequencial (`await cache.add(...)`) dentro do `event.waitUntil` do install. O `skipWaiting()` só é solicitado depois que todas terminam, garantindo que a partida funcione offline mesmo para países ainda não vistos e sem requisitar bandeiras simultaneamente. A UI continua carregando a bandeira atual e, no máximo, a próxima para manter a transição visual responsiva.
 
 ```js
 // sw.js — linha 1
-const CACHE_NAME = 'aprendizagem-cache-v10'; // ← incrementar a cada deploy
+const CACHE_NAME = 'aprendizagem-cache-v12'; // ← incrementar a cada deploy
 ```
 
-Todos os módulos em `modules/*.js` precisam estar listados no array `APP_ASSETS` do `sw.js`.
+Todos os módulos em `modules/*.js` e o atlas `data/world-map.js` precisam estar listados no array `APP_ASSETS` do `sw.js`.
 
 ---
 
@@ -333,7 +345,7 @@ A querystring `?v=X.Y.Z` força o browser a buscar o arquivo novamente mesmo que
 
 ```html
 <!-- index.html — linha do script de entrada -->
-<script type="module" src="script.js?v=2.0.0"></script>
+<script type="module" src="script.js?v=2.1.5"></script>
 <!--                                   ^^^^^ incrementar aqui -->
 ```
 
@@ -351,7 +363,7 @@ O Service Worker usa o nome do cache para invalidar versões antigas. Sempre inc
 
 ```js
 // sw.js — linha 1
-const CACHE_NAME = 'aprendizagem-cache-v10'; // ← incrementar aqui
+const CACHE_NAME = 'aprendizagem-cache-v12'; // ← incrementar aqui
 ```
 
 ### Resumo: o que atualizar a cada modificação em JS

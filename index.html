@@ -11,7 +11,7 @@
   <title>Aprendizado</title>
   <link rel="manifest" href="manifest.webmanifest">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
-  <link rel="stylesheet" href="styles.css?v=1.1.0">
+  <link rel="stylesheet" href="styles.css?v=1.1.1">
 </head>
 
 <body>
@@ -264,7 +264,12 @@
 
         <section class="flags-board panel" aria-live="polite">
           <div class="flags-image-wrap">
-            <img id="flagsImage" class="flags-image" alt="Bandeira do país a descobrir" decoding="async">
+            <button id="flagsMapTrigger" class="flags-map-trigger" type="button" disabled
+              aria-label="Abrir mapa regional depois de concluir a rodada" aria-controls="flagsMapPanel"
+              aria-expanded="false">
+              <img id="flagsImage" class="flags-image" alt="Bandeira do país a descobrir" decoding="async">
+              <span class="flags-map-trigger-label">Mapa regional disponível após concluir</span>
+            </button>
           </div>
           <p id="flagsPrompt" class="flags-prompt">Monte o nome do país</p>
           <div id="flagsAnswer" class="flags-answer" aria-label="Resposta do país"></div>
@@ -282,6 +287,31 @@
         </section>
         <p class="flags-keyboard-tip">Teclado: digite uma letra para selecionar, <b>Backspace</b> apaga.</p>
       </main>
+
+      <section id="flagsMapPanel" class="flags-map-panel hidden" role="dialog"
+        aria-labelledby="flagsMapTitle" aria-describedby="flagsMapDescription" aria-hidden="true">
+        <div class="flags-map-card">
+          <header class="flags-map-header">
+            <div>
+              <span class="flags-kicker">LOCALIZAÇÃO</span>
+              <h3 id="flagsMapTitle">Mapa regional</h3>
+            </div>
+            <button id="flagsMapCloseBtn" class="btn-ghost" type="button">Fechar mapa</button>
+          </header>
+          <p id="flagsMapDescription" class="flags-map-description">
+            O país da rodada aparece em vermelho. Os países brancos ao redor ajudam a reconhecer a região.
+          </p>
+          <figure class="flags-map-figure">
+            <svg id="flagsMapSvg" class="flags-map-svg" role="img" aria-labelledby="flagsMapTitle"
+              aria-describedby="flagsMapDescription" preserveAspectRatio="xMidYMid meet"></svg>
+            <figcaption>Vermelho: país da rodada. Branco: países de contexto.</figcaption>
+          </figure>
+          <div class="flags-map-legend" aria-label="Legenda do mapa">
+            <span class="flags-map-legend-item"><i class="flags-map-swatch target" aria-hidden="true"></i>País da rodada</span>
+            <span class="flags-map-legend-item"><i class="flags-map-swatch context" aria-hidden="true"></i>Países ao redor</span>
+          </div>
+        </div>
+      </section>
 
       <section id="flagsResultView" class="flags-result-view hidden" aria-labelledby="flagsResultTitle">
         <div class="flags-result-icon" aria-hidden="true">🏁</div>
@@ -303,7 +333,7 @@
     </div>
   </div>
 
-  <script type="module" src="script.js?v=2.1.3"></script>
+  <script type="module" src="script.js?v=2.1.5"></script>
 </body>
 
 </html>

@@ -1,4 +1,4 @@
-const CACHE_NAME = 'aprendizagem-cache-v10';
+const CACHE_NAME = 'aprendizagem-cache-v12';
 const APP_ASSETS = [
   './',
   './index.html',
@@ -11,6 +11,8 @@ const APP_ASSETS = [
   './colors.json',
   './writing.json',
   './data/countries.json',
+  './data/world-map.js',
+  './assets/maps/CC-BY-4.0.md',
   './icons/icon-192.png',
   './icons/icon-512.png',
   // Módulos JS
@@ -26,6 +28,7 @@ const APP_ASSETS = [
   './modules/game.js',
   './modules/mode.js',
   './modules/flagsLogic.js',
+  './modules/flagsMapLogic.js',
   './modules/flags.js',
   // Áudios
   './audio/Aprender com você é divertido.mp3',

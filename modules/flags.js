@@ -1,5 +1,6 @@
 import { state, el } from './state.js';
 import { setMessage } from './ui.js';
+import worldMap from '../data/world-map.js';
 import {
   FLAGS_MAX_HINTS,
   FLAGS_ROUND_COUNT,
@@ -18,9 +19,27 @@ import {
   selectFlagCountries,
   shouldShowFlagHint,
 } from './flagsLogic.js';
+import {
+  calculateFlagMapViewport,
+  canOpenFlagMap,
+  getFlagLocationBounds,
+  isTinyFlagLocation,
+  isWrappedFlagLocation,
+  selectFlagMapContext,
+} from './flagsMapLogic.js';
 
 const LETTER_CHARACTER = /\p{L}/u;
 const FLAGS_PRELOAD_COUNT = 1;
+const SVG_NAMESPACE = 'http://www.w3.org/2000/svg';
+const WORLD_MAP_WIDTH = Number(worldMap.viewBox.split(/\s+/u)[2]);
+const FLAG_MAP_FOCUSABLE_SELECTOR = [
+  'button:not([disabled])',
+  '[href]',
+  'input:not([disabled])',
+  'select:not([disabled])',
+  'textarea:not([disabled])',
+  '[tabindex]:not([tabindex="-1"])',
+].join(',');
 
 function escapeHtml(value) {
   return String(value)
@@ -113,6 +132,143 @@ function renderFlagsControls() {
   el.flagsNextBtn.textContent = lastRound ? 'Ver resultado 🏁' : 'Próxima bandeira ➜';
 }
 
+function getMapCountryName(location) {
+  const code = String(location?.id || '').toUpperCase();
+  return state.dbCountries.find(country => country.code === code)?.namePtBr || location?.name || code;
+}
+
+function renderFlagMapTrigger() {
+  const country = state.flagsCurrentCountry;
+  const available = Boolean(country && canOpenFlagMap(state.flagsStatus));
+  const countryName = country?.namePtBr || 'este país';
+
+  el.flagsMapTrigger.disabled = !available;
+  el.flagsMapTrigger.setAttribute('aria-expanded', String(state.flagsMapOpen));
+  el.flagsMapTrigger.setAttribute(
+    'aria-label',
+    available
+      ? `Abrir mapa regional de ${countryName}`
+      : 'Abrir mapa regional depois de acertar ou revelar a resposta',
+  );
+  el.flagsMapTrigger.querySelector('.flags-map-trigger-label').textContent = available
+    ? `Ver mapa regional de ${countryName}`
+    : 'Mapa regional disponível após concluir';
+}
+
+function renderFlagMap() {
+  const country = state.flagsCurrentCountry;
+  if (!country) return;
+
+  const targetCode = String(country.code || '').toLowerCase();
+  const targetLocation = worldMap.locations.find(location => location.id === targetCode);
+  if (!targetLocation) return;
+
+  const context = selectFlagMapContext(targetCode, worldMap.locations);
+  const viewport = calculateFlagMapViewport(context, worldMap.viewBox);
+  const contextWithoutTarget = context.filter(location => location.id !== targetCode);
+  const locationsToRender = [...contextWithoutTarget, targetLocation];
+  const countryName = country.namePtBr;
+
+  el.flagsMapTitle.textContent = `Onde fica ${countryName}?`;
+  el.flagsMapDescription.textContent = `O país da rodada, ${countryName}, aparece em vermelho. Os países brancos ao redor ajudam a reconhecer a região.`;
+  el.flagsMapSvg.setAttribute('viewBox', viewport.viewBox);
+  el.flagsMapSvg.setAttribute('aria-label', `Mapa regional de ${countryName}`);
+  el.flagsMapSvg.replaceChildren();
+
+  for (const location of locationsToRender) {
+    const isTarget = location.id === targetCode;
+    const path = document.createElementNS(SVG_NAMESPACE, 'path');
+    path.setAttribute('d', location.path);
+    path.setAttribute('class', isTarget ? 'flags-map-country target' : 'flags-map-country context');
+    path.setAttribute('data-country-code', location.id.toUpperCase());
+    path.setAttribute('role', 'img');
+    path.setAttribute(
+      'aria-label',
+      isTarget
+        ? `${getMapCountryName(location)}, país da rodada`
+        : `${getMapCountryName(location)}, país de contexto`,
+    );
+    el.flagsMapSvg.append(path);
+
+    if (isTarget && isWrappedFlagLocation(location)) {
+      const wrappedPath = document.createElementNS(SVG_NAMESPACE, 'path');
+      wrappedPath.setAttribute('d', location.path);
+      wrappedPath.setAttribute('class', 'flags-map-country target');
+      wrappedPath.setAttribute('transform', `translate(${WORLD_MAP_WIDTH} 0)`);
+      wrappedPath.setAttribute('aria-hidden', 'true');
+      el.flagsMapSvg.append(wrappedPath);
+    }
+  }
+
+  if (isTinyFlagLocation(targetLocation) || isWrappedFlagLocation(targetLocation)) {
+    const bounds = getFlagLocationBounds(targetLocation);
+    const marker = document.createElementNS(SVG_NAMESPACE, 'circle');
+    const markerX = isWrappedFlagLocation(targetLocation)
+      ? WORLD_MAP_WIDTH + Math.min(bounds.minX, WORLD_MAP_WIDTH * .2)
+      : bounds.centerX;
+    marker.setAttribute('class', 'flags-map-target-marker');
+    marker.setAttribute('cx', markerX);
+    marker.setAttribute('cy', bounds.centerY);
+    marker.setAttribute('r', Math.max(4, Math.min(10, Math.max(bounds.width, bounds.height) * .65)));
+    marker.setAttribute('data-country-code', targetCode.toUpperCase());
+    marker.setAttribute('role', 'img');
+    marker.setAttribute('aria-label', `${countryName}, marcador do país da rodada`);
+    el.flagsMapSvg.append(marker);
+  }
+}
+
+function getFlagMapFocusableElements() {
+  return [...el.flagsMapPanel.querySelectorAll(FLAG_MAP_FOCUSABLE_SELECTOR)]
+    .filter(element => element.tabIndex >= 0 && element.getAttribute('aria-hidden') !== 'true');
+}
+
+function trapFlagMapFocus(event) {
+  const focusableElements = getFlagMapFocusableElements();
+  if (!focusableElements.length) {
+    event.preventDefault();
+    return;
+  }
+
+  const currentIndex = focusableElements.indexOf(document.activeElement);
+  const lastIndex = focusableElements.length - 1;
+  const nextIndex = event.shiftKey
+    ? currentIndex <= 0 ? lastIndex : currentIndex - 1
+    : currentIndex < 0 || currentIndex >= lastIndex ? 0 : currentIndex + 1;
+
+  event.preventDefault();
+  focusableElements[nextIndex].focus();
+}
+
+function closeFlagMap({ restoreFocus = false } = {}) {
+  state.flagsMapOpen = false;
+  el.flagsMapTrigger.setAttribute('aria-expanded', 'false');
+  el.flagsMapPanel.classList.add('hidden');
+  el.flagsMapPanel.setAttribute('aria-hidden', 'true');
+
+  const returnFocus = state.flagsMapReturnFocus;
+  state.flagsMapReturnFocus = null;
+  if (
+    restoreFocus &&
+    returnFocus &&
+    typeof returnFocus.focus === 'function' &&
+    !returnFocus.disabled &&
+    returnFocus.isConnected !== false
+  ) {
+    returnFocus.focus();
+  }
+}
+
+function openFlagMap(event) {
+  if (!state.flagsGameStarted || !canOpenFlagMap(state.flagsStatus)) return;
+  state.flagsMapReturnFocus = event?.currentTarget || el.flagsMapTrigger;
+  renderFlagMap();
+  state.flagsMapOpen = true;
+  el.flagsMapTrigger.setAttribute('aria-expanded', 'true');
+  el.flagsMapPanel.classList.remove('hidden');
+  el.flagsMapPanel.setAttribute('aria-hidden', 'false');
+  el.flagsMapCloseBtn.focus();
+}
+
 function preloadUpcomingFlags() {
   const upcomingCountries = state.flagsCountries.slice(
     state.flagsIndex + 1,
@@ -151,9 +307,11 @@ function renderFlagsRound() {
   renderAnswerSlots();
   renderLetterPool();
   renderFlagsControls();
+  renderFlagMapTrigger();
 }
 
 function resetFlagRound() {
+  closeFlagMap();
   const letters = getCountryLetters();
   state.flagsRoundPoints = getAvailablePoints(0);
   state.flagsHintsUsed = 0;
@@ -171,6 +329,7 @@ function resetFlagRound() {
 
 function loadNextFlag() {
   if (state.flagsGameStarted && state.flagsIndex >= 0 && state.flagsStatus === 'playing') return;
+  closeFlagMap();
   if (state.flagsIndex + 1 >= state.flagsCountries.length) {
     finishFlagsGame();
     return;
@@ -339,6 +498,7 @@ function revealAnswer() {
 }
 
 function finishFlagsGame() {
+  closeFlagMap();
   state.flagsGameStarted = false;
   el.flagsPlayingView.classList.add('hidden');
   el.flagsResultView.classList.remove('hidden');
@@ -372,6 +532,7 @@ export function startFlagsGame(extraLetters = state.flagsExtraLetters) {
   state.flagsCorrectCount = 0;
   state.flagsRevealedCount = 0;
   state.flagsGameStarted = true;
+  closeFlagMap();
   el.modeSelection.classList.add('hidden');
   el.flagsConfig.classList.add('hidden');
   el.flagsGame.classList.remove('hidden');
@@ -381,6 +542,7 @@ export function startFlagsGame(extraLetters = state.flagsExtraLetters) {
 }
 
 function showModeSelection() {
+  closeFlagMap();
   state.flagsGameStarted = false;
   state.gameMode = 'syllables';
   el.flagsGame.classList.add('hidden');
@@ -400,6 +562,21 @@ function openFlagsConfig() {
 }
 
 function handleFlagsKeydown(event) {
+  if (state.flagsMapOpen) {
+    if (event.key === 'Escape') {
+      event.preventDefault();
+      closeFlagMap({ restoreFocus: true });
+      return;
+    }
+    if (event.key === 'Tab') {
+      trapFlagMapFocus(event);
+      return;
+    }
+    if (event.key === 'Enter' || event.key === ' ') return;
+    event.preventDefault();
+    event.stopPropagation();
+    return;
+  }
   if (!state.flagsGameStarted || state.flagsStatus !== 'playing') return;
   if (['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement?.tagName)) return;
 
@@ -430,6 +607,8 @@ export function initFlagsListeners() {
   el.flagsNextBtn.addEventListener('click', loadNextFlag);
   el.flagsHintBtn.addEventListener('click', handleHint);
   el.flagsRevealBtn.addEventListener('click', revealAnswer);
+  el.flagsMapTrigger.addEventListener('click', openFlagMap);
+  el.flagsMapCloseBtn.addEventListener('click', () => closeFlagMap({ restoreFocus: true }));
   el.flagsDeleteBtn.addEventListener('click', deleteLastPlayerLetter);
   el.flagsClearBtn.addEventListener('click', clearPlayerLetters);
 
