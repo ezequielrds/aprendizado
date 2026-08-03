@@ -10,8 +10,8 @@ const scriptSource = fs.readFileSync(path.join(root, 'script.js'), 'utf8');
 const serviceWorkerSource = fs.readFileSync(path.join(root, 'sw.js'), 'utf8');
 
 test('o app atualiza o Service Worker instalado sem exigir limpeza manual', () => {
-  assert.match(indexSource, /script\.js\?v=2\.1\.7/u);
-  assert.match(scriptSource, /SERVICE_WORKER_VERSION\s*=\s*['"]2\.1\.7['"]/u);
+  assert.match(indexSource, /script\.js\?v=2\.1\.8/u);
+  assert.match(scriptSource, /SERVICE_WORKER_VERSION\s*=\s*['"]2\.1\.8['"]/u);
   assert.match(scriptSource, /serviceWorker\.register\([^)]*\?v=\$\{SERVICE_WORKER_VERSION\}/u);
   assert.match(scriptSource, /updateViaCache\s*:\s*['"]none['"]/u);
   assert.match(scriptSource, /registration\.update\(\)/u);
@@ -27,7 +27,7 @@ test('o app atualiza o Service Worker instalado sem exigir limpeza manual', () =
   );
   assert.match(scriptSource, /if \(controllerChangeHandled\) return/u);
   assert.match(scriptSource, /window\.location\.reload\(\)/u);
-  assert.match(serviceWorkerSource, /CACHE_NAME\s*=\s*['"]aprendizagem-cache-v14['"]/u);
+  assert.match(serviceWorkerSource, /CACHE_NAME\s*=\s*['"]aprendizagem-cache-v15['"]/u);
   assert.match(serviceWorkerSource, /addEventListener\(['"]message['"]/u);
   assert.match(serviceWorkerSource, /skipWaiting\(\)/u);
 });

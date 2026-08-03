@@ -228,7 +228,7 @@ checkWritingAnswer()                 [writing.js]
 
 Depois de `flagsStatus` mudar para `correct` ou `revealed`, o botão da bandeira habilita o diálogo regional. Em `playing`, inclusive após erro ou dica parcial, o botão permanece desabilitado. `flagsMapLogic.js` escolhe o alvo e vários países de contexto, com exceções explícitas para ilhas pequenas (incluindo Nova Zelândia + Austrália), e calcula uma `viewBox` regional a partir das paths locais. Na abertura, a UI guarda a viewport-base, o foco visual do país-alvo e o nível de zoom; os controles **− Afastar** e **+ Aproximar** recalculam a `viewBox` sem acumular arredondamentos. Ao aproximar, o foco mantém o alvo visível — inclusive Kiribati no antimeridiano — e o fechamento limpa esse estado temporário. Nada disso altera pontuação, índice, resposta ou controles da próxima rodada.
 
-O SVG é criado pela UI com paths do único atlas `data/world-map.js`, sem `<script>`, `fetch` ou URL remota inserida. O país-alvo usa preenchimento vermelho e os países de contexto usam branco com borda; geometrias pequenas recebem um marcador vermelho adicional sem substituir a forma real. O diálogo possui botão de fechamento, controles de zoom associados ao SVG, Escape, legenda textual e mantém o foco sem movê-lo ao trocar de rodada.
+O SVG é criado pela UI com paths do único atlas `data/world-map.js`, sem `<script>`, `fetch` ou URL remota inserida. O país-alvo usa preenchimento vermelho e os países de contexto usam branco com borda; inclusive geometrias pequenas usam somente a forma do país em vermelho, sem marcadores circulares adicionais. O diálogo possui botão de fechamento, controles de zoom associados ao SVG, Escape, legenda textual e mantém o foco sem movê-lo ao trocar de rodada.
 
 ---
 
@@ -308,7 +308,7 @@ O shell da aplicação, o atlas único `data/world-map.js` e sua atribuição fi
 
 ```js
 // sw.js — linha 1
-const CACHE_NAME = 'aprendizagem-cache-v14'; // ← incrementar a cada deploy
+const CACHE_NAME = 'aprendizagem-cache-v15'; // ← incrementar a cada deploy
 ```
 
 Todos os módulos em `modules/*.js` e o atlas `data/world-map.js` precisam estar listados no array `APP_ASSETS` do `sw.js`.
@@ -345,7 +345,7 @@ A querystring `?v=X.Y.Z` força o browser a buscar o arquivo novamente mesmo que
 
 ```html
 <!-- index.html — linha do script de entrada -->
-<script type="module" src="script.js?v=2.1.7"></script>
+<script type="module" src="script.js?v=2.1.8"></script>
 <!--                                   ^^^^^ incrementar aqui -->
 ```
 
@@ -363,7 +363,7 @@ O Service Worker usa o nome do cache para invalidar versões antigas. Sempre inc
 
 ```js
 // sw.js — linha 1
-const CACHE_NAME = 'aprendizagem-cache-v14'; // ← incrementar aqui
+const CACHE_NAME = 'aprendizagem-cache-v15'; // ← incrementar aqui
 ```
 
 ### Resumo: o que atualizar a cada modificação em JS

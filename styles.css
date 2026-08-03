@@ -1395,14 +1395,6 @@ summary:focus-visible {
   stroke-width: 1.8;
 }
 
-.flags-map-target-marker {
-  fill: #ef4444;
-  stroke: #ffffff;
-  stroke-width: 2.4;
-  vector-effect: non-scaling-stroke;
-  paint-order: stroke fill;
-}
-
 .flags-map-figure figcaption {
   margin-top: 10px;
   color: #172554;

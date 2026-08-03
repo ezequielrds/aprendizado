@@ -26,8 +26,6 @@ import {
   calculateFlagMapViewport,
   canOpenFlagMap,
   getFlagMapFocusPoint,
-  getFlagLocationBounds,
-  isTinyFlagLocation,
   isWrappedFlagLocation,
   selectFlagMapContext,
   zoomFlagMapViewport,
@@ -209,20 +207,6 @@ function renderFlagMap() {
       wrappedPath.setAttribute('aria-hidden', 'true');
       el.flagsMapSvg.append(wrappedPath);
     }
-  }
-
-  if (isTinyFlagLocation(targetLocation) || isWrappedFlagLocation(targetLocation)) {
-    const bounds = getFlagLocationBounds(targetLocation);
-    const marker = document.createElementNS(SVG_NAMESPACE, 'circle');
-    const markerX = state.flagsMapFocusPoint?.x ?? bounds.centerX;
-    marker.setAttribute('class', 'flags-map-target-marker');
-    marker.setAttribute('cx', markerX);
-    marker.setAttribute('cy', bounds.centerY);
-    marker.setAttribute('r', Math.max(4, Math.min(10, Math.max(bounds.width, bounds.height) * .65)));
-    marker.setAttribute('data-country-code', targetCode.toUpperCase());
-    marker.setAttribute('role', 'img');
-    marker.setAttribute('aria-label', `${countryName}, marcador do país da rodada`);
-    el.flagsMapSvg.append(marker);
   }
 }
 

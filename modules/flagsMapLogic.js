@@ -152,7 +152,7 @@ export function getFlagLocationBounds(location) {
 /**
  * Retorna o ponto visual que representa o alvo no mapa. Países que cruzam o
  * antimeridiano são desenhados também à direita do atlas; o foco acompanha
- * essa cópia para que o marcador vermelho permaneça na viewport.
+ * essa cópia para que o país vermelho permaneça na viewport.
  */
 export function getFlagMapFocusPoint(location, worldViewBox) {
   const bounds = getFlagLocationBounds(location);

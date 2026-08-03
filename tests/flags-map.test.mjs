@@ -20,6 +20,7 @@ const countries = JSON.parse(fs.readFileSync(path.join(root, 'data/countries.jso
 const indexSource = fs.readFileSync(path.join(root, 'index.html'), 'utf8');
 const flagsSource = fs.readFileSync(path.join(root, 'modules/flags.js'), 'utf8');
 const serviceWorkerSource = fs.readFileSync(path.join(root, 'sw.js'), 'utf8');
+const stylesSource = fs.readFileSync(path.join(root, 'styles.css'), 'utf8');
 
 function locationCodes(locations) {
   return new Set(locations.map(location => String(location.id).toUpperCase()));
@@ -122,7 +123,7 @@ test('o zoom continua dentro dos limites para todos os contextos de paises', () 
   }
 });
 
-test('o zoom mantem o marcador do pais-alvo visivel em todos os niveis de aproximacao', () => {
+test('o zoom mantem o foco do pais-alvo visivel em todos os niveis de aproximacao', () => {
   for (const country of countries) {
     const targetLocation = worldMap.locations.find(location => location.id === country.code.toLowerCase());
     const context = selectFlagMapContext(country.code, worldMap.locations);
@@ -142,6 +143,13 @@ test('o zoom mantem o marcador do pais-alvo visivel em todos os niveis de aproxi
       );
     }
   }
+});
+
+test('o mapa mostra somente o pais-alvo pintado, sem marcador circular extra', () => {
+  assert.match(flagsSource, /isTarget \? 'flags-map-country target' : 'flags-map-country context'/u);
+  assert.doesNotMatch(flagsSource, /createElementNS\(SVG_NAMESPACE, 'circle'\)/u);
+  assert.doesNotMatch(flagsSource, /flags-map-target-marker/u);
+  assert.doesNotMatch(stylesSource, /flags-map-target-marker/u);
 });
 
 test('cada pais possui um contexto minimo sem alterar o atlas', () => {
