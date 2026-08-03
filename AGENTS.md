@@ -296,7 +296,7 @@ O shell da aplicação é precacheado no install. As 193 bandeiras locais ficam 
 
 ```js
 // sw.js — linha 1
-const CACHE_NAME = 'aprendizagem-cache-v9'; // ← incrementar a cada deploy
+const CACHE_NAME = 'aprendizagem-cache-v10'; // ← incrementar a cada deploy
 ```
 
 Todos os módulos em `modules/*.js` precisam estar listados no array `APP_ASSETS` do `sw.js`.
@@ -351,7 +351,7 @@ O Service Worker usa o nome do cache para invalidar versões antigas. Sempre inc
 
 ```js
 // sw.js — linha 1
-const CACHE_NAME = 'aprendizagem-cache-v9'; // ← incrementar aqui
+const CACHE_NAME = 'aprendizagem-cache-v10'; // ← incrementar aqui
 ```
 
 ### Resumo: o que atualizar a cada modificação em JS

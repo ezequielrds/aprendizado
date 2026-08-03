@@ -16,6 +16,7 @@ import {
   isFullyRevealed,
   isLastFlagRound,
   selectFlagCountries,
+  shouldShowFlagHint,
 } from './flagsLogic.js';
 
 const LETTER_CHARACTER = /\p{L}/u;
@@ -95,13 +96,15 @@ function renderLetterPool() {
 
 function renderFlagsControls() {
   const playing = state.flagsStatus === 'playing';
+  const showHint = shouldShowFlagHint(state.flagsStatus);
   const hintsAvailable = state.flagsHintsUsed < FLAGS_MAX_HINTS;
   const lastRound = isLastFlagRound(state.flagsIndex, state.flagsCountries.length);
 
   el.flagsRoundPoints.textContent = state.flagsRoundPoints;
   el.flagsHintsUsed.textContent = `${state.flagsHintsUsed} / ${FLAGS_MAX_HINTS}`;
   el.flagsHintBtn.innerHTML = `💡 Usar dica <span>(${state.flagsHintsUsed}/${FLAGS_MAX_HINTS})</span>`;
-  el.flagsHintBtn.disabled = !playing || !hintsAvailable;
+  el.flagsHintBtn.disabled = !showHint || !hintsAvailable;
+  el.flagsHintBtn.classList.toggle('hidden', !showHint);
   el.flagsRevealBtn.disabled = !playing;
   el.flagsRevealBtn.classList.toggle('hidden', !playing);
   el.flagsDeleteBtn.disabled = !playing || !state.flagsAnswerSlots.some(slot => slot && !slot.revealed);

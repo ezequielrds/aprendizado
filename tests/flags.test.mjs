@@ -20,6 +20,7 @@ import {
   isLastFlagRound,
   normalizeCountryAnswer,
   selectFlagCountries,
+  shouldShowFlagHint,
 } from '../modules/flagsLogic.js';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -82,6 +83,11 @@ test('a pontuacao nunca fica negativa', () => {
 
 test('quatro dicas valem zero pontos', () => {
   assert.equal(getRoundPoints({ hintsUsed: 4, status: 'correct' }), 0);
+});
+
+test('o botao de dica desaparece depois de mostrar a resposta', () => {
+  assert.equal(shouldShowFlagHint('playing'), true);
+  assert.equal(shouldShowFlagHint('revealed'), false);
 });
 
 test('uma resposta totalmente revelada vale zero', () => {

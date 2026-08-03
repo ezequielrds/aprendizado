@@ -1,4 +1,4 @@
-const CACHE_NAME = 'aprendizagem-cache-v9';
+const CACHE_NAME = 'aprendizagem-cache-v10';
 const APP_ASSETS = [
   './',
   './index.html',
@@ -266,6 +266,12 @@ function fetchFlagSequentially(request) {
 function isFlagRequest(url) {
   return url.pathname.startsWith(FLAG_PATH_PREFIX);
 }
+
+self.addEventListener('message', (event) => {
+  if (event.data && event.data.type === 'SKIP_WAITING') {
+    self.skipWaiting();
+  }
+});
 
 self.addEventListener('install', (event) => {
   event.waitUntil(

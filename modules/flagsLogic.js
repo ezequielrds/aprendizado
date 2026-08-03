@@ -124,6 +124,10 @@ export function getAvailablePoints(hintsUsed) {
   return Math.max(0, FLAGS_POINTS_PER_ROUND - Math.max(0, Number(hintsUsed) || 0) * 10);
 }
 
+export function shouldShowFlagHint(status) {
+  return status === 'playing';
+}
+
 export function getRoundPoints({ hintsUsed = 0, status = 'correct', fullyRevealed = false } = {}) {
   if (status === 'revealed' || fullyRevealed) return 0;
   return getAvailablePoints(hintsUsed);

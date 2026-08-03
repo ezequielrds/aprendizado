@@ -35,6 +35,55 @@ initModeListeners();      // Seleção de modo, config Números, config Escrita,
 initWritingGlobals();     // Expõe window.handleLetterClick e window.handleSlotClick
 initFlagsListeners();     // Configuração e partida Bandeiras do Mundo
 
+const SERVICE_WORKER_VERSION = '2.1.3';
+const SERVICE_WORKER_RELOAD_KEY = 'aprendizado-sw-reloaded-version';
+let controllerChangeHandled = false;
+
+function requestSkipWaiting(registration) {
+  if (registration.waiting) {
+    registration.waiting.postMessage({ type: 'SKIP_WAITING' });
+  }
+}
+
+function watchServiceWorkerInstallation(registration) {
+  const observedWorkers = new WeakSet();
+  const observeInstallingWorker = () => {
+    requestSkipWaiting(registration);
+    const worker = registration.installing;
+    if (!worker || observedWorkers.has(worker)) return;
+
+    observedWorkers.add(worker);
+    worker.addEventListener('statechange', () => {
+      if (worker.state === 'installed') {
+        requestSkipWaiting(registration);
+      }
+    });
+
+    if (worker.state === 'installed') {
+      requestSkipWaiting(registration);
+    }
+  };
+
+  registration.addEventListener('updatefound', observeInstallingWorker);
+  observeInstallingWorker();
+}
+
+function reloadOnceOnControllerChange() {
+  navigator.serviceWorker.addEventListener('controllerchange', () => {
+    if (controllerChangeHandled) return;
+    controllerChangeHandled = true;
+
+    try {
+      if (sessionStorage.getItem(SERVICE_WORKER_RELOAD_KEY) === SERVICE_WORKER_VERSION) return;
+      sessionStorage.setItem(SERVICE_WORKER_RELOAD_KEY, SERVICE_WORKER_VERSION);
+    } catch {
+      // The in-memory guard still prevents a reload loop if storage is unavailable.
+    }
+
+    window.location.reload();
+  });
+}
+
 // ── 3. Carregamento assíncrono dos dados ──────────────────────────────────
 
 async function initGame() {
@@ -72,8 +121,17 @@ initGame();
 // ── 4. Service Worker ─────────────────────────────────────────────────────
 
 if ('serviceWorker' in navigator) {
+  reloadOnceOnControllerChange();
+
   window.addEventListener('load', () => {
-    navigator.serviceWorker.register('./sw.js').catch(err => {
+    navigator.serviceWorker.register(`./sw.js?v=${SERVICE_WORKER_VERSION}`, {
+      updateViaCache: 'none',
+    }).then(registration => {
+      watchServiceWorkerInstallation(registration);
+      return registration.update().then(() => {
+        requestSkipWaiting(registration);
+      });
+    }).catch(err => {
       console.warn('Service worker registration failed:', err);
     });
   });
