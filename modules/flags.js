@@ -25,6 +25,7 @@ import {
   FLAG_MAP_ZOOM_MIN_LEVEL,
   calculateFlagMapViewport,
   canOpenFlagMap,
+  getFlagMapCapitalPoint,
   getFlagMapFocusPoint,
   orderFlagMapLocations,
   selectFlagMapContext,
@@ -141,6 +142,61 @@ function getMapCountryName(location) {
   return state.dbCountries.find(country => country.code === code)?.namePtBr || location?.name || code;
 }
 
+function createFlagMapCapitalAnnotation({ countryName, capitalName, point, continuation = false }) {
+  const annotation = document.createElementNS(SVG_NAMESPACE, 'g');
+  annotation.setAttribute('class', 'flags-map-capital');
+  annotation.setAttribute('data-capital-annotation', 'true');
+
+  if (continuation) {
+    annotation.setAttribute('transform', `translate(${WORLD_MAP_WIDTH} 0)`);
+    annotation.setAttribute('data-map-continuation', 'true');
+    annotation.setAttribute('aria-hidden', 'true');
+  } else {
+    annotation.setAttribute('role', 'img');
+    annotation.setAttribute('aria-label', `Capital de ${countryName}: ${capitalName}`);
+  }
+
+  const marker = document.createElementNS(SVG_NAMESPACE, 'circle');
+  marker.setAttribute('class', 'flags-map-capital-marker');
+  marker.setAttribute('data-capital-marker', 'true');
+  marker.setAttribute('cx', point.x);
+  marker.setAttribute('cy', point.y);
+  marker.setAttribute('aria-hidden', 'true');
+
+  const label = document.createElementNS(SVG_NAMESPACE, 'text');
+  const labelDirection = point.x > WORLD_MAP_WIDTH - 110 ? -1 : 1;
+  label.setAttribute('class', 'flags-map-capital-label');
+  label.setAttribute('data-capital-label', 'true');
+  label.setAttribute('data-capital-x', point.x);
+  label.setAttribute('data-capital-y', point.y);
+  label.setAttribute('data-capital-label-direction', labelDirection);
+  label.setAttribute('text-anchor', labelDirection < 0 ? 'end' : 'start');
+  label.setAttribute('aria-hidden', 'true');
+  label.textContent = capitalName;
+
+  annotation.append(marker, label);
+  return annotation;
+}
+
+function renderFlagMapCapitalAppearance(viewport) {
+  const viewportScale = viewport.width / WORLD_MAP_WIDTH;
+  const markerRadius = Math.max(1, 7 * viewportScale);
+  const labelFontSize = Math.max(4, 28 * viewportScale);
+  const labelOffset = Math.max(2, 12 * viewportScale);
+
+  for (const marker of el.flagsMapSvg.querySelectorAll('[data-capital-marker]')) {
+    marker.setAttribute('r', markerRadius);
+  }
+  for (const label of el.flagsMapSvg.querySelectorAll('[data-capital-label]')) {
+    const x = Number(label.getAttribute('data-capital-x'));
+    const y = Number(label.getAttribute('data-capital-y'));
+    const direction = Number(label.getAttribute('data-capital-label-direction')) || 1;
+    label.setAttribute('x', x + direction * labelOffset);
+    label.setAttribute('y', y - labelOffset);
+    label.setAttribute('font-size', labelFontSize);
+  }
+}
+
 function renderFlagMapTrigger() {
   const country = state.flagsCurrentCountry;
   const available = Boolean(country && canOpenFlagMap(state.flagsStatus));
@@ -168,19 +224,29 @@ function renderFlagMap() {
   if (!targetLocation) return;
 
   const context = selectFlagMapContext(targetCode, worldMap.locations);
+  const countryName = country.namePtBr;
+  const capitalName = country.capital?.namePtBr;
+  const capitalPoint = getFlagMapCapitalPoint(country.capital, worldMap.viewBox);
   state.flagsMapBaseViewport = calculateFlagMapViewport(
     context,
     worldMap.viewBox,
     FLAG_MAP_INITIAL_PADDING,
   );
-  state.flagsMapFocusPoint = getFlagMapFocusPoint(targetLocation, worldMap.viewBox);
+  state.flagsMapFocusPoint = getFlagMapFocusPoint(targetLocation, worldMap.viewBox, capitalPoint);
   state.flagsMapZoomLevel = 0;
   const locationsToRender = orderFlagMapLocations(targetCode, worldMap.locations);
-  const countryName = country.namePtBr;
+  const capitalDescription = capitalName && capitalPoint
+    ? ` O ponto preto identifica ${capitalName}, a capital.`
+    : '';
 
   el.flagsMapTitle.textContent = `Onde fica ${countryName}?`;
-  el.flagsMapDescription.textContent = `O país da rodada, ${countryName}, aparece em vermelho. Os demais países do mapa aparecem em branco; afaste o zoom para ver o mapa-múndi.`;
-  el.flagsMapSvg.setAttribute('aria-label', `Mapa-múndi com ${countryName} em destaque`);
+  el.flagsMapDescription.textContent = `O país da rodada, ${countryName}, aparece em vermelho. Os demais países do mapa aparecem em branco; afaste o zoom para ver o mapa-múndi.${capitalDescription}`;
+  el.flagsMapSvg.setAttribute(
+    'aria-label',
+    capitalName && capitalPoint
+      ? `Mapa-múndi com ${countryName} em destaque e ${capitalName} como capital`
+      : `Mapa-múndi com ${countryName} em destaque`,
+  );
   el.flagsMapSvg.replaceChildren();
 
   for (const location of locationsToRender) {
@@ -209,6 +275,12 @@ function renderFlagMap() {
     el.flagsMapSvg.append(wrappedPath);
   }
 
+  if (capitalName && capitalPoint) {
+    const capitalAnnotation = { countryName, capitalName, point: capitalPoint };
+    el.flagsMapSvg.append(createFlagMapCapitalAnnotation(capitalAnnotation));
+    el.flagsMapSvg.append(createFlagMapCapitalAnnotation({ ...capitalAnnotation, continuation: true }));
+  }
+
   renderFlagMapZoom();
 }
 
@@ -228,6 +300,7 @@ function renderFlagMapZoom() {
   for (const path of el.flagsMapSvg.querySelectorAll('[data-map-continuation]')) {
     path.style.display = showMapContinuation ? '' : 'none';
   }
+  renderFlagMapCapitalAppearance(viewport);
   el.flagsMapZoomOutBtn.disabled = viewport.level <= FLAG_MAP_ZOOM_MIN_LEVEL;
   el.flagsMapZoomInBtn.disabled = viewport.level >= FLAG_MAP_ZOOM_MAX_LEVEL;
 

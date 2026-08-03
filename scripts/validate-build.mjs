@@ -73,8 +73,8 @@ for (const moduleFile of moduleFiles) {
 assert.match(index, /id="modeFlagsBtn"/);
 assert.match(index, /id="flagsMapTrigger"/);
 assert.match(index, /id="flagsMapPanel"[^>]*role="dialog"/u);
-assert.match(index, /script\.js\?v=2\.1\.9/);
-assert.match(serviceWorker, /aprendizagem-cache-v16/);
+assert.match(index, /script\.js\?v=2\.1\.10/);
+assert.match(serviceWorker, /aprendizagem-cache-v17/);
 assert.match(serviceWorker, /\.\/data\/countries\.json/);
 assert.match(appAssets, /\.\/data\/world-map\.js/);
 assert.match(appAssets, /\.\/assets\/maps\/CC-BY-4\.0\.md/);

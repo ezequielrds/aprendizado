@@ -62,7 +62,7 @@ leitura/
 ├── colors.json             # Cores com nome multilíngue e valor hex
 ├── writing.json            # Palavras para o modo Escrita com emoji/imagem
 ├── data/
-│   ├── countries.json      # 193 Estados-membros da ONU e referências locais de bandeiras
+│   ├── countries.json      # 193 Estados-membros da ONU, bandeiras e capitais locais
 │   └── world-map.js        # Atlas ES local com 256 geometrias do @svg-maps/world
 ├── assets/
 │   ├── flags/              # SVGs locais das bandeiras + SOURCE.md
@@ -226,9 +226,9 @@ checkWritingAnswer()                 [writing.js]
 
 ### 8.1. Mapa regional das Bandeiras
 
-Depois de `flagsStatus` mudar para `correct` ou `revealed`, o botão da bandeira habilita o diálogo de localização. Em `playing`, inclusive após erro ou dica parcial, o botão permanece desabilitado. `flagsMapLogic.js` escolhe o alvo e vários países de contexto apenas para calcular a `viewBox` regional inicial; o renderer sempre desenha as **256 geometrias do atlas local**, com o alvo por último e em vermelho e os demais países em branco — inclusive quando aparecem apenas cortados na borda da viewport. Ao afastar até o limite, a `viewBox` é exatamente o atlas mundial `0 0 1010 666`. Uma cópia de continuidade do atlas só é desenhada quando a viewport cruza o antimeridiano, preservando o contexto de ilhas como Kiribati sem duplicar o mapa-múndi. A UI guarda a viewport-base, o foco visual do país-alvo e o nível de zoom; os controles **− Afastar** e **+ Aproximar** recalculam a `viewBox` sem acumular arredondamentos. Ao aproximar, o foco mantém o alvo visível, e o fechamento limpa esse estado temporário. O único destaque visual é a própria geometria vermelha do país: nunca criar marcador circular. Nada disso altera pontuação, índice, resposta ou controles da próxima rodada.
+Depois de `flagsStatus` mudar para `correct` ou `revealed`, o botão da bandeira habilita o diálogo de localização. Em `playing`, inclusive após erro ou dica parcial, o botão permanece desabilitado. `flagsMapLogic.js` escolhe o alvo e vários países de contexto apenas para calcular a `viewBox` regional inicial; o renderer sempre desenha as **256 geometrias do atlas local**, com o alvo por último e em vermelho e os demais países em branco — inclusive quando aparecem apenas cortados na borda da viewport. Ao afastar até o limite, a `viewBox` é exatamente o atlas mundial `0 0 1010 666`. Uma cópia de continuidade do atlas só é desenhada quando a viewport cruza o antimeridiano, preservando o contexto de ilhas como Kiribati sem duplicar o mapa-múndi. A UI guarda a viewport-base, o foco visual do país-alvo, sua capital e o nível de zoom; os controles **− Afastar** e **+ Aproximar** recalculam a `viewBox` sem acumular arredondamentos. Ao aproximar, o foco combinado mantém tanto o alvo quanto a capital visíveis, e o fechamento limpa esse estado temporário. Nada disso altera pontuação, índice, resposta ou controles da próxima rodada.
 
-O SVG é criado pela UI com paths do único atlas `data/world-map.js`, sem `<script>`, `fetch` ou URL remota inserida. O país-alvo usa preenchimento vermelho e os demais países usam branco com borda; inclusive geometrias pequenas usam somente a forma do país em vermelho, sem marcadores circulares adicionais. O diálogo possui botão de fechamento, controles de zoom associados ao SVG, Escape, legenda textual e mantém o foco sem movê-lo ao trocar de rodada.
+O SVG é criado pela UI com paths do único atlas `data/world-map.js`, sem `<script>`, `fetch` ou URL remota inserida. O país-alvo usa somente sua geometria vermelha; **nunca** criar marcador circular vermelho ou `.flags-map-target-marker`. Cada registro em `data/countries.json` possui uma capital offline (`namePtBr`, `latitude`, `longitude`), obtida de `P36` e `P625` da Wikidata em 2026-08-03 e embutida no arquivo estático. `getFlagMapCapitalPoint` projeta essas coordenadas na Mercator do atlas; o ponto preto `.flags-map-capital-marker` e o texto `.flags-map-capital-label` são a única exceção circular e ficam sobre a capital, inclusive no antimeridiano. O diálogo possui botão de fechamento, controles de zoom associados ao SVG, Escape, legenda textual e mantém o foco sem movê-lo ao trocar de rodada.
 
 ---
 
@@ -273,6 +273,21 @@ Letras individuais maiúsculas.
 `word` deve estar em **MAIÚSCULAS** (o modo Escrita é case-sensitive).
 `image` pode ser um emoji string ou `null` (quando null, exibe apenas o botão de ouvir).
 
+### `data/countries.json`
+```json
+{
+  "code": "BR",
+  "namePtBr": "Brasil",
+  "flagAsset": "assets/flags/br.svg",
+  "capital": {
+    "namePtBr": "Brasília",
+    "latitude": -15.793889,
+    "longitude": -47.882778
+  }
+}
+```
+Cada um dos 193 países deve ter uma capital local. As coordenadas são geográficas em graus e são projetadas no SVG Mercator do atlas somente no cliente; não consultar serviço remoto em runtime.
+
 ---
 
 ## 10. Idiomas suportados
@@ -308,7 +323,7 @@ O shell da aplicação, o atlas único `data/world-map.js` e sua atribuição fi
 
 ```js
 // sw.js — linha 1
-const CACHE_NAME = 'aprendizagem-cache-v16'; // ← incrementar a cada deploy
+const CACHE_NAME = 'aprendizagem-cache-v17'; // ← incrementar a cada deploy
 ```
 
 Todos os módulos em `modules/*.js` e o atlas `data/world-map.js` precisam estar listados no array `APP_ASSETS` do `sw.js`.
@@ -345,7 +360,7 @@ A querystring `?v=X.Y.Z` força o browser a buscar o arquivo novamente mesmo que
 
 ```html
 <!-- index.html — linha do script de entrada -->
-<script type="module" src="script.js?v=2.1.9"></script>
+<script type="module" src="script.js?v=2.1.10"></script>
 <!--                                   ^^^^^ incrementar aqui -->
 ```
 
@@ -363,7 +378,7 @@ O Service Worker usa o nome do cache para invalidar versões antigas. Sempre inc
 
 ```js
 // sw.js — linha 1
-const CACHE_NAME = 'aprendizagem-cache-v16'; // ← incrementar aqui
+const CACHE_NAME = 'aprendizagem-cache-v17'; // ← incrementar aqui
 ```
 
 ### Resumo: o que atualizar a cada modificação em JS

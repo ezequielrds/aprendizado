@@ -3,1158 +3,2123 @@
     "code": "AD",
     "namePtBr": "Andorra",
     "normalizedName": "ANDORRA",
-    "flagAsset": "assets/flags/ad.svg"
+    "flagAsset": "assets/flags/ad.svg",
+    "capital": {
+      "namePtBr": "Andorra-a-Velha",
+      "latitude": 42.507222,
+      "longitude": 1.522222
+    }
   },
   {
     "code": "AE",
     "namePtBr": "Emirados Árabes Unidos",
     "normalizedName": "EMIRADOS ARABES UNIDOS",
-    "flagAsset": "assets/flags/ae.svg"
+    "flagAsset": "assets/flags/ae.svg",
+    "capital": {
+      "namePtBr": "Abu Dhabi",
+      "latitude": 24.451111,
+      "longitude": 54.396944
+    }
   },
   {
     "code": "AF",
     "namePtBr": "Afeganistão",
     "normalizedName": "AFEGANISTAO",
-    "flagAsset": "assets/flags/af.svg"
+    "flagAsset": "assets/flags/af.svg",
+    "capital": {
+      "namePtBr": "Cabul",
+      "latitude": 34.532778,
+      "longitude": 69.165833
+    }
   },
   {
     "code": "AG",
     "namePtBr": "Antígua e Barbuda",
     "normalizedName": "ANTIGUA E BARBUDA",
-    "flagAsset": "assets/flags/ag.svg"
+    "flagAsset": "assets/flags/ag.svg",
+    "capital": {
+      "namePtBr": "São João",
+      "latitude": 17.121111,
+      "longitude": -61.844722
+    }
   },
   {
     "code": "AL",
     "namePtBr": "Albânia",
     "normalizedName": "ALBANIA",
-    "flagAsset": "assets/flags/al.svg"
+    "flagAsset": "assets/flags/al.svg",
+    "capital": {
+      "namePtBr": "Tirana",
+      "latitude": 41.328333,
+      "longitude": 19.818056
+    }
   },
   {
     "code": "AM",
     "namePtBr": "Armênia",
     "normalizedName": "ARMENIA",
-    "flagAsset": "assets/flags/am.svg"
+    "flagAsset": "assets/flags/am.svg",
+    "capital": {
+      "namePtBr": "Erevan",
+      "latitude": 40.181389,
+      "longitude": 44.514444
+    }
   },
   {
     "code": "AO",
     "namePtBr": "Angola",
     "normalizedName": "ANGOLA",
-    "flagAsset": "assets/flags/ao.svg"
+    "flagAsset": "assets/flags/ao.svg",
+    "capital": {
+      "namePtBr": "Luanda",
+      "latitude": -8.838333,
+      "longitude": 13.234444
+    }
   },
   {
     "code": "AR",
     "namePtBr": "Argentina",
     "normalizedName": "ARGENTINA",
-    "flagAsset": "assets/flags/ar.svg"
+    "flagAsset": "assets/flags/ar.svg",
+    "capital": {
+      "namePtBr": "Buenos Aires",
+      "latitude": -34.599722,
+      "longitude": -58.381944
+    }
   },
   {
     "code": "AT",
     "namePtBr": "Áustria",
     "normalizedName": "AUSTRIA",
-    "flagAsset": "assets/flags/at.svg"
+    "flagAsset": "assets/flags/at.svg",
+    "capital": {
+      "namePtBr": "Viena",
+      "latitude": 48.208333,
+      "longitude": 16.3725
+    }
   },
   {
     "code": "AU",
     "namePtBr": "Austrália",
     "normalizedName": "AUSTRALIA",
-    "flagAsset": "assets/flags/au.svg"
+    "flagAsset": "assets/flags/au.svg",
+    "capital": {
+      "namePtBr": "Camberra",
+      "latitude": -35.293056,
+      "longitude": 149.126944
+    }
   },
   {
     "code": "AZ",
     "namePtBr": "Azerbaijão",
     "normalizedName": "AZERBAIJAO",
-    "flagAsset": "assets/flags/az.svg"
+    "flagAsset": "assets/flags/az.svg",
+    "capital": {
+      "namePtBr": "Baku",
+      "latitude": 40.366656,
+      "longitude": 49.835183
+    }
   },
   {
     "code": "BA",
     "namePtBr": "Bósnia e Herzegovina",
     "normalizedName": "BOSNIA E HERZEGOVINA",
-    "flagAsset": "assets/flags/ba.svg"
+    "flagAsset": "assets/flags/ba.svg",
+    "capital": {
+      "namePtBr": "Sarajevo",
+      "latitude": 43.856389,
+      "longitude": 18.413056
+    }
   },
   {
     "code": "BB",
     "namePtBr": "Barbados",
     "normalizedName": "BARBADOS",
-    "flagAsset": "assets/flags/bb.svg"
+    "flagAsset": "assets/flags/bb.svg",
+    "capital": {
+      "namePtBr": "Bridgetown",
+      "latitude": 13.0975,
+      "longitude": -59.616667
+    }
   },
   {
     "code": "BD",
     "namePtBr": "Bangladesh",
     "normalizedName": "BANGLADESH",
-    "flagAsset": "assets/flags/bd.svg"
+    "flagAsset": "assets/flags/bd.svg",
+    "capital": {
+      "namePtBr": "Daca",
+      "latitude": 23.728889,
+      "longitude": 90.394444
+    }
   },
   {
     "code": "BE",
     "namePtBr": "Bélgica",
     "normalizedName": "BELGICA",
-    "flagAsset": "assets/flags/be.svg"
+    "flagAsset": "assets/flags/be.svg",
+    "capital": {
+      "namePtBr": "Cidade de Bruxelas",
+      "latitude": 50.846667,
+      "longitude": 4.351667
+    }
   },
   {
     "code": "BF",
     "namePtBr": "Burkina Faso",
     "normalizedName": "BURKINA FASO",
-    "flagAsset": "assets/flags/bf.svg"
+    "flagAsset": "assets/flags/bf.svg",
+    "capital": {
+      "namePtBr": "Uagadugu",
+      "latitude": 12.368611,
+      "longitude": -1.5275
+    }
   },
   {
     "code": "BG",
     "namePtBr": "Bulgária",
     "normalizedName": "BULGARIA",
-    "flagAsset": "assets/flags/bg.svg"
+    "flagAsset": "assets/flags/bg.svg",
+    "capital": {
+      "namePtBr": "Sófia",
+      "latitude": 42.697886,
+      "longitude": 23.321726
+    }
   },
   {
     "code": "BH",
     "namePtBr": "Bahrein",
     "normalizedName": "BAHREIN",
-    "flagAsset": "assets/flags/bh.svg"
+    "flagAsset": "assets/flags/bh.svg",
+    "capital": {
+      "namePtBr": "Manama",
+      "latitude": 26.216667,
+      "longitude": 50.583333
+    }
   },
   {
     "code": "BI",
     "namePtBr": "Burundi",
     "normalizedName": "BURUNDI",
-    "flagAsset": "assets/flags/bi.svg"
+    "flagAsset": "assets/flags/bi.svg",
+    "capital": {
+      "namePtBr": "Guitega",
+      "latitude": -3.428333,
+      "longitude": 29.925
+    }
   },
   {
     "code": "BJ",
     "namePtBr": "Benim",
     "normalizedName": "BENIM",
-    "flagAsset": "assets/flags/bj.svg"
+    "flagAsset": "assets/flags/bj.svg",
+    "capital": {
+      "namePtBr": "Porto Novo",
+      "latitude": 6.483333,
+      "longitude": 2.616667
+    }
   },
   {
     "code": "BN",
     "namePtBr": "Brunei",
     "normalizedName": "BRUNEI",
-    "flagAsset": "assets/flags/bn.svg"
+    "flagAsset": "assets/flags/bn.svg",
+    "capital": {
+      "namePtBr": "Bandar Seri Begawan",
+      "latitude": 4.916667,
+      "longitude": 114.916667
+    }
   },
   {
     "code": "BO",
     "namePtBr": "Bolívia",
     "normalizedName": "BOLIVIA",
-    "flagAsset": "assets/flags/bo.svg"
+    "flagAsset": "assets/flags/bo.svg",
+    "capital": {
+      "namePtBr": "Sucre",
+      "latitude": -19.0475,
+      "longitude": -65.26
+    }
   },
   {
     "code": "BR",
     "namePtBr": "Brasil",
     "normalizedName": "BRASIL",
-    "flagAsset": "assets/flags/br.svg"
+    "flagAsset": "assets/flags/br.svg",
+    "capital": {
+      "namePtBr": "Brasília",
+      "latitude": -15.793889,
+      "longitude": -47.882778
+    }
   },
   {
     "code": "BS",
     "namePtBr": "Bahamas",
     "normalizedName": "BAHAMAS",
-    "flagAsset": "assets/flags/bs.svg"
+    "flagAsset": "assets/flags/bs.svg",
+    "capital": {
+      "namePtBr": "Nassau",
+      "latitude": 25.078056,
+      "longitude": -77.338611
+    }
   },
   {
     "code": "BT",
     "namePtBr": "Butão",
     "normalizedName": "BUTAO",
-    "flagAsset": "assets/flags/bt.svg"
+    "flagAsset": "assets/flags/bt.svg",
+    "capital": {
+      "namePtBr": "Thimbu",
+      "latitude": 27.47135,
+      "longitude": 89.63367
+    }
   },
   {
     "code": "BW",
     "namePtBr": "Botsuana",
     "normalizedName": "BOTSUANA",
-    "flagAsset": "assets/flags/bw.svg"
+    "flagAsset": "assets/flags/bw.svg",
+    "capital": {
+      "namePtBr": "Gaborone",
+      "latitude": -24.656944,
+      "longitude": 25.908611
+    }
   },
   {
     "code": "BY",
     "namePtBr": "Belarus",
     "normalizedName": "BELARUS",
-    "flagAsset": "assets/flags/by.svg"
+    "flagAsset": "assets/flags/by.svg",
+    "capital": {
+      "namePtBr": "Minsk",
+      "latitude": 53.902246,
+      "longitude": 27.561837
+    }
   },
   {
     "code": "BZ",
     "namePtBr": "Belize",
     "normalizedName": "BELIZE",
-    "flagAsset": "assets/flags/bz.svg"
+    "flagAsset": "assets/flags/bz.svg",
+    "capital": {
+      "namePtBr": "Belmopan",
+      "latitude": 17.25,
+      "longitude": -88.7675
+    }
   },
   {
     "code": "CA",
     "namePtBr": "Canadá",
     "normalizedName": "CANADA",
-    "flagAsset": "assets/flags/ca.svg"
+    "flagAsset": "assets/flags/ca.svg",
+    "capital": {
+      "namePtBr": "Ottawa",
+      "latitude": 45.424722,
+      "longitude": -75.695
+    }
   },
   {
     "code": "CD",
     "namePtBr": "República Democrática do Congo",
     "normalizedName": "REPUBLICA DEMOCRATICA DO CONGO",
-    "flagAsset": "assets/flags/cd.svg"
+    "flagAsset": "assets/flags/cd.svg",
+    "capital": {
+      "namePtBr": "Quinxassa",
+      "latitude": -4.321944,
+      "longitude": 15.311944
+    }
   },
   {
     "code": "CF",
     "namePtBr": "República Centro-Africana",
     "normalizedName": "REPUBLICA CENTRO-AFRICANA",
-    "flagAsset": "assets/flags/cf.svg"
+    "flagAsset": "assets/flags/cf.svg",
+    "capital": {
+      "namePtBr": "Bangui",
+      "latitude": 4.37325,
+      "longitude": 18.562833
+    }
   },
   {
     "code": "CG",
     "namePtBr": "República do Congo",
     "normalizedName": "REPUBLICA DO CONGO",
-    "flagAsset": "assets/flags/cg.svg"
+    "flagAsset": "assets/flags/cg.svg",
+    "capital": {
+      "namePtBr": "Brazavile",
+      "latitude": -4.269444,
+      "longitude": 15.271111
+    }
   },
   {
     "code": "CH",
     "namePtBr": "Suíça",
     "normalizedName": "SUICA",
-    "flagAsset": "assets/flags/ch.svg"
+    "flagAsset": "assets/flags/ch.svg",
+    "capital": {
+      "namePtBr": "Berna",
+      "latitude": 46.94798,
+      "longitude": 7.44743
+    }
   },
   {
     "code": "CI",
     "namePtBr": "Costa do Marfim",
     "normalizedName": "COSTA DO MARFIM",
-    "flagAsset": "assets/flags/ci.svg"
+    "flagAsset": "assets/flags/ci.svg",
+    "capital": {
+      "namePtBr": "Iamussucro",
+      "latitude": 6.816111,
+      "longitude": -5.274167
+    }
   },
   {
     "code": "CL",
     "namePtBr": "Chile",
     "normalizedName": "CHILE",
-    "flagAsset": "assets/flags/cl.svg"
+    "flagAsset": "assets/flags/cl.svg",
+    "capital": {
+      "namePtBr": "Santiago",
+      "latitude": -33.4375,
+      "longitude": -70.65
+    }
   },
   {
     "code": "CM",
     "namePtBr": "Camarões",
     "normalizedName": "CAMAROES",
-    "flagAsset": "assets/flags/cm.svg"
+    "flagAsset": "assets/flags/cm.svg",
+    "capital": {
+      "namePtBr": "Iaundé",
+      "latitude": 3.857778,
+      "longitude": 11.518056
+    }
   },
   {
     "code": "CN",
     "namePtBr": "China",
     "normalizedName": "CHINA",
-    "flagAsset": "assets/flags/cn.svg"
+    "flagAsset": "assets/flags/cn.svg",
+    "capital": {
+      "namePtBr": "Pequim",
+      "latitude": 39.90403,
+      "longitude": 116.407526
+    }
   },
   {
     "code": "CO",
     "namePtBr": "Colômbia",
     "normalizedName": "COLOMBIA",
-    "flagAsset": "assets/flags/co.svg"
+    "flagAsset": "assets/flags/co.svg",
+    "capital": {
+      "namePtBr": "Bogotá",
+      "latitude": 4.60971,
+      "longitude": -74.08175
+    }
   },
   {
     "code": "CR",
     "namePtBr": "Costa Rica",
     "normalizedName": "COSTA RICA",
-    "flagAsset": "assets/flags/cr.svg"
+    "flagAsset": "assets/flags/cr.svg",
+    "capital": {
+      "namePtBr": "San José",
+      "latitude": 9.932739,
+      "longitude": -84.079614
+    }
   },
   {
     "code": "CU",
     "namePtBr": "Cuba",
     "normalizedName": "CUBA",
-    "flagAsset": "assets/flags/cu.svg"
+    "flagAsset": "assets/flags/cu.svg",
+    "capital": {
+      "namePtBr": "Havana",
+      "latitude": 23.136667,
+      "longitude": -82.358889
+    }
   },
   {
     "code": "CV",
     "namePtBr": "Cabo Verde",
     "normalizedName": "CABO VERDE",
-    "flagAsset": "assets/flags/cv.svg"
+    "flagAsset": "assets/flags/cv.svg",
+    "capital": {
+      "namePtBr": "Praia",
+      "latitude": 14.917719,
+      "longitude": -23.509156
+    }
   },
   {
     "code": "CY",
     "namePtBr": "Chipre",
     "normalizedName": "CHIPRE",
-    "flagAsset": "assets/flags/cy.svg"
+    "flagAsset": "assets/flags/cy.svg",
+    "capital": {
+      "namePtBr": "Nicósia",
+      "latitude": 35.1725,
+      "longitude": 33.365
+    }
   },
   {
     "code": "CZ",
     "namePtBr": "Tchéquia",
     "normalizedName": "TCHEQUIA",
-    "flagAsset": "assets/flags/cz.svg"
+    "flagAsset": "assets/flags/cz.svg",
+    "capital": {
+      "namePtBr": "Praga",
+      "latitude": 50.0875,
+      "longitude": 14.421389
+    }
   },
   {
     "code": "DE",
     "namePtBr": "Alemanha",
     "normalizedName": "ALEMANHA",
-    "flagAsset": "assets/flags/de.svg"
+    "flagAsset": "assets/flags/de.svg",
+    "capital": {
+      "namePtBr": "Berlim",
+      "latitude": 52.516667,
+      "longitude": 13.383333
+    }
   },
   {
     "code": "DJ",
     "namePtBr": "Djibuti",
     "normalizedName": "DJIBUTI",
-    "flagAsset": "assets/flags/dj.svg"
+    "flagAsset": "assets/flags/dj.svg",
+    "capital": {
+      "namePtBr": "Djibuti",
+      "latitude": 11.595,
+      "longitude": 43.148056
+    }
   },
   {
     "code": "DK",
     "namePtBr": "Dinamarca",
     "normalizedName": "DINAMARCA",
-    "flagAsset": "assets/flags/dk.svg"
+    "flagAsset": "assets/flags/dk.svg",
+    "capital": {
+      "namePtBr": "Copenhague",
+      "latitude": 55.676111,
+      "longitude": 12.568889
+    }
   },
   {
     "code": "DM",
     "namePtBr": "Dominica",
     "normalizedName": "DOMINICA",
-    "flagAsset": "assets/flags/dm.svg"
+    "flagAsset": "assets/flags/dm.svg",
+    "capital": {
+      "namePtBr": "Roseau",
+      "latitude": 15.3,
+      "longitude": -61.383333
+    }
   },
   {
     "code": "DO",
     "namePtBr": "República Dominicana",
     "normalizedName": "REPUBLICA DOMINICANA",
-    "flagAsset": "assets/flags/do.svg"
+    "flagAsset": "assets/flags/do.svg",
+    "capital": {
+      "namePtBr": "São Domingos",
+      "latitude": 18.4625,
+      "longitude": -69.936111
+    }
   },
   {
     "code": "DZ",
     "namePtBr": "Argélia",
     "normalizedName": "ARGELIA",
-    "flagAsset": "assets/flags/dz.svg"
+    "flagAsset": "assets/flags/dz.svg",
+    "capital": {
+      "namePtBr": "Argel",
+      "latitude": 36.776389,
+      "longitude": 3.058611
+    }
   },
   {
     "code": "EC",
     "namePtBr": "Equador",
     "normalizedName": "EQUADOR",
-    "flagAsset": "assets/flags/ec.svg"
+    "flagAsset": "assets/flags/ec.svg",
+    "capital": {
+      "namePtBr": "Quito",
+      "latitude": -0.22,
+      "longitude": -78.5125
+    }
   },
   {
     "code": "EE",
     "namePtBr": "Estônia",
     "normalizedName": "ESTONIA",
-    "flagAsset": "assets/flags/ee.svg"
+    "flagAsset": "assets/flags/ee.svg",
+    "capital": {
+      "namePtBr": "Tallinn",
+      "latitude": 59.437222,
+      "longitude": 24.745
+    }
   },
   {
     "code": "EG",
     "namePtBr": "Egito",
     "normalizedName": "EGITO",
-    "flagAsset": "assets/flags/eg.svg"
+    "flagAsset": "assets/flags/eg.svg",
+    "capital": {
+      "namePtBr": "Cairo",
+      "latitude": 30.044444,
+      "longitude": 31.235833
+    }
   },
   {
     "code": "ER",
     "namePtBr": "Eritreia",
     "normalizedName": "ERITREIA",
-    "flagAsset": "assets/flags/er.svg"
+    "flagAsset": "assets/flags/er.svg",
+    "capital": {
+      "namePtBr": "Asmara",
+      "latitude": 15.333333,
+      "longitude": 38.916667
+    }
   },
   {
     "code": "ES",
     "namePtBr": "Espanha",
     "normalizedName": "ESPANHA",
-    "flagAsset": "assets/flags/es.svg"
+    "flagAsset": "assets/flags/es.svg",
+    "capital": {
+      "namePtBr": "Madri",
+      "latitude": 40.416944,
+      "longitude": -3.703333
+    }
   },
   {
     "code": "ET",
     "namePtBr": "Etiópia",
     "normalizedName": "ETIOPIA",
-    "flagAsset": "assets/flags/et.svg"
+    "flagAsset": "assets/flags/et.svg",
+    "capital": {
+      "namePtBr": "Adis Abeba",
+      "latitude": 9.035833,
+      "longitude": 38.7525
+    }
   },
   {
     "code": "FI",
     "namePtBr": "Finlândia",
     "normalizedName": "FINLANDIA",
-    "flagAsset": "assets/flags/fi.svg"
+    "flagAsset": "assets/flags/fi.svg",
+    "capital": {
+      "namePtBr": "Helsinque",
+      "latitude": 60.170833,
+      "longitude": 24.9375
+    }
   },
   {
     "code": "FJ",
     "namePtBr": "Fiji",
     "normalizedName": "FIJI",
-    "flagAsset": "assets/flags/fj.svg"
+    "flagAsset": "assets/flags/fj.svg",
+    "capital": {
+      "namePtBr": "Suva",
+      "latitude": -18.133333,
+      "longitude": 178.433333
+    }
   },
   {
     "code": "FM",
     "namePtBr": "Micronésia",
     "normalizedName": "MICRONESIA",
-    "flagAsset": "assets/flags/fm.svg"
+    "flagAsset": "assets/flags/fm.svg",
+    "capital": {
+      "namePtBr": "Paliquir",
+      "latitude": 6.917778,
+      "longitude": 158.185
+    }
   },
   {
     "code": "FR",
     "namePtBr": "França",
     "normalizedName": "FRANCA",
-    "flagAsset": "assets/flags/fr.svg"
+    "flagAsset": "assets/flags/fr.svg",
+    "capital": {
+      "namePtBr": "Paris",
+      "latitude": 48.856667,
+      "longitude": 2.352222
+    }
   },
   {
     "code": "GA",
     "namePtBr": "Gabão",
     "normalizedName": "GABAO",
-    "flagAsset": "assets/flags/ga.svg"
+    "flagAsset": "assets/flags/ga.svg",
+    "capital": {
+      "namePtBr": "Libreville",
+      "latitude": 0.407778,
+      "longitude": 9.440278
+    }
   },
   {
     "code": "GB",
     "namePtBr": "Reino Unido",
     "normalizedName": "REINO UNIDO",
-    "flagAsset": "assets/flags/gb.svg"
+    "flagAsset": "assets/flags/gb.svg",
+    "capital": {
+      "namePtBr": "Londres",
+      "latitude": 51.507222,
+      "longitude": -0.1275
+    }
   },
   {
     "code": "GD",
     "namePtBr": "Granada",
     "normalizedName": "GRANADA",
-    "flagAsset": "assets/flags/gd.svg"
+    "flagAsset": "assets/flags/gd.svg",
+    "capital": {
+      "namePtBr": "São Jorge",
+      "latitude": 12.0525,
+      "longitude": -61.753056
+    }
   },
   {
     "code": "GE",
     "namePtBr": "Geórgia",
     "normalizedName": "GEORGIA",
-    "flagAsset": "assets/flags/ge.svg"
+    "flagAsset": "assets/flags/ge.svg",
+    "capital": {
+      "namePtBr": "Tiblíssi",
+      "latitude": 41.7225,
+      "longitude": 44.7925
+    }
   },
   {
     "code": "GH",
     "namePtBr": "Gana",
     "normalizedName": "GANA",
-    "flagAsset": "assets/flags/gh.svg"
+    "flagAsset": "assets/flags/gh.svg",
+    "capital": {
+      "namePtBr": "Acra",
+      "latitude": 5.55602,
+      "longitude": -0.1969
+    }
   },
   {
     "code": "GM",
     "namePtBr": "Gâmbia",
     "normalizedName": "GAMBIA",
-    "flagAsset": "assets/flags/gm.svg"
+    "flagAsset": "assets/flags/gm.svg",
+    "capital": {
+      "namePtBr": "Banjul",
+      "latitude": 13.453056,
+      "longitude": -16.5775
+    }
   },
   {
     "code": "GN",
     "namePtBr": "Guiné",
     "normalizedName": "GUINE",
-    "flagAsset": "assets/flags/gn.svg"
+    "flagAsset": "assets/flags/gn.svg",
+    "capital": {
+      "namePtBr": "Conacri",
+      "latitude": 9.509167,
+      "longitude": -13.712222
+    }
   },
   {
     "code": "GQ",
     "namePtBr": "Guiné Equatorial",
     "normalizedName": "GUINE EQUATORIAL",
-    "flagAsset": "assets/flags/gq.svg"
+    "flagAsset": "assets/flags/gq.svg",
+    "capital": {
+      "namePtBr": "Ciudad de la Paz",
+      "latitude": 1.591667,
+      "longitude": 10.822222
+    }
   },
   {
     "code": "GR",
     "namePtBr": "Grécia",
     "normalizedName": "GRECIA",
-    "flagAsset": "assets/flags/gr.svg"
+    "flagAsset": "assets/flags/gr.svg",
+    "capital": {
+      "namePtBr": "Atenas",
+      "latitude": 37.984167,
+      "longitude": 23.728056
+    }
   },
   {
     "code": "GT",
     "namePtBr": "Guatemala",
     "normalizedName": "GUATEMALA",
-    "flagAsset": "assets/flags/gt.svg"
+    "flagAsset": "assets/flags/gt.svg",
+    "capital": {
+      "namePtBr": "Cidade da Guatemala",
+      "latitude": 14.641667,
+      "longitude": -90.513333
+    }
   },
   {
     "code": "GW",
     "namePtBr": "Guiné-Bissau",
     "normalizedName": "GUINE-BISSAU",
-    "flagAsset": "assets/flags/gw.svg"
+    "flagAsset": "assets/flags/gw.svg",
+    "capital": {
+      "namePtBr": "Bissau",
+      "latitude": 11.86,
+      "longitude": -15.583333
+    }
   },
   {
     "code": "GY",
     "namePtBr": "Guiana",
     "normalizedName": "GUIANA",
-    "flagAsset": "assets/flags/gy.svg"
+    "flagAsset": "assets/flags/gy.svg",
+    "capital": {
+      "namePtBr": "Georgetown",
+      "latitude": 6.805833,
+      "longitude": -58.150833
+    }
   },
   {
     "code": "HN",
     "namePtBr": "Honduras",
     "normalizedName": "HONDURAS",
-    "flagAsset": "assets/flags/hn.svg"
+    "flagAsset": "assets/flags/hn.svg",
+    "capital": {
+      "namePtBr": "Tegucigalpa",
+      "latitude": 14.105783,
+      "longitude": -87.204706
+    }
   },
   {
     "code": "HR",
     "namePtBr": "Croácia",
     "normalizedName": "CROACIA",
-    "flagAsset": "assets/flags/hr.svg"
+    "flagAsset": "assets/flags/hr.svg",
+    "capital": {
+      "namePtBr": "Zagreb",
+      "latitude": 45.813056,
+      "longitude": 15.977222
+    }
   },
   {
     "code": "HT",
     "namePtBr": "Haiti",
     "normalizedName": "HAITI",
-    "flagAsset": "assets/flags/ht.svg"
+    "flagAsset": "assets/flags/ht.svg",
+    "capital": {
+      "namePtBr": "Porto Príncipe",
+      "latitude": 18.546944,
+      "longitude": -72.340278
+    }
   },
   {
     "code": "HU",
     "namePtBr": "Hungria",
     "normalizedName": "HUNGRIA",
-    "flagAsset": "assets/flags/hu.svg"
+    "flagAsset": "assets/flags/hu.svg",
+    "capital": {
+      "namePtBr": "Budapeste",
+      "latitude": 47.498333,
+      "longitude": 19.040833
+    }
   },
   {
     "code": "ID",
     "namePtBr": "Indonésia",
     "normalizedName": "INDONESIA",
-    "flagAsset": "assets/flags/id.svg"
+    "flagAsset": "assets/flags/id.svg",
+    "capital": {
+      "namePtBr": "Jacarta",
+      "latitude": -6.175278,
+      "longitude": 106.826944
+    }
   },
   {
     "code": "IE",
     "namePtBr": "Irlanda",
     "normalizedName": "IRLANDA",
-    "flagAsset": "assets/flags/ie.svg"
+    "flagAsset": "assets/flags/ie.svg",
+    "capital": {
+      "namePtBr": "Dublin",
+      "latitude": 53.349722,
+      "longitude": -6.260278
+    }
   },
   {
     "code": "IL",
     "namePtBr": "Israel",
     "normalizedName": "ISRAEL",
-    "flagAsset": "assets/flags/il.svg"
+    "flagAsset": "assets/flags/il.svg",
+    "capital": {
+      "namePtBr": "Jerusalém",
+      "latitude": 31.776679,
+      "longitude": 35.234156
+    }
   },
   {
     "code": "IN",
     "namePtBr": "Índia",
     "normalizedName": "INDIA",
-    "flagAsset": "assets/flags/in.svg"
+    "flagAsset": "assets/flags/in.svg",
+    "capital": {
+      "namePtBr": "Nova Deli",
+      "latitude": 28.613889,
+      "longitude": 77.208889
+    }
   },
   {
     "code": "IQ",
     "namePtBr": "Iraque",
     "normalizedName": "IRAQUE",
-    "flagAsset": "assets/flags/iq.svg"
+    "flagAsset": "assets/flags/iq.svg",
+    "capital": {
+      "namePtBr": "Bagdá",
+      "latitude": 33.315278,
+      "longitude": 44.366111
+    }
   },
   {
     "code": "IR",
     "namePtBr": "Irã",
     "normalizedName": "IRA",
-    "flagAsset": "assets/flags/ir.svg"
+    "flagAsset": "assets/flags/ir.svg",
+    "capital": {
+      "namePtBr": "Teerã",
+      "latitude": 35.688889,
+      "longitude": 51.389722
+    }
   },
   {
     "code": "IS",
     "namePtBr": "Islândia",
     "normalizedName": "ISLANDIA",
-    "flagAsset": "assets/flags/is.svg"
+    "flagAsset": "assets/flags/is.svg",
+    "capital": {
+      "namePtBr": "Reykjavík",
+      "latitude": 64.1475,
+      "longitude": -21.935
+    }
   },
   {
     "code": "IT",
     "namePtBr": "Itália",
     "normalizedName": "ITALIA",
-    "flagAsset": "assets/flags/it.svg"
+    "flagAsset": "assets/flags/it.svg",
+    "capital": {
+      "namePtBr": "Roma",
+      "latitude": 41.893056,
+      "longitude": 12.482778
+    }
   },
   {
     "code": "JM",
     "namePtBr": "Jamaica",
     "normalizedName": "JAMAICA",
-    "flagAsset": "assets/flags/jm.svg"
+    "flagAsset": "assets/flags/jm.svg",
+    "capital": {
+      "namePtBr": "Kingston",
+      "latitude": 17.971389,
+      "longitude": -76.793056
+    }
   },
   {
     "code": "JO",
     "namePtBr": "Jordânia",
     "normalizedName": "JORDANIA",
-    "flagAsset": "assets/flags/jo.svg"
+    "flagAsset": "assets/flags/jo.svg",
+    "capital": {
+      "namePtBr": "Amã",
+      "latitude": 31.930983,
+      "longitude": 35.926084
+    }
   },
   {
     "code": "JP",
     "namePtBr": "Japão",
     "normalizedName": "JAPAO",
-    "flagAsset": "assets/flags/jp.svg"
+    "flagAsset": "assets/flags/jp.svg",
+    "capital": {
+      "namePtBr": "Tóquio",
+      "latitude": 35.689444,
+      "longitude": 139.691667
+    }
   },
   {
     "code": "KE",
     "namePtBr": "Quênia",
     "normalizedName": "QUENIA",
-    "flagAsset": "assets/flags/ke.svg"
+    "flagAsset": "assets/flags/ke.svg",
+    "capital": {
+      "namePtBr": "Nairóbi",
+      "latitude": -1.286389,
+      "longitude": 36.817222
+    }
   },
   {
     "code": "KG",
     "namePtBr": "Quirguistão",
     "normalizedName": "QUIRGUISTAO",
-    "flagAsset": "assets/flags/kg.svg"
+    "flagAsset": "assets/flags/kg.svg",
+    "capital": {
+      "namePtBr": "Bisqueque",
+      "latitude": 42.866667,
+      "longitude": 74.566667
+    }
   },
   {
     "code": "KH",
     "namePtBr": "Camboja",
     "normalizedName": "CAMBOJA",
-    "flagAsset": "assets/flags/kh.svg"
+    "flagAsset": "assets/flags/kh.svg",
+    "capital": {
+      "namePtBr": "Phnom Penh",
+      "latitude": 11.569583,
+      "longitude": 104.921028
+    }
   },
   {
     "code": "KI",
     "namePtBr": "Kiribati",
     "normalizedName": "KIRIBATI",
-    "flagAsset": "assets/flags/ki.svg"
+    "flagAsset": "assets/flags/ki.svg",
+    "capital": {
+      "namePtBr": "Taraua do Sul",
+      "latitude": 1.333333,
+      "longitude": 172.966667
+    }
   },
   {
     "code": "KM",
     "namePtBr": "Comores",
     "normalizedName": "COMORES",
-    "flagAsset": "assets/flags/km.svg"
+    "flagAsset": "assets/flags/km.svg",
+    "capital": {
+      "namePtBr": "Moroni",
+      "latitude": -11.703611,
+      "longitude": 43.253611
+    }
   },
   {
     "code": "KN",
     "namePtBr": "São Cristóvão e Névis",
     "normalizedName": "SAO CRISTOVAO E NEVIS",
-    "flagAsset": "assets/flags/kn.svg"
+    "flagAsset": "assets/flags/kn.svg",
+    "capital": {
+      "namePtBr": "Basseterre",
+      "latitude": 17.298333,
+      "longitude": -62.734167
+    }
   },
   {
     "code": "KP",
     "namePtBr": "Coreia do Norte",
     "normalizedName": "COREIA DO NORTE",
-    "flagAsset": "assets/flags/kp.svg"
+    "flagAsset": "assets/flags/kp.svg",
+    "capital": {
+      "namePtBr": "Pyongyang",
+      "latitude": 39.016667,
+      "longitude": 125.7475
+    }
   },
   {
     "code": "KR",
     "namePtBr": "Coreia do Sul",
     "normalizedName": "COREIA DO SUL",
-    "flagAsset": "assets/flags/kr.svg"
+    "flagAsset": "assets/flags/kr.svg",
+    "capital": {
+      "namePtBr": "Seul",
+      "latitude": 37.56,
+      "longitude": 126.99
+    }
   },
   {
     "code": "KW",
     "namePtBr": "Kuwait",
     "normalizedName": "KUWAIT",
-    "flagAsset": "assets/flags/kw.svg"
+    "flagAsset": "assets/flags/kw.svg",
+    "capital": {
+      "namePtBr": "Kuwait",
+      "latitude": 29.375,
+      "longitude": 47.98
+    }
   },
   {
     "code": "KZ",
     "namePtBr": "Cazaquistão",
     "normalizedName": "CAZAQUISTAO",
-    "flagAsset": "assets/flags/kz.svg"
+    "flagAsset": "assets/flags/kz.svg",
+    "capital": {
+      "namePtBr": "Astana",
+      "latitude": 51.133333,
+      "longitude": 71.433333
+    }
   },
   {
     "code": "LA",
     "namePtBr": "Laos",
     "normalizedName": "LAOS",
-    "flagAsset": "assets/flags/la.svg"
+    "flagAsset": "assets/flags/la.svg",
+    "capital": {
+      "namePtBr": "Vienciana",
+      "latitude": 17.98,
+      "longitude": 102.63
+    }
   },
   {
     "code": "LB",
     "namePtBr": "Líbano",
     "normalizedName": "LIBANO",
-    "flagAsset": "assets/flags/lb.svg"
+    "flagAsset": "assets/flags/lb.svg",
+    "capital": {
+      "namePtBr": "Beirute",
+      "latitude": 33.886944,
+      "longitude": 35.513056
+    }
   },
   {
     "code": "LC",
     "namePtBr": "Santa Lúcia",
     "normalizedName": "SANTA LUCIA",
-    "flagAsset": "assets/flags/lc.svg"
+    "flagAsset": "assets/flags/lc.svg",
+    "capital": {
+      "namePtBr": "Castries",
+      "latitude": 14.010833,
+      "longitude": -60.989444
+    }
   },
   {
     "code": "LI",
     "namePtBr": "Liechtenstein",
     "normalizedName": "LIECHTENSTEIN",
-    "flagAsset": "assets/flags/li.svg"
+    "flagAsset": "assets/flags/li.svg",
+    "capital": {
+      "namePtBr": "Vaduz",
+      "latitude": 47.140556,
+      "longitude": 9.522222
+    }
   },
   {
     "code": "LK",
     "namePtBr": "Sri Lanka",
     "normalizedName": "SRI LANKA",
-    "flagAsset": "assets/flags/lk.svg"
+    "flagAsset": "assets/flags/lk.svg",
+    "capital": {
+      "namePtBr": "Sri Jayawardenepura Kotte",
+      "latitude": 6.9,
+      "longitude": 79.916389
+    }
   },
   {
     "code": "LR",
     "namePtBr": "Libéria",
     "normalizedName": "LIBERIA",
-    "flagAsset": "assets/flags/lr.svg"
+    "flagAsset": "assets/flags/lr.svg",
+    "capital": {
+      "namePtBr": "Monróvia",
+      "latitude": 6.310556,
+      "longitude": -10.804722
+    }
   },
   {
     "code": "LS",
     "namePtBr": "Lesoto",
     "normalizedName": "LESOTO",
-    "flagAsset": "assets/flags/ls.svg"
+    "flagAsset": "assets/flags/ls.svg",
+    "capital": {
+      "namePtBr": "Maseru",
+      "latitude": -29.31,
+      "longitude": 27.48
+    }
   },
   {
     "code": "LT",
     "namePtBr": "Lituânia",
     "normalizedName": "LITUANIA",
-    "flagAsset": "assets/flags/lt.svg"
+    "flagAsset": "assets/flags/lt.svg",
+    "capital": {
+      "namePtBr": "Vilnius",
+      "latitude": 54.687222,
+      "longitude": 25.28
+    }
   },
   {
     "code": "LU",
     "namePtBr": "Luxemburgo",
     "normalizedName": "LUXEMBURGO",
-    "flagAsset": "assets/flags/lu.svg"
+    "flagAsset": "assets/flags/lu.svg",
+    "capital": {
+      "namePtBr": "Luxemburgo",
+      "latitude": 49.611389,
+      "longitude": 6.13
+    }
   },
   {
     "code": "LV",
     "namePtBr": "Letônia",
     "normalizedName": "LETONIA",
-    "flagAsset": "assets/flags/lv.svg"
+    "flagAsset": "assets/flags/lv.svg",
+    "capital": {
+      "namePtBr": "Riga",
+      "latitude": 56.9475,
+      "longitude": 24.106944
+    }
   },
   {
     "code": "LY",
     "namePtBr": "Líbia",
     "normalizedName": "LIBIA",
-    "flagAsset": "assets/flags/ly.svg"
+    "flagAsset": "assets/flags/ly.svg",
+    "capital": {
+      "namePtBr": "Trípoli",
+      "latitude": 32.8875,
+      "longitude": 13.1875
+    }
   },
   {
     "code": "MA",
     "namePtBr": "Marrocos",
     "normalizedName": "MARROCOS",
-    "flagAsset": "assets/flags/ma.svg"
+    "flagAsset": "assets/flags/ma.svg",
+    "capital": {
+      "namePtBr": "Rabat",
+      "latitude": 34.021111,
+      "longitude": -6.841389
+    }
   },
   {
     "code": "MC",
     "namePtBr": "Mônaco",
     "normalizedName": "MONACO",
-    "flagAsset": "assets/flags/mc.svg"
+    "flagAsset": "assets/flags/mc.svg",
+    "capital": {
+      "namePtBr": "Mônaco",
+      "latitude": 43.731111,
+      "longitude": 7.42
+    }
   },
   {
     "code": "MD",
     "namePtBr": "Moldávia",
     "normalizedName": "MOLDAVIA",
-    "flagAsset": "assets/flags/md.svg"
+    "flagAsset": "assets/flags/md.svg",
+    "capital": {
+      "namePtBr": "Chişinău",
+      "latitude": 47.022778,
+      "longitude": 28.835278
+    }
   },
   {
     "code": "ME",
     "namePtBr": "Montenegro",
     "normalizedName": "MONTENEGRO",
-    "flagAsset": "assets/flags/me.svg"
+    "flagAsset": "assets/flags/me.svg",
+    "capital": {
+      "namePtBr": "Podgorica",
+      "latitude": 42.441389,
+      "longitude": 19.262778
+    }
   },
   {
     "code": "MG",
     "namePtBr": "Madagascar",
     "normalizedName": "MADAGASCAR",
-    "flagAsset": "assets/flags/mg.svg"
+    "flagAsset": "assets/flags/mg.svg",
+    "capital": {
+      "namePtBr": "Antananarivo",
+      "latitude": -18.91,
+      "longitude": 47.525
+    }
   },
   {
     "code": "MH",
     "namePtBr": "Ilhas Marshall",
     "normalizedName": "ILHAS MARSHALL",
-    "flagAsset": "assets/flags/mh.svg"
+    "flagAsset": "assets/flags/mh.svg",
+    "capital": {
+      "namePtBr": "Majuro",
+      "latitude": 7.0918,
+      "longitude": 171.3802
+    }
   },
   {
     "code": "MK",
     "namePtBr": "Macedônia do Norte",
     "normalizedName": "MACEDONIA DO NORTE",
-    "flagAsset": "assets/flags/mk.svg"
+    "flagAsset": "assets/flags/mk.svg",
+    "capital": {
+      "namePtBr": "Skopje",
+      "latitude": 41.996111,
+      "longitude": 21.431667
+    }
   },
   {
     "code": "ML",
     "namePtBr": "Mali",
     "normalizedName": "MALI",
-    "flagAsset": "assets/flags/ml.svg"
+    "flagAsset": "assets/flags/ml.svg",
+    "capital": {
+      "namePtBr": "Bamaco",
+      "latitude": 12.645833,
+      "longitude": -7.992222
+    }
   },
   {
     "code": "MM",
     "namePtBr": "Mianmar",
     "normalizedName": "MIANMAR",
-    "flagAsset": "assets/flags/mm.svg"
+    "flagAsset": "assets/flags/mm.svg",
+    "capital": {
+      "namePtBr": "Naypyidaw",
+      "latitude": 19.7475,
+      "longitude": 96.115
+    }
   },
   {
     "code": "MN",
     "namePtBr": "Mongólia",
     "normalizedName": "MONGOLIA",
-    "flagAsset": "assets/flags/mn.svg"
+    "flagAsset": "assets/flags/mn.svg",
+    "capital": {
+      "namePtBr": "Ulan Bator",
+      "latitude": 47.921357,
+      "longitude": 106.905515
+    }
   },
   {
     "code": "MR",
     "namePtBr": "Mauritânia",
     "normalizedName": "MAURITANIA",
-    "flagAsset": "assets/flags/mr.svg"
+    "flagAsset": "assets/flags/mr.svg",
+    "capital": {
+      "namePtBr": "Nouakchott",
+      "latitude": 18.08581,
+      "longitude": -15.9785
+    }
   },
   {
     "code": "MT",
     "namePtBr": "Malta",
     "normalizedName": "MALTA",
-    "flagAsset": "assets/flags/mt.svg"
+    "flagAsset": "assets/flags/mt.svg",
+    "capital": {
+      "namePtBr": "Valeta",
+      "latitude": 35.897778,
+      "longitude": 14.5125
+    }
   },
   {
     "code": "MU",
     "namePtBr": "Maurício",
     "normalizedName": "MAURICIO",
-    "flagAsset": "assets/flags/mu.svg"
+    "flagAsset": "assets/flags/mu.svg",
+    "capital": {
+      "namePtBr": "Porto Luís",
+      "latitude": -20.161944,
+      "longitude": 57.498889
+    }
   },
   {
     "code": "MV",
     "namePtBr": "Maldivas",
     "normalizedName": "MALDIVAS",
-    "flagAsset": "assets/flags/mv.svg"
+    "flagAsset": "assets/flags/mv.svg",
+    "capital": {
+      "namePtBr": "Malé",
+      "latitude": 4.175,
+      "longitude": 73.508333
+    }
   },
   {
     "code": "MW",
     "namePtBr": "Malaui",
     "normalizedName": "MALAUI",
-    "flagAsset": "assets/flags/mw.svg"
+    "flagAsset": "assets/flags/mw.svg",
+    "capital": {
+      "namePtBr": "Lilongué",
+      "latitude": -13.986389,
+      "longitude": 33.768056
+    }
   },
   {
     "code": "MX",
     "namePtBr": "México",
     "normalizedName": "MEXICO",
-    "flagAsset": "assets/flags/mx.svg"
+    "flagAsset": "assets/flags/mx.svg",
+    "capital": {
+      "namePtBr": "Cidade do México",
+      "latitude": 19.353773,
+      "longitude": -99.13589
+    }
   },
   {
     "code": "MY",
     "namePtBr": "Malásia",
     "normalizedName": "MALASIA",
-    "flagAsset": "assets/flags/my.svg"
+    "flagAsset": "assets/flags/my.svg",
+    "capital": {
+      "namePtBr": "Kuala Lumpur",
+      "latitude": 3.147778,
+      "longitude": 101.695278
+    }
   },
   {
     "code": "MZ",
     "namePtBr": "Moçambique",
     "normalizedName": "MOCAMBIQUE",
-    "flagAsset": "assets/flags/mz.svg"
+    "flagAsset": "assets/flags/mz.svg",
+    "capital": {
+      "namePtBr": "Maputo",
+      "latitude": -25.968889,
+      "longitude": 32.573333
+    }
   },
   {
     "code": "NA",
     "namePtBr": "Namíbia",
     "normalizedName": "NAMIBIA",
-    "flagAsset": "assets/flags/na.svg"
+    "flagAsset": "assets/flags/na.svg",
+    "capital": {
+      "namePtBr": "Windhoek",
+      "latitude": -22.57,
+      "longitude": 17.083611
+    }
   },
   {
     "code": "NE",
     "namePtBr": "Níger",
     "normalizedName": "NIGER",
-    "flagAsset": "assets/flags/ne.svg"
+    "flagAsset": "assets/flags/ne.svg",
+    "capital": {
+      "namePtBr": "Niamey",
+      "latitude": 13.515,
+      "longitude": 2.1175
+    }
   },
   {
     "code": "NG",
     "namePtBr": "Nigéria",
     "normalizedName": "NIGERIA",
-    "flagAsset": "assets/flags/ng.svg"
+    "flagAsset": "assets/flags/ng.svg",
+    "capital": {
+      "namePtBr": "Abuja",
+      "latitude": 9.055556,
+      "longitude": 7.491389
+    }
   },
   {
     "code": "NI",
     "namePtBr": "Nicarágua",
     "normalizedName": "NICARAGUA",
-    "flagAsset": "assets/flags/ni.svg"
+    "flagAsset": "assets/flags/ni.svg",
+    "capital": {
+      "namePtBr": "Managua",
+      "latitude": 12.154681,
+      "longitude": -86.273725
+    }
   },
   {
     "code": "NL",
     "namePtBr": "Países Baixos",
     "normalizedName": "PAISES BAIXOS",
-    "flagAsset": "assets/flags/nl.svg"
+    "flagAsset": "assets/flags/nl.svg",
+    "capital": {
+      "namePtBr": "Amsterdã",
+      "latitude": 52.366667,
+      "longitude": 4.883333
+    }
   },
   {
     "code": "NO",
     "namePtBr": "Noruega",
     "normalizedName": "NORUEGA",
-    "flagAsset": "assets/flags/no.svg"
+    "flagAsset": "assets/flags/no.svg",
+    "capital": {
+      "namePtBr": "Oslo",
+      "latitude": 59.913333,
+      "longitude": 10.738889
+    }
   },
   {
     "code": "NP",
     "namePtBr": "Nepal",
     "normalizedName": "NEPAL",
-    "flagAsset": "assets/flags/np.svg"
+    "flagAsset": "assets/flags/np.svg",
+    "capital": {
+      "namePtBr": "Catmandu",
+      "latitude": 27.71,
+      "longitude": 85.32
+    }
   },
   {
     "code": "NR",
     "namePtBr": "Nauru",
     "normalizedName": "NAURU",
-    "flagAsset": "assets/flags/nr.svg"
+    "flagAsset": "assets/flags/nr.svg",
+    "capital": {
+      "namePtBr": "Yaren",
+      "latitude": -0.5477,
+      "longitude": 166.920867
+    }
   },
   {
     "code": "NZ",
     "namePtBr": "Nova Zelândia",
     "normalizedName": "NOVA ZELANDIA",
-    "flagAsset": "assets/flags/nz.svg"
+    "flagAsset": "assets/flags/nz.svg",
+    "capital": {
+      "namePtBr": "Wellington",
+      "latitude": -41.288889,
+      "longitude": 174.777222
+    }
   },
   {
     "code": "OM",
     "namePtBr": "Omã",
     "normalizedName": "OMA",
-    "flagAsset": "assets/flags/om.svg"
+    "flagAsset": "assets/flags/om.svg",
+    "capital": {
+      "namePtBr": "Mascate",
+      "latitude": 23.613889,
+      "longitude": 58.592222
+    }
   },
   {
     "code": "PA",
     "namePtBr": "Panamá",
     "normalizedName": "PANAMA",
-    "flagAsset": "assets/flags/pa.svg"
+    "flagAsset": "assets/flags/pa.svg",
+    "capital": {
+      "namePtBr": "Cidade do Panamá",
+      "latitude": 8.971111,
+      "longitude": -79.534722
+    }
   },
   {
     "code": "PE",
     "namePtBr": "Peru",
     "normalizedName": "PERU",
-    "flagAsset": "assets/flags/pe.svg"
+    "flagAsset": "assets/flags/pe.svg",
+    "capital": {
+      "namePtBr": "Lima",
+      "latitude": -12.06,
+      "longitude": -77.0375
+    }
   },
   {
     "code": "PG",
     "namePtBr": "Papua-Nova Guiné",
     "normalizedName": "PAPUA-NOVA GUINE",
-    "flagAsset": "assets/flags/pg.svg"
+    "flagAsset": "assets/flags/pg.svg",
+    "capital": {
+      "namePtBr": "Port Moresby",
+      "latitude": -9.478889,
+      "longitude": 147.149444
+    }
   },
   {
     "code": "PH",
     "namePtBr": "Filipinas",
     "normalizedName": "FILIPINAS",
-    "flagAsset": "assets/flags/ph.svg"
+    "flagAsset": "assets/flags/ph.svg",
+    "capital": {
+      "namePtBr": "Manila",
+      "latitude": 14.595833,
+      "longitude": 120.977222
+    }
   },
   {
     "code": "PK",
     "namePtBr": "Paquistão",
     "normalizedName": "PAQUISTAO",
-    "flagAsset": "assets/flags/pk.svg"
+    "flagAsset": "assets/flags/pk.svg",
+    "capital": {
+      "namePtBr": "Islamabad",
+      "latitude": 33.698889,
+      "longitude": 73.036944
+    }
   },
   {
     "code": "PL",
     "namePtBr": "Polônia",
     "normalizedName": "POLONIA",
-    "flagAsset": "assets/flags/pl.svg"
+    "flagAsset": "assets/flags/pl.svg",
+    "capital": {
+      "namePtBr": "Varsóvia",
+      "latitude": 52.23,
+      "longitude": 21.011111
+    }
   },
   {
     "code": "PT",
     "namePtBr": "Portugal",
     "normalizedName": "PORTUGAL",
-    "flagAsset": "assets/flags/pt.svg"
+    "flagAsset": "assets/flags/pt.svg",
+    "capital": {
+      "namePtBr": "Lisboa",
+      "latitude": 38.708042,
+      "longitude": -9.139016
+    }
   },
   {
     "code": "PW",
     "namePtBr": "Palau",
     "normalizedName": "PALAU",
-    "flagAsset": "assets/flags/pw.svg"
+    "flagAsset": "assets/flags/pw.svg",
+    "capital": {
+      "namePtBr": "Ngerulmud",
+      "latitude": 7.500556,
+      "longitude": 134.624167
+    }
   },
   {
     "code": "PY",
     "namePtBr": "Paraguai",
     "normalizedName": "PARAGUAI",
-    "flagAsset": "assets/flags/py.svg"
+    "flagAsset": "assets/flags/py.svg",
+    "capital": {
+      "namePtBr": "Assunção",
+      "latitude": -25.28,
+      "longitude": -57.634444
+    }
   },
   {
     "code": "QA",
     "namePtBr": "Catar",
     "normalizedName": "CATAR",
-    "flagAsset": "assets/flags/qa.svg"
+    "flagAsset": "assets/flags/qa.svg",
+    "capital": {
+      "namePtBr": "Doha",
+      "latitude": 25.286111,
+      "longitude": 51.529444
+    }
   },
   {
     "code": "RO",
     "namePtBr": "Romênia",
     "normalizedName": "ROMENIA",
-    "flagAsset": "assets/flags/ro.svg"
+    "flagAsset": "assets/flags/ro.svg",
+    "capital": {
+      "namePtBr": "Bucareste",
+      "latitude": 44.413361,
+      "longitude": 26.097778
+    }
   },
   {
     "code": "RS",
     "namePtBr": "Sérvia",
     "normalizedName": "SERVIA",
-    "flagAsset": "assets/flags/rs.svg"
+    "flagAsset": "assets/flags/rs.svg",
+    "capital": {
+      "namePtBr": "Belgrado",
+      "latitude": 44.817778,
+      "longitude": 20.456944
+    }
   },
   {
     "code": "RU",
     "namePtBr": "Rússia",
     "normalizedName": "RUSSIA",
-    "flagAsset": "assets/flags/ru.svg"
+    "flagAsset": "assets/flags/ru.svg",
+    "capital": {
+      "namePtBr": "Moscou",
+      "latitude": 55.750556,
+      "longitude": 37.6175
+    }
   },
   {
     "code": "RW",
     "namePtBr": "Ruanda",
     "normalizedName": "RUANDA",
-    "flagAsset": "assets/flags/rw.svg"
+    "flagAsset": "assets/flags/rw.svg",
+    "capital": {
+      "namePtBr": "Kigali",
+      "latitude": -1.9525,
+      "longitude": 30.115
+    }
   },
   {
     "code": "SA",
     "namePtBr": "Arábia Saudita",
     "normalizedName": "ARABIA SAUDITA",
-    "flagAsset": "assets/flags/sa.svg"
+    "flagAsset": "assets/flags/sa.svg",
+    "capital": {
+      "namePtBr": "Riade",
+      "latitude": 24.65,
+      "longitude": 46.71
+    }
   },
   {
     "code": "SB",
     "namePtBr": "Ilhas Salomão",
     "normalizedName": "ILHAS SALOMAO",
-    "flagAsset": "assets/flags/sb.svg"
+    "flagAsset": "assets/flags/sb.svg",
+    "capital": {
+      "namePtBr": "Honiara",
+      "latitude": -9.433333,
+      "longitude": 159.95
+    }
   },
   {
     "code": "SC",
     "namePtBr": "Seicheles",
     "normalizedName": "SEICHELES",
-    "flagAsset": "assets/flags/sc.svg"
+    "flagAsset": "assets/flags/sc.svg",
+    "capital": {
+      "namePtBr": "Vitória",
+      "latitude": -4.623611,
+      "longitude": 55.454444
+    }
   },
   {
     "code": "SD",
     "namePtBr": "Sudão",
     "normalizedName": "SUDAO",
-    "flagAsset": "assets/flags/sd.svg"
+    "flagAsset": "assets/flags/sd.svg",
+    "capital": {
+      "namePtBr": "Cartum",
+      "latitude": 15.60308,
+      "longitude": 32.52654
+    }
   },
   {
     "code": "SE",
     "namePtBr": "Suécia",
     "normalizedName": "SUECIA",
-    "flagAsset": "assets/flags/se.svg"
+    "flagAsset": "assets/flags/se.svg",
+    "capital": {
+      "namePtBr": "Estocolmo",
+      "latitude": 59.329444,
+      "longitude": 18.068611
+    }
   },
   {
     "code": "SG",
     "namePtBr": "Singapura",
     "normalizedName": "SINGAPURA",
-    "flagAsset": "assets/flags/sg.svg"
+    "flagAsset": "assets/flags/sg.svg",
+    "capital": {
+      "namePtBr": "Singapura",
+      "latitude": 1.3,
+      "longitude": 103.8
+    }
   },
   {
     "code": "SI",
     "namePtBr": "Eslovênia",
     "normalizedName": "ESLOVENIA",
-    "flagAsset": "assets/flags/si.svg"
+    "flagAsset": "assets/flags/si.svg",
+    "capital": {
+      "namePtBr": "Liubliana",
+      "latitude": 46.051389,
+      "longitude": 14.506111
+    }
   },
   {
     "code": "SK",
     "namePtBr": "Eslováquia",
     "normalizedName": "ESLOVAQUIA",
-    "flagAsset": "assets/flags/sk.svg"
+    "flagAsset": "assets/flags/sk.svg",
+    "capital": {
+      "namePtBr": "Bratislava",
+      "latitude": 48.151699,
+      "longitude": 17.109306
+    }
   },
   {
     "code": "SL",
     "namePtBr": "Serra Leoa",
     "normalizedName": "SERRA LEOA",
-    "flagAsset": "assets/flags/sl.svg"
+    "flagAsset": "assets/flags/sl.svg",
+    "capital": {
+      "namePtBr": "Freetown",
+      "latitude": 8.487222,
+      "longitude": -13.235556
+    }
   },
   {
     "code": "SM",
     "namePtBr": "San Marino",
     "normalizedName": "SAN MARINO",
-    "flagAsset": "assets/flags/sm.svg"
+    "flagAsset": "assets/flags/sm.svg",
+    "capital": {
+      "namePtBr": "San Marino",
+      "latitude": 43.932011,
+      "longitude": 12.44845
+    }
   },
   {
     "code": "SN",
     "namePtBr": "Senegal",
     "normalizedName": "SENEGAL",
-    "flagAsset": "assets/flags/sn.svg"
+    "flagAsset": "assets/flags/sn.svg",
+    "capital": {
+      "namePtBr": "Dacar",
+      "latitude": 14.672556,
+      "longitude": -17.432
+    }
   },
   {
     "code": "SO",
     "namePtBr": "Somália",
     "normalizedName": "SOMALIA",
-    "flagAsset": "assets/flags/so.svg"
+    "flagAsset": "assets/flags/so.svg",
+    "capital": {
+      "namePtBr": "Mogadíscio",
+      "latitude": 2.039167,
+      "longitude": 45.341944
+    }
   },
   {
     "code": "SR",
     "namePtBr": "Suriname",
     "normalizedName": "SURINAME",
-    "flagAsset": "assets/flags/sr.svg"
+    "flagAsset": "assets/flags/sr.svg",
+    "capital": {
+      "namePtBr": "Paramaribo",
+      "latitude": 5.866667,
+      "longitude": -55.166667
+    }
   },
   {
     "code": "SS",
     "namePtBr": "Sudão do Sul",
     "normalizedName": "SUDAO DO SUL",
-    "flagAsset": "assets/flags/ss.svg"
+    "flagAsset": "assets/flags/ss.svg",
+    "capital": {
+      "namePtBr": "Juba",
+      "latitude": 4.853889,
+      "longitude": 31.5825
+    }
   },
   {
     "code": "ST",
     "namePtBr": "São Tomé e Príncipe",
     "normalizedName": "SAO TOME E PRINCIPE",
-    "flagAsset": "assets/flags/st.svg"
+    "flagAsset": "assets/flags/st.svg",
+    "capital": {
+      "namePtBr": "São Tomé",
+      "latitude": 0.3375,
+      "longitude": 6.728333
+    }
   },
   {
     "code": "SV",
     "namePtBr": "El Salvador",
     "normalizedName": "EL SALVADOR",
-    "flagAsset": "assets/flags/sv.svg"
+    "flagAsset": "assets/flags/sv.svg",
+    "capital": {
+      "namePtBr": "San Salvador",
+      "latitude": 13.697597,
+      "longitude": -89.191156
+    }
   },
   {
     "code": "SY",
     "namePtBr": "Síria",
     "normalizedName": "SIRIA",
-    "flagAsset": "assets/flags/sy.svg"
+    "flagAsset": "assets/flags/sy.svg",
+    "capital": {
+      "namePtBr": "Damasco",
+      "latitude": 33.513,
+      "longitude": 36.292
+    }
   },
   {
     "code": "SZ",
     "namePtBr": "Essuatíni",
     "normalizedName": "ESSUATINI",
-    "flagAsset": "assets/flags/sz.svg"
+    "flagAsset": "assets/flags/sz.svg",
+    "capital": {
+      "namePtBr": "Mebabane",
+      "latitude": -26.316667,
+      "longitude": 31.133333
+    }
   },
   {
     "code": "TD",
     "namePtBr": "Chade",
     "normalizedName": "CHADE",
-    "flagAsset": "assets/flags/td.svg"
+    "flagAsset": "assets/flags/td.svg",
+    "capital": {
+      "namePtBr": "Jamena",
+      "latitude": 12.11,
+      "longitude": 15.05
+    }
   },
   {
     "code": "TG",
     "namePtBr": "Togo",
     "normalizedName": "TOGO",
-    "flagAsset": "assets/flags/tg.svg"
+    "flagAsset": "assets/flags/tg.svg",
+    "capital": {
+      "namePtBr": "Lomé",
+      "latitude": 6.13,
+      "longitude": 1.215833
+    }
   },
   {
     "code": "TH",
     "namePtBr": "Tailândia",
     "normalizedName": "TAILANDIA",
-    "flagAsset": "assets/flags/th.svg"
+    "flagAsset": "assets/flags/th.svg",
+    "capital": {
+      "namePtBr": "Bancoque",
+      "latitude": 13.75,
+      "longitude": 100.516667
+    }
   },
   {
     "code": "TJ",
     "namePtBr": "Tadjiquistão",
     "normalizedName": "TADJIQUISTAO",
-    "flagAsset": "assets/flags/tj.svg"
+    "flagAsset": "assets/flags/tj.svg",
+    "capital": {
+      "namePtBr": "Duxambé",
+      "latitude": 38.573056,
+      "longitude": 68.786389
+    }
   },
   {
     "code": "TL",
     "namePtBr": "Timor-Leste",
     "normalizedName": "TIMOR-LESTE",
-    "flagAsset": "assets/flags/tl.svg"
+    "flagAsset": "assets/flags/tl.svg",
+    "capital": {
+      "namePtBr": "Díli",
+      "latitude": -8.553611,
+      "longitude": 125.578333
+    }
   },
   {
     "code": "TM",
     "namePtBr": "Turcomenistão",
     "normalizedName": "TURCOMENISTAO",
-    "flagAsset": "assets/flags/tm.svg"
+    "flagAsset": "assets/flags/tm.svg",
+    "capital": {
+      "namePtBr": "Asgabate",
+      "latitude": 37.95,
+      "longitude": 58.383333
+    }
   },
   {
     "code": "TN",
     "namePtBr": "Tunísia",
     "normalizedName": "TUNISIA",
-    "flagAsset": "assets/flags/tn.svg"
+    "flagAsset": "assets/flags/tn.svg",
+    "capital": {
+      "namePtBr": "Túnis",
+      "latitude": 36.800833,
+      "longitude": 10.18
+    }
   },
   {
     "code": "TO",
     "namePtBr": "Tonga",
     "normalizedName": "TONGA",
-    "flagAsset": "assets/flags/to.svg"
+    "flagAsset": "assets/flags/to.svg",
+    "capital": {
+      "namePtBr": "Nuku'alofa",
+      "latitude": -21.13434,
+      "longitude": -175.201808
+    }
   },
   {
     "code": "TR",
     "namePtBr": "Turquia",
     "normalizedName": "TURQUIA",
-    "flagAsset": "assets/flags/tr.svg"
+    "flagAsset": "assets/flags/tr.svg",
+    "capital": {
+      "namePtBr": "Ancara",
+      "latitude": 39.93576,
+      "longitude": 32.83869
+    }
   },
   {
     "code": "TT",
     "namePtBr": "Trinidad e Tobago",
     "normalizedName": "TRINIDAD E TOBAGO",
-    "flagAsset": "assets/flags/tt.svg"
+    "flagAsset": "assets/flags/tt.svg",
+    "capital": {
+      "namePtBr": "Port of Spain",
+      "latitude": 10.666667,
+      "longitude": -61.516667
+    }
   },
   {
     "code": "TV",
     "namePtBr": "Tuvalu",
     "normalizedName": "TUVALU",
-    "flagAsset": "assets/flags/tv.svg"
+    "flagAsset": "assets/flags/tv.svg",
+    "capital": {
+      "namePtBr": "Funafuti",
+      "latitude": -8.504778,
+      "longitude": 179.117361
+    }
   },
   {
     "code": "TZ",
     "namePtBr": "Tanzânia",
     "normalizedName": "TANZANIA",
-    "flagAsset": "assets/flags/tz.svg"
+    "flagAsset": "assets/flags/tz.svg",
+    "capital": {
+      "namePtBr": "Dodoma",
+      "latitude": -6.1835,
+      "longitude": 35.746
+    }
   },
   {
     "code": "UA",
     "namePtBr": "Ucrânia",
     "normalizedName": "UCRANIA",
-    "flagAsset": "assets/flags/ua.svg"
+    "flagAsset": "assets/flags/ua.svg",
+    "capital": {
+      "namePtBr": "Kiev",
+      "latitude": 50.45,
+      "longitude": 30.523611
+    }
   },
   {
     "code": "UG",
     "namePtBr": "Uganda",
     "normalizedName": "UGANDA",
-    "flagAsset": "assets/flags/ug.svg"
+    "flagAsset": "assets/flags/ug.svg",
+    "capital": {
+      "namePtBr": "Kampala",
+      "latitude": 0.313611,
+      "longitude": 32.581111
+    }
   },
   {
     "code": "US",
     "namePtBr": "Estados Unidos",
     "normalizedName": "ESTADOS UNIDOS",
-    "flagAsset": "assets/flags/us.svg"
+    "flagAsset": "assets/flags/us.svg",
+    "capital": {
+      "namePtBr": "Washington, D.C.",
+      "latitude": 38.895,
+      "longitude": -77.036667
+    }
   },
   {
     "code": "UY",
     "namePtBr": "Uruguai",
     "normalizedName": "URUGUAI",
-    "flagAsset": "assets/flags/uy.svg"
+    "flagAsset": "assets/flags/uy.svg",
+    "capital": {
+      "namePtBr": "Montevidéu",
+      "latitude": -34.905917,
+      "longitude": -56.191311
+    }
   },
   {
     "code": "UZ",
     "namePtBr": "Uzbequistão",
     "normalizedName": "UZBEQUISTAO",
-    "flagAsset": "assets/flags/uz.svg"
+    "flagAsset": "assets/flags/uz.svg",
+    "capital": {
+      "namePtBr": "Tashkent",
+      "latitude": 41.311111,
+      "longitude": 69.279722
+    }
   },
   {
     "code": "VC",
     "namePtBr": "São Vicente e Granadinas",
     "normalizedName": "SAO VICENTE E GRANADINAS",
-    "flagAsset": "assets/flags/vc.svg"
+    "flagAsset": "assets/flags/vc.svg",
+    "capital": {
+      "namePtBr": "Kingstown",
+      "latitude": 13.15527,
+      "longitude": -61.22742
+    }
   },
   {
     "code": "VE",
     "namePtBr": "Venezuela",
     "normalizedName": "VENEZUELA",
-    "flagAsset": "assets/flags/ve.svg"
+    "flagAsset": "assets/flags/ve.svg",
+    "capital": {
+      "namePtBr": "Caracas",
+      "latitude": 10.506111,
+      "longitude": -66.914444
+    }
   },
   {
     "code": "VN",
     "namePtBr": "Vietnã",
     "normalizedName": "VIETNA",
-    "flagAsset": "assets/flags/vn.svg"
+    "flagAsset": "assets/flags/vn.svg",
+    "capital": {
+      "namePtBr": "Hanói",
+      "latitude": 21.0245,
+      "longitude": 105.84117
+    }
   },
   {
     "code": "VU",
     "namePtBr": "Vanuatu",
     "normalizedName": "VANUATU",
-    "flagAsset": "assets/flags/vu.svg"
+    "flagAsset": "assets/flags/vu.svg",
+    "capital": {
+      "namePtBr": "Porto Vila",
+      "latitude": -17.73333,
+      "longitude": 168.316667
+    }
   },
   {
     "code": "WS",
     "namePtBr": "Samoa",
     "normalizedName": "SAMOA",
-    "flagAsset": "assets/flags/ws.svg"
+    "flagAsset": "assets/flags/ws.svg",
+    "capital": {
+      "namePtBr": "Apia",
+      "latitude": -13.833333,
+      "longitude": -171.833333
+    }
   },
   {
     "code": "YE",
     "namePtBr": "Iêmen",
     "normalizedName": "IEMEN",
-    "flagAsset": "assets/flags/ye.svg"
+    "flagAsset": "assets/flags/ye.svg",
+    "capital": {
+      "namePtBr": "Sana",
+      "latitude": 15.35,
+      "longitude": 44.2
+    }
   },
   {
     "code": "ZA",
     "namePtBr": "África do Sul",
     "normalizedName": "AFRICA DO SUL",
-    "flagAsset": "assets/flags/za.svg"
+    "flagAsset": "assets/flags/za.svg",
+    "capital": {
+      "namePtBr": "Pretória",
+      "latitude": -25.746389,
+      "longitude": 28.188056
+    }
   },
   {
     "code": "ZM",
     "namePtBr": "Zâmbia",
     "normalizedName": "ZAMBIA",
-    "flagAsset": "assets/flags/zm.svg"
+    "flagAsset": "assets/flags/zm.svg",
+    "capital": {
+      "namePtBr": "Lusaca",
+      "latitude": -15.416667,
+      "longitude": 28.283333
+    }
   },
   {
     "code": "ZW",
     "namePtBr": "Zimbábue",
     "normalizedName": "ZIMBABUE",
-    "flagAsset": "assets/flags/zw.svg"
+    "flagAsset": "assets/flags/zw.svg",
+    "capital": {
+      "namePtBr": "Harare",
+      "latitude": -17.829167,
+      "longitude": 31.052222
+    }
   }
 ]

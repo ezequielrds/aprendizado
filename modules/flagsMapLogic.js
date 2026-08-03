@@ -1,5 +1,10 @@
 const MAP_NUMBER_PATTERN = /[-+]?(?:\d+(?:\.\d*)?|\.\d+)(?:[eE][-+]?\d+)?|[a-zA-Z]/gu;
 const LOCATION_BOUNDS_CACHE = new WeakMap();
+const CAPITAL_MAP_REFERENCE_WIDTH = 1010;
+const CAPITAL_MAP_REFERENCE_HEIGHT = 666;
+const CAPITAL_MAP_PRIME_MERIDIAN_X = 475;
+const CAPITAL_MAP_EQUATOR_Y = 463;
+const MAX_MERCATOR_LATITUDE = 85.05112878;
 
 export const FLAG_MAP_MIN_CONTEXT = 7;
 export const FLAG_MAP_INITIAL_PADDING = .22;
@@ -78,6 +83,33 @@ function parseViewBox(viewBox) {
     return { x: 0, y: 0, width: 1010, height: 666 };
   }
   return { x: values[0], y: values[1], width: values[2], height: values[3] };
+}
+
+/**
+ * Converte latitude/longitude da capital para o Mercator usado pelo atlas
+ * local svg-maps. Os valores de referência foram calibrados contra o viewBox
+ * `0 0 1010 666`, cujo meridiano de Greenwich fica em x=475 e a linha do
+ * Equador em y=463. O x é envolvido para preservar capitais no antimeridiano.
+ */
+export function getFlagMapCapitalPoint(capital, worldViewBox) {
+  const latitude = Number(capital?.latitude);
+  const longitude = Number(capital?.longitude);
+  if (!Number.isFinite(latitude) || !Number.isFinite(longitude)) return null;
+
+  const world = parseViewBox(worldViewBox);
+  if (world.width <= 0 || world.height <= 0) return null;
+
+  const scale = world.width / (2 * Math.PI);
+  const primeMeridianX = world.x + world.width * (CAPITAL_MAP_PRIME_MERIDIAN_X / CAPITAL_MAP_REFERENCE_WIDTH);
+  const equatorY = world.y + world.height * (CAPITAL_MAP_EQUATOR_Y / CAPITAL_MAP_REFERENCE_HEIGHT);
+  const clampedLatitude = Math.max(-MAX_MERCATOR_LATITUDE, Math.min(MAX_MERCATOR_LATITUDE, latitude));
+  const latitudeRadians = clampedLatitude * Math.PI / 180;
+  const longitudeRadians = longitude * Math.PI / 180;
+  const projectedX = primeMeridianX + scale * longitudeRadians;
+  const x = world.x + ((projectedX - world.x) % world.width + world.width) % world.width;
+  const y = equatorY - scale * Math.log(Math.tan(Math.PI / 4 + latitudeRadians / 2));
+
+  return Number.isFinite(y) ? { x, y } : null;
 }
 
 /**
@@ -186,19 +218,31 @@ export function getFlagLocationBounds(location) {
  * antimeridiano são desenhados também à direita do atlas; o foco acompanha
  * essa cópia para que o país vermelho permaneça na viewport.
  */
-export function getFlagMapFocusPoint(location, worldViewBox) {
+export function getFlagMapFocusPoint(location, worldViewBox, secondaryPoint = null) {
   const bounds = getFlagLocationBounds(location);
   if (!bounds) return null;
 
   const world = parseViewBox(worldViewBox);
-  if (isWrappedBounds(bounds)) {
-    return {
+  const targetPoint = isWrappedBounds(bounds)
+    ? {
       x: world.x + world.width + Math.min(bounds.minX - world.x, world.width * .2),
       y: bounds.centerY,
-    };
-  }
+    }
+    : { x: bounds.centerX, y: bounds.centerY };
+  const secondaryX = Number(secondaryPoint?.x);
+  const secondaryY = Number(secondaryPoint?.y);
+  if (!Number.isFinite(secondaryX) || !Number.isFinite(secondaryY)) return targetPoint;
 
-  return { x: bounds.centerX, y: bounds.centerY };
+  // Escolhe a cópia horizontal da capital mais próxima do alvo: países que
+  // cruzam o antimeridiano são focados na cópia desenhada à direita do atlas.
+  let adjacentCapitalX = secondaryX;
+  while (adjacentCapitalX - targetPoint.x > world.width / 2) adjacentCapitalX -= world.width;
+  while (targetPoint.x - adjacentCapitalX > world.width / 2) adjacentCapitalX += world.width;
+
+  return {
+    x: (targetPoint.x + adjacentCapitalX) / 2,
+    y: (targetPoint.y + secondaryY) / 2,
+  };
 }
 
 function distanceBetweenLocations(first, second) {

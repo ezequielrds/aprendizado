@@ -27,6 +27,17 @@ function locationCodes(locations) {
   return new Set(locations.map(location => String(location.id).toUpperCase()));
 }
 
+function isMapPointVisible(point, viewport) {
+  const worldWidth = Number(worldMap.viewBox.split(/\s+/u)[2]);
+  const horizontalCoordinates = [point.x, point.x + worldWidth];
+  return horizontalCoordinates.some(x => (
+    x >= viewport.x - .01
+    && x <= viewport.x + viewport.width + .01
+    && point.y >= viewport.y - .01
+    && point.y <= viewport.y + viewport.height + .01
+  ));
+}
+
 test('o mapa so pode abrir depois de uma rodada concluida', () => {
   assert.equal(canOpenFlagMap('playing'), false);
   assert.equal(canOpenFlagMap('correct'), true);
@@ -40,6 +51,45 @@ test('o atlas local cobre os 193 codigos da base de paises', () => {
   for (const country of countries) {
     assert.equal(atlasCodes.has(country.code), true, country.code);
   }
+});
+
+test('cada país possui uma capital local com coordenadas geográficas', () => {
+  for (const country of countries) {
+    const capital = country.capital;
+    assert.equal(typeof capital?.namePtBr, 'string', `${country.code}: capital deve ter nome`);
+    assert.ok(capital.namePtBr.trim(), `${country.code}: capital não pode ser vazia`);
+    assert.ok(Number.isFinite(capital.latitude), `${country.code}: latitude da capital deve ser finita`);
+    assert.ok(Number.isFinite(capital.longitude), `${country.code}: longitude da capital deve ser finita`);
+    assert.ok(capital.latitude >= -90 && capital.latitude <= 90, `${country.code}: latitude fora do intervalo`);
+    assert.ok(capital.longitude >= -180 && capital.longitude <= 180, `${country.code}: longitude fora do intervalo`);
+  }
+
+  assert.deepEqual(countries.find(country => country.code === 'BR')?.capital, {
+    namePtBr: 'Brasília',
+    latitude: -15.793889,
+    longitude: -47.882778,
+  });
+});
+
+test('a projeção da capital usa as coordenadas do atlas Mercator local', () => {
+  const projectCapital = flagMapLogic.getFlagMapCapitalPoint;
+  assert.equal(typeof projectCapital, 'function');
+
+  const andorra = countries.find(country => country.code === 'AD');
+  const andorraPoint = projectCapital(andorra.capital, worldMap.viewBox);
+  assert.ok(Math.abs(andorraPoint.x - 479.270678) < .01);
+  assert.ok(Math.abs(andorraPoint.y - 331.00662) < .01);
+
+  const andorraBounds = flagMapLogic.getFlagLocationBounds(
+    worldMap.locations.find(location => location.id === 'ad'),
+  );
+  assert.ok(andorraPoint.x >= andorraBounds.minX - .2 && andorraPoint.x <= andorraBounds.maxX + .2);
+  assert.ok(andorraPoint.y >= andorraBounds.minY - .2 && andorraPoint.y <= andorraBounds.maxY + .2);
+
+  const taraua = countries.find(country => country.code === 'KI');
+  const tarauaPoint = projectCapital(taraua.capital, worldMap.viewBox);
+  assert.ok(tarauaPoint.x > 950 && tarauaPoint.x < 970, 'a capital de Kiribati deve ficar na borda do antimeridiano');
+  assert.equal(projectCapital({ latitude: 'inválida', longitude: 0 }, worldMap.viewBox), null);
 });
 
 test('a renderizacao preserva todo o atlas e deixa somente o alvo por cima', () => {
@@ -163,31 +213,42 @@ test('o zoom continua dentro dos limites para todos os contextos de paises', () 
   }
 });
 
-test('o zoom mantem o foco do pais-alvo visivel em todos os niveis de aproximacao', () => {
+test('o zoom mantém o alvo e sua capital visíveis em todos os níveis de aproximação', () => {
   for (const country of countries) {
     const targetLocation = worldMap.locations.find(location => location.id === country.code.toLowerCase());
     const context = selectFlagMapContext(country.code, worldMap.locations);
     const baseViewport = calculateFlagMapViewport(context, worldMap.viewBox, FLAG_MAP_INITIAL_PADDING);
-    const focusPoint = getFlagMapFocusPoint(targetLocation, worldMap.viewBox);
+    const targetFocusPoint = getFlagMapFocusPoint(targetLocation, worldMap.viewBox);
+    const capitalPoint = flagMapLogic.getFlagMapCapitalPoint(country.capital, worldMap.viewBox);
+    const focusPoint = getFlagMapFocusPoint(targetLocation, worldMap.viewBox, capitalPoint);
 
-    assert.ok(focusPoint, `${country.code}: foco do alvo deve existir`);
+    assert.ok(targetFocusPoint, `${country.code}: foco do alvo deve existir`);
+    assert.ok(capitalPoint, `${country.code}: ponto da capital deve existir`);
+    assert.ok(focusPoint, `${country.code}: foco combinado deve existir`);
     for (let level = 0; level <= FLAG_MAP_ZOOM_MAX_LEVEL; level += 1) {
       const viewport = zoomFlagMapViewport(baseViewport, worldMap.viewBox, level, focusPoint);
       assert.ok(
-        focusPoint.x >= viewport.x - .01 && focusPoint.x <= viewport.x + viewport.width + .01,
-        `${country.code}: alvo deve permanecer visivel no zoom ${level}`,
+        isMapPointVisible(targetFocusPoint, viewport),
+        `${country.code}: alvo deve permanecer visível no zoom ${level}`,
       );
       assert.ok(
-        focusPoint.y >= viewport.y - .01 && focusPoint.y <= viewport.y + viewport.height + .01,
-        `${country.code}: alvo deve permanecer visivel no zoom ${level}`,
+        isMapPointVisible(capitalPoint, viewport),
+        `${country.code}: capital deve permanecer visível no zoom ${level}`,
       );
     }
   }
 });
 
-test('o mapa mostra somente o pais-alvo pintado, sem marcador circular extra', () => {
+test('o mapa destaca apenas a geometria do país e usa um marcador preto exclusivo para a capital', () => {
   assert.match(flagsSource, /isTarget \? 'flags-map-country target' : 'flags-map-country context'/u);
-  assert.doesNotMatch(flagsSource, /createElementNS\(SVG_NAMESPACE, 'circle'\)/u);
+  assert.match(flagsSource, /getFlagMapCapitalPoint\(country\.capital, worldMap\.viewBox\)/u);
+  assert.match(flagsSource, /createElementNS\(SVG_NAMESPACE, 'circle'\)/u);
+  assert.match(flagsSource, /flags-map-capital-marker/u);
+  assert.match(flagsSource, /createElementNS\(SVG_NAMESPACE, 'text'\)/u);
+  assert.match(flagsSource, /Capital de \$\{countryName\}: \$\{capitalName\}/u);
+  assert.match(stylesSource, /\.flags-map-capital-marker\s*\{[\s\S]*?fill:\s*#000000;/u);
+  assert.match(stylesSource, /\.flags-map-capital-label\s*\{/u);
+  assert.match(indexSource, /Ponto preto: capital/u);
   assert.doesNotMatch(flagsSource, /flags-map-target-marker/u);
   assert.doesNotMatch(stylesSource, /flags-map-target-marker/u);
 });
