@@ -53,12 +53,44 @@ function normalizeCode(value) {
   return String(value ?? '').trim().toLowerCase();
 }
 
+/**
+ * Mantém o atlas completo e posiciona o país-alvo por último para que seu
+ * preenchimento vermelho não seja encoberto pelos demais países.
+ */
+export function orderFlagMapLocations(targetCode, locations) {
+  const atlasLocations = (Array.isArray(locations) ? locations : [])
+    .filter(location => location?.id && location?.path);
+  const targetIndex = atlasLocations.findIndex(
+    location => normalizeCode(location.id) === normalizeCode(targetCode),
+  );
+  if (targetIndex < 0) return atlasLocations;
+
+  return [
+    ...atlasLocations.slice(0, targetIndex),
+    ...atlasLocations.slice(targetIndex + 1),
+    atlasLocations[targetIndex],
+  ];
+}
+
 function parseViewBox(viewBox) {
   const values = String(viewBox ?? '').trim().split(/[\s,]+/u).map(Number);
   if (values.length !== 4 || values.some(value => !Number.isFinite(value))) {
     return { x: 0, y: 0, width: 1010, height: 666 };
   }
   return { x: values[0], y: values[1], width: values[2], height: values[3] };
+}
+
+/**
+ * A cópia à direita do atlas só é necessária quando a viewport transborda o
+ * antimeridiano. No mapa-múndi inteiro, ela ficaria visualmente duplicada.
+ */
+export function shouldShowFlagMapContinuation(viewport, worldViewBox) {
+  const world = parseViewBox(worldViewBox);
+  const x = Number(viewport?.x);
+  const width = Number(viewport?.width);
+  if (!Number.isFinite(x) || !Number.isFinite(width) || width <= 0) return false;
+
+  return x + width > world.x + world.width + .01;
 }
 
 function addPoint(bounds, x, y) {
@@ -316,6 +348,17 @@ export function zoomFlagMapViewport(viewport, worldViewBox, level = 0, focusPoin
   const baseHeight = Number(viewport?.height);
 
   if (![baseX, baseY, baseWidth, baseHeight].every(Number.isFinite) || baseWidth <= 0 || baseHeight <= 0) {
+    return {
+      x: world.x,
+      y: world.y,
+      width: world.width,
+      height: world.height,
+      level: zoomLevel,
+      viewBox: `${world.x} ${world.y} ${world.width} ${world.height}`,
+    };
+  }
+
+  if (zoomLevel === FLAG_MAP_ZOOM_MIN_LEVEL) {
     return {
       x: world.x,
       y: world.y,

@@ -299,12 +299,12 @@
             <button id="flagsMapCloseBtn" class="btn-ghost" type="button">Fechar mapa</button>
           </header>
           <p id="flagsMapDescription" class="flags-map-description">
-            O país da rodada aparece em vermelho. Os países brancos ao redor ajudam a reconhecer a região.
+            O país da rodada aparece em vermelho. Os demais países do mapa aparecem em branco; afaste o zoom para ver o mapa-múndi.
           </p>
           <figure class="flags-map-figure">
             <svg id="flagsMapSvg" class="flags-map-svg" role="img" aria-labelledby="flagsMapTitle"
               aria-describedby="flagsMapDescription" preserveAspectRatio="xMidYMid meet"></svg>
-            <figcaption>Vermelho: país da rodada. Branco: países de contexto.</figcaption>
+            <figcaption>Vermelho: país da rodada. Branco: demais países do mapa.</figcaption>
           </figure>
           <div class="flags-map-zoom-controls" role="group" aria-label="Controles de zoom do mapa">
             <button id="flagsMapZoomOutBtn" class="btn-ghost flags-map-zoom-button" type="button"
@@ -315,7 +315,7 @@
           </div>
           <div class="flags-map-legend" aria-label="Legenda do mapa">
             <span class="flags-map-legend-item"><i class="flags-map-swatch target" aria-hidden="true"></i>País da rodada</span>
-            <span class="flags-map-legend-item"><i class="flags-map-swatch context" aria-hidden="true"></i>Países ao redor</span>
+            <span class="flags-map-legend-item"><i class="flags-map-swatch context" aria-hidden="true"></i>Demais países</span>
           </div>
         </div>
       </section>
@@ -340,7 +340,7 @@
     </div>
   </div>
 
-  <script type="module" src="script.js?v=2.1.8"></script>
+  <script type="module" src="script.js?v=2.1.9"></script>
 </body>
 
 </html>

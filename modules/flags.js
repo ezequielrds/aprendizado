@@ -26,8 +26,9 @@ import {
   calculateFlagMapViewport,
   canOpenFlagMap,
   getFlagMapFocusPoint,
-  isWrappedFlagLocation,
+  orderFlagMapLocations,
   selectFlagMapContext,
+  shouldShowFlagMapContinuation,
   zoomFlagMapViewport,
 } from './flagsMapLogic.js';
 
@@ -174,40 +175,41 @@ function renderFlagMap() {
   );
   state.flagsMapFocusPoint = getFlagMapFocusPoint(targetLocation, worldMap.viewBox);
   state.flagsMapZoomLevel = 0;
-  const contextWithoutTarget = context.filter(location => location.id !== targetCode);
-  const locationsToRender = [...contextWithoutTarget, targetLocation];
+  const locationsToRender = orderFlagMapLocations(targetCode, worldMap.locations);
   const countryName = country.namePtBr;
 
   el.flagsMapTitle.textContent = `Onde fica ${countryName}?`;
-  el.flagsMapDescription.textContent = `O país da rodada, ${countryName}, aparece em vermelho. Os países brancos ao redor ajudam a reconhecer a região.`;
-  renderFlagMapZoom();
-  el.flagsMapSvg.setAttribute('aria-label', `Mapa regional de ${countryName}`);
+  el.flagsMapDescription.textContent = `O país da rodada, ${countryName}, aparece em vermelho. Os demais países do mapa aparecem em branco; afaste o zoom para ver o mapa-múndi.`;
+  el.flagsMapSvg.setAttribute('aria-label', `Mapa-múndi com ${countryName} em destaque`);
   el.flagsMapSvg.replaceChildren();
 
   for (const location of locationsToRender) {
     const isTarget = location.id === targetCode;
+    const className = isTarget ? 'flags-map-country target' : 'flags-map-country context';
     const path = document.createElementNS(SVG_NAMESPACE, 'path');
     path.setAttribute('d', location.path);
-    path.setAttribute('class', isTarget ? 'flags-map-country target' : 'flags-map-country context');
+    path.setAttribute('class', className);
     path.setAttribute('data-country-code', location.id.toUpperCase());
-    path.setAttribute('role', 'img');
-    path.setAttribute(
-      'aria-label',
-      isTarget
-        ? `${getMapCountryName(location)}, país da rodada`
-        : `${getMapCountryName(location)}, país de contexto`,
-    );
+    if (isTarget) {
+      path.setAttribute('role', 'img');
+      path.setAttribute('aria-label', `${getMapCountryName(location)}, país da rodada`);
+    } else {
+      path.setAttribute('aria-hidden', 'true');
+    }
     el.flagsMapSvg.append(path);
 
-    if (isTarget && isWrappedFlagLocation(location)) {
-      const wrappedPath = document.createElementNS(SVG_NAMESPACE, 'path');
-      wrappedPath.setAttribute('d', location.path);
-      wrappedPath.setAttribute('class', 'flags-map-country target');
-      wrappedPath.setAttribute('transform', `translate(${WORLD_MAP_WIDTH} 0)`);
-      wrappedPath.setAttribute('aria-hidden', 'true');
-      el.flagsMapSvg.append(wrappedPath);
-    }
+    // Duplica o atlas à direita para que regiões que cruzam o antimeridiano
+    // continuem exibindo todos os países ao redor do alvo.
+    const wrappedPath = document.createElementNS(SVG_NAMESPACE, 'path');
+    wrappedPath.setAttribute('d', location.path);
+    wrappedPath.setAttribute('class', className);
+    wrappedPath.setAttribute('transform', `translate(${WORLD_MAP_WIDTH} 0)`);
+    wrappedPath.setAttribute('data-map-continuation', 'true');
+    wrappedPath.setAttribute('aria-hidden', 'true');
+    el.flagsMapSvg.append(wrappedPath);
   }
+
+  renderFlagMapZoom();
 }
 
 function renderFlagMapZoom() {
@@ -222,6 +224,10 @@ function renderFlagMapZoom() {
   );
   state.flagsMapZoomLevel = viewport.level;
   el.flagsMapSvg.setAttribute('viewBox', viewport.viewBox);
+  const showMapContinuation = shouldShowFlagMapContinuation(viewport, worldMap.viewBox);
+  for (const path of el.flagsMapSvg.querySelectorAll('[data-map-continuation]')) {
+    path.style.display = showMapContinuation ? '' : 'none';
+  }
   el.flagsMapZoomOutBtn.disabled = viewport.level <= FLAG_MAP_ZOOM_MIN_LEVEL;
   el.flagsMapZoomInBtn.disabled = viewport.level >= FLAG_MAP_ZOOM_MAX_LEVEL;
 

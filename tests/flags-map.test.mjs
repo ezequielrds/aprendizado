@@ -4,6 +4,7 @@ import path from 'node:path';
 import test from 'node:test';
 import { fileURLToPath } from 'node:url';
 import worldMap from '../data/world-map.js';
+import * as flagMapLogic from '../modules/flagsMapLogic.js';
 import {
   FLAG_MAP_INITIAL_PADDING,
   FLAG_MAP_ZOOM_MAX_LEVEL,
@@ -39,6 +40,17 @@ test('o atlas local cobre os 193 codigos da base de paises', () => {
   for (const country of countries) {
     assert.equal(atlasCodes.has(country.code), true, country.code);
   }
+});
+
+test('a renderizacao preserva todo o atlas e deixa somente o alvo por cima', () => {
+  const orderLocations = flagMapLogic.orderFlagMapLocations;
+  assert.equal(typeof orderLocations, 'function');
+
+  const ordered = orderLocations('NZ', worldMap.locations);
+  assert.equal(ordered.length, worldMap.locations.length);
+  assert.deepEqual(locationCodes(ordered), locationCodes(worldMap.locations));
+  assert.equal(ordered.at(-1)?.id, 'nz');
+  assert.match(flagsSource, /const locationsToRender = orderFlagMapLocations\(targetCode, worldMap\.locations\);/u);
 });
 
 test('o contexto da Nova Zelandia inclui a Australia e varios paises', () => {
@@ -100,6 +112,34 @@ test('o zoom preserva o centro e respeita os limites do mapa', () => {
   assert.ok(farther.y >= 0);
   assert.equal(minLevel.level, FLAG_MAP_ZOOM_MIN_LEVEL);
   assert.equal(maxLevel.level, FLAG_MAP_ZOOM_MAX_LEVEL);
+});
+
+test('o menor zoom sempre revela o mapa mundi completo', () => {
+  const [x, y, width, height] = worldMap.viewBox.split(/\s+/u).map(Number);
+
+  for (const country of countries) {
+    const context = selectFlagMapContext(country.code, worldMap.locations);
+    const baseViewport = calculateFlagMapViewport(context, worldMap.viewBox, FLAG_MAP_INITIAL_PADDING);
+    const farthest = zoomFlagMapViewport(baseViewport, worldMap.viewBox, FLAG_MAP_ZOOM_MIN_LEVEL);
+
+    assert.deepEqual(
+      { x: farthest.x, y: farthest.y, width: farthest.width, height: farthest.height, viewBox: farthest.viewBox },
+      { x, y, width, height, viewBox: worldMap.viewBox },
+      `${country.code}: o limite de afastamento deve mostrar o mapa mundi`,
+    );
+  }
+});
+
+test('a cópia do atlas só aparece quando a viewport atravessa o antimeridiano', () => {
+  const shouldShowContinuation = flagMapLogic.shouldShowFlagMapContinuation;
+  assert.equal(typeof shouldShowContinuation, 'function');
+
+  const [x, y, width, height] = worldMap.viewBox.split(/\s+/u).map(Number);
+  assert.equal(shouldShowContinuation({ x, y, width, height }, worldMap.viewBox), false);
+  assert.equal(shouldShowContinuation({ x: x - 10, y, width: 20, height }, worldMap.viewBox), false);
+  assert.equal(shouldShowContinuation({ x: x + width - 10, y, width: 20, height }, worldMap.viewBox), true);
+  assert.match(flagsSource, /shouldShowFlagMapContinuation\(viewport, worldMap\.viewBox\)/u);
+  assert.match(flagsSource, /path\.style\.display = showMapContinuation \? '' : 'none';/u);
 });
 
 test('o zoom continua dentro dos limites para todos os contextos de paises', () => {
