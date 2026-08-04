@@ -1,4 +1,4 @@
-const CACHE_NAME = 'aprendizagem-cache-v18';
+const CACHE_NAME = 'aprendizagem-cache-v20';
 const APP_ASSETS = [
   './',
   './index.html',
@@ -11,6 +11,7 @@ const APP_ASSETS = [
   './colors.json',
   './writing.json',
   './data/countries.json',
+  './data/country-curiosities.pt-BR.json',
   './data/world-map.js',
   './assets/maps/CC-BY-4.0.md',
   './icons/icon-192.png',

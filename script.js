@@ -35,7 +35,7 @@ initModeListeners();      // Seleção de modo, config Números, config Escrita,
 initWritingGlobals();     // Expõe window.handleLetterClick e window.handleSlotClick
 initFlagsListeners();     // Configuração e partida Bandeiras do Mundo
 
-const SERVICE_WORKER_VERSION = '2.1.11';
+const SERVICE_WORKER_VERSION = '2.1.13';
 const SERVICE_WORKER_RELOAD_KEY = 'aprendizado-sw-reloaded-version';
 let controllerChangeHandled = false;
 
@@ -88,16 +88,17 @@ function reloadOnceOnControllerChange() {
 
 async function initGame() {
   try {
-    const [resWords, resPhrases, resLetters, resColors, resWriting, resCountries] = await Promise.all([
+    const [resWords, resPhrases, resLetters, resColors, resWriting, resCountries, resCountryCuriosities] = await Promise.all([
       fetch('words.json'),
       fetch('phrases.json'),
       fetch('letters.json'),
       fetch('colors.json'),
       fetch('writing.json'),
       fetch('data/countries.json'),
+      fetch('data/country-curiosities.pt-BR.json'),
     ]);
 
-    if (!resWords.ok || !resPhrases.ok || !resLetters.ok || !resColors.ok || !resWriting.ok || !resCountries.ok) {
+    if (!resWords.ok || !resPhrases.ok || !resLetters.ok || !resColors.ok || !resWriting.ok || !resCountries.ok || !resCountryCuriosities.ok) {
       throw new Error('Erro ao carregar dados');
     }
 
@@ -106,7 +107,14 @@ async function initGame() {
     state.dbLetters   = await resLetters.json();
     state.dbColors    = await resColors.json();
     state.dbWriting   = await resWriting.json();
-    state.dbCountries = await resCountries.json();
+    const [countries, countryCuriosities] = await Promise.all([
+      resCountries.json(),
+      resCountryCuriosities.json(),
+    ]);
+    state.dbCountries = countries.map(country => ({
+      ...country,
+      curiosity: countryCuriosities[country.code]?.text || '',
+    }));
     el.modeFlagsBtn.disabled = false;
 
     el.wordsInput.value = state.dbSyllables.join(', ');

@@ -8,6 +8,7 @@ import worldMap from '../data/world-map.js';
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const read = relativePath => fs.readFileSync(path.join(root, relativePath), 'utf8');
 const countries = JSON.parse(read('data/countries.json'));
+const countryCuriosities = JSON.parse(read('data/country-curiosities.pt-BR.json'));
 const flagsDirectory = path.join(root, 'assets/flags');
 const mapLicense = read('assets/maps/CC-BY-4.0.md');
 
@@ -15,6 +16,14 @@ assert.equal(countries.length, 193, 'countries.json precisa ter 193 registros');
 assert.equal(new Set(countries.map(country => country.code)).size, 193, 'codigos de pais devem ser unicos');
 assert.equal(new Set(countries.map(country => country.namePtBr)).size, 193, 'nomes de pais devem ser unicos');
 assert.equal(new Set(countries.map(country => country.normalizedName)).size, 193, 'nomes normalizados devem ser unicos');
+assert.deepEqual(Object.keys(countryCuriosities).sort(), countries.map(country => country.code).sort(), 'cada país deve ter uma curiosidade');
+for (const country of countries) {
+  const curiosity = countryCuriosities[country.code];
+  assert.equal(typeof curiosity?.text, 'string', `${country.code}: curiosidade deve ser texto`);
+  assert.ok(curiosity.text.trim() && curiosity.text.length <= 110, `${country.code}: curiosidade inválida`);
+  assert.match(curiosity.source || '', /^https:\/\//u, `${country.code}: fonte HTTPS obrigatória`);
+  assert.doesNotMatch(curiosity.text, /\bcapital\b/ui, `${country.code}: curiosidade não pode mencionar capital`);
+}
 assert.equal(worldMap.locations.length, 256, 'o atlas mundial esperado precisa ter 256 localizacoes');
 const mapCodes = new Set(worldMap.locations.map(location => String(location.id).toUpperCase()));
 for (const country of countries) {
@@ -73,9 +82,10 @@ for (const moduleFile of moduleFiles) {
 assert.match(index, /id="modeFlagsBtn"/);
 assert.match(index, /id="flagsMapTrigger"/);
 assert.match(index, /id="flagsMapPanel"[^>]*role="dialog"/u);
-assert.match(index, /script\.js\?v=2\.1\.11/);
-assert.match(serviceWorker, /aprendizagem-cache-v18/);
+assert.match(index, /script\.js\?v=2\.1\.13/);
+assert.match(serviceWorker, /aprendizagem-cache-v20/);
 assert.match(serviceWorker, /\.\/data\/countries\.json/);
+assert.match(serviceWorker, /\.\/data\/country-curiosities\.pt-BR\.json/);
 assert.match(appAssets, /\.\/data\/world-map\.js/);
 assert.match(appAssets, /\.\/assets\/maps\/CC-BY-4\.0\.md/);
 assert.match(serviceWorker, /ignoreSearch:\s*true/);

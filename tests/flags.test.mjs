@@ -25,7 +25,25 @@ import {
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const countries = JSON.parse(fs.readFileSync(path.join(root, 'data/countries.json'), 'utf8'));
+const countryCuriositiesPath = path.join(root, 'data/country-curiosities.pt-BR.json');
 const serviceWorkerSource = fs.readFileSync(path.join(root, 'sw.js'), 'utf8');
+
+test('cada país tem uma curiosidade local, interessante e rastreável', () => {
+  assert.equal(fs.existsSync(countryCuriositiesPath), true, 'a base de curiosidades precisa existir');
+  if (!fs.existsSync(countryCuriositiesPath)) return;
+
+  const curiosities = JSON.parse(fs.readFileSync(countryCuriositiesPath, 'utf8'));
+  assert.deepEqual(Object.keys(curiosities).sort(), countries.map(country => country.code).sort());
+  for (const country of countries) {
+    const curiosity = curiosities[country.code];
+    assert.equal(typeof curiosity?.text, 'string', `${country.code}: curiosidade deve ser texto`);
+    assert.ok(curiosity.text.trim(), `${country.code}: curiosidade não pode ser vazia`);
+    assert.ok(curiosity.text.length <= 110, `${country.code}: curiosidade deve ser curta`);
+    assert.equal(typeof curiosity?.source, 'string', `${country.code}: fonte deve ser texto`);
+    assert.match(curiosity.source, /^https:\/\//u, `${country.code}: fonte deve usar HTTPS`);
+    assert.doesNotMatch(curiosity.text, /\bcapital\b/ui, `${country.code}: curiosidade não pode mencionar capital`);
+  }
+});
 
 test('a base local contem exatamente 193 paises', () => {
   assert.equal(countries.length, 193);

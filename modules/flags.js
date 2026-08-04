@@ -225,6 +225,7 @@ function renderFlagMap() {
 
   const context = selectFlagMapContext(targetCode, worldMap.locations);
   const countryName = country.namePtBr;
+  const curiosity = country.curiosity;
   const capitalName = country.capital?.namePtBr;
   const capitalPoint = getFlagMapCapitalPoint(country.capital, worldMap.viewBox);
   state.flagsMapBaseViewport = calculateFlagMapViewport(
@@ -235,12 +236,9 @@ function renderFlagMap() {
   state.flagsMapFocusPoint = getFlagMapFocusPoint(targetLocation, worldMap.viewBox, capitalPoint);
   state.flagsMapZoomLevel = 0;
   const locationsToRender = orderFlagMapLocations(targetCode, worldMap.locations);
-  const capitalDescription = capitalName && capitalPoint
-    ? ` O ponto preto identifica ${capitalName}, a capital.`
-    : '';
 
   el.flagsMapTitle.textContent = `Onde fica ${countryName}?`;
-  el.flagsMapDescription.textContent = `O país da rodada, ${countryName}, aparece em vermelho. Os demais países do mapa aparecem em branco; afaste o zoom para ver o mapa-múndi.${capitalDescription}`;
+  el.flagsMapDescription.textContent = curiosity || 'Curiosidade indisponível para este país.';
   el.flagsMapSvg.setAttribute(
     'aria-label',
     capitalName && capitalPoint

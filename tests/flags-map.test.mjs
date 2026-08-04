@@ -92,6 +92,12 @@ test('a projeção da capital usa as coordenadas do atlas Mercator local', () =>
   assert.equal(projectCapital({ latitude: 'inválida', longitude: 0 }, worldMap.viewBox), null);
 });
 
+test('a descrição do mapa mostra a curiosidade curada do país', () => {
+  assert.match(flagsSource, /const curiosity = country\.curiosity;/u);
+  assert.match(flagsSource, /el\.flagsMapDescription\.textContent = curiosity \|\| 'Curiosidade indisponível para este país\.'/u);
+  assert.doesNotMatch(flagsSource, /sua capital é \$\{capitalName\}/u);
+});
+
 test('a renderizacao preserva todo o atlas e deixa somente o alvo por cima', () => {
   const orderLocations = flagMapLogic.orderFlagMapLocations;
   assert.equal(typeof orderLocations, 'function');
