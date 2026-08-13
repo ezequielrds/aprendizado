@@ -97,9 +97,30 @@ export const numberTranslations = {
   ],
 };
 
+// Alfabetos do modo Letras por idioma.
+// ru-RU usa o alfabeto cirílico (33 letras); os demais usam o alfabeto
+// latino carregado de letters.json (fallback em getLettersForLanguage).
+export const letterTranslations = {
+  'ru-RU': [
+    'А', 'Б', 'В', 'Г', 'Д', 'Е', 'Ё', 'Ж', 'З', 'И', 'Й', 'К', 'Л', 'М',
+    'Н', 'О', 'П', 'Р', 'С', 'Т', 'У', 'Ф', 'Х', 'Ц', 'Ч', 'Ш', 'Щ', 'Ъ',
+    'Ы', 'Ь', 'Э', 'Ю', 'Я',
+  ],
+};
+
+/**
+ * Retorna a lista de letras do alfabeto para o idioma informado.
+ * Idiomas sem alfabeto próprio usam o alfabeto latino de letters.json.
+ * @param {string} lang
+ * @returns {string[]}
+ */
+export function getLettersForLanguage(lang) {
+  return letterTranslations[lang] ? [...letterTranslations[lang]] : [...state.dbLetters];
+}
+
 // Padrões de validação de entrada
 export const SYLLABLE_PATTERN = /[a-zA-ZáàâãéêíóôõúçÁÀÂÃÉÊÍÓÔÕÚÇ]+-[a-zA-Z]/;
-export const LETTER_PATTERN   = /^[a-zA-ZáàâãéêíóôõúçÁÀÂÃÉÊÍÓÔÕÚÇ]$/;
+export const LETTER_PATTERN   = /^[a-zA-ZáàâãéêíóôõúçÁÀÂÃÉÊÍÓÔÕÚÇа-яА-ЯёЁ]$/;
 export const NUMBER_PATTERN   = /^-?\d+$/;
 
 // ── Referências DOM ────────────────────────────────────────────────────────

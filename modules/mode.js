@@ -1,4 +1,4 @@
-import { state, el }              from './state.js';
+import { state, el, getLettersForLanguage }              from './state.js';
 import { buildDeck }               from './deck.js';
 import { renderStreak, updateProgress, setMessage } from './ui.js';
 import { loadNewWord }             from './game.js';
@@ -42,8 +42,8 @@ export function setMode(mode) {
     el.nextBtn.textContent = 'Próxima palavra ➜';
 
   } else if (mode === 'letters') {
-    state.words            = [...state.dbLetters];
-    el.wordsInput.value    = state.dbLetters.join(', ');
+    state.words            = getLettersForLanguage(state.selectedLanguage);
+    el.wordsInput.value    = state.words.join(', ');
     el.configSummary.textContent = 'Carregar/editar lista de letras';
     el.configHelp.innerHTML =
       'Separe por vírgula, ponto-e-vírgula ou quebra de linha. Ex.: <code>A</code>, <code>B</code>, <code>C</code>';
@@ -166,8 +166,13 @@ export function initModeListeners() {
   el.languageSelector.addEventListener('change', e => {
     state.selectedLanguage = e.target.value;
     localStorage.setItem('selectedLanguage', state.selectedLanguage);
-    if (
-      (state.gameMode === 'colors' || state.gameMode === 'numbers' || state.gameMode === 'letters') &&
+    if (state.gameMode === 'letters' && state.idx >= 0) {
+      // Troca o alfabeto inteiro (ex.: cirílico em russo) e reinicia o deck
+      state.words = getLettersForLanguage(state.selectedLanguage);
+      buildDeck();
+      loadNewWord();
+    } else if (
+      (state.gameMode === 'colors' || state.gameMode === 'numbers') &&
       state.idx >= 0
     ) {
       updateCurrentItemUI();
