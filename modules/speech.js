@@ -21,7 +21,17 @@ export function getVoiceForLanguage(lang) {
     'ru-RU': /ru[-_]ru|russian/i,
   };
   const pattern = langMap[lang] || /pt/i;
-  return voices.find(v => pattern.test(v.lang) || pattern.test(v.name)) || voices[0];
+  // Busca estrita: só retorna a voz se ela for exatamente do idioma pedido.
+  // Isso evita que uma voz de outro idioma (ex.: pt-BR, que aparece antes na
+  // lista do Windows) "roube" a fala de ru-RU e pronuncie o cirílico errado.
+  const exact = voices.find(v => pattern.test(v.lang) || pattern.test(v.name));
+  if (exact) return exact;
+  // Fallback:
+  // - Para ru-RU, não forçamos pt-BR: deixamos voz undefined para o browser
+  //   usar a voz padrão de 'ru-RU' (o SO pode ter TTS russo mesmo sem listagem).
+  // - Para os demais, caímos em pt-BR ou na primeira voz disponível.
+  if (lang === 'ru-RU') return undefined;
+  return voices.find(v => /pt/i.test(v.lang) || /pt/i.test(v.name)) || voices[0];
 }
 
 /**

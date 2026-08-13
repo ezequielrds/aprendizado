@@ -39,7 +39,7 @@ initModeListeners();      // Seleção de modo, config Números, config Escrita,
 initWritingGlobals();     // Expõe window.handleLetterClick e window.handleSlotClick
 initFlagsListeners();     // Configuração e partida Bandeiras do Mundo
 
-const SERVICE_WORKER_VERSION = '2.1.17';
+const SERVICE_WORKER_VERSION = '2.1.18';
 const SERVICE_WORKER_RELOAD_KEY = 'aprendizado-sw-reloaded-version';
 let controllerChangeHandled = false;
 
