@@ -18,6 +18,11 @@ import { initModeListeners }   from './modules/mode.js';
 import { initWritingGlobals }  from './modules/writing.js';
 import { initFlagsListeners }  from './modules/flags.js';
 
+// ── Constantes de versão (devem vir antes de qualquer uso) ─────────────────
+const SERVICE_WORKER_VERSION = '2.1.18';
+const SERVICE_WORKER_RELOAD_KEY = 'aprendizado-sw-reloaded-version';
+let controllerChangeHandled = false;
+
 // ── 1. Inicialização imediata da UI ───────────────────────────────────────
 
 el.highScore.textContent      = state.high;
@@ -38,10 +43,6 @@ initGameListeners();      // correctBtn, nextBtn, shuffleBtn, loadBtn, speakBtn,
 initModeListeners();      // Seleção de modo, config Números, config Escrita, idioma
 initWritingGlobals();     // Expõe window.handleLetterClick e window.handleSlotClick
 initFlagsListeners();     // Configuração e partida Bandeiras do Mundo
-
-const SERVICE_WORKER_VERSION = '2.1.18';
-const SERVICE_WORKER_RELOAD_KEY = 'aprendizado-sw-reloaded-version';
-let controllerChangeHandled = false;
 
 function requestSkipWaiting(registration) {
   if (registration.waiting) {
