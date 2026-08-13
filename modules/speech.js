@@ -18,6 +18,7 @@ export function getVoiceForLanguage(lang) {
     'en-US': /en[-_]us|english.*united.*states/i,
     'es-ES': /es[-_]es|spanish.*spain/i,
     'de-DE': /de[-_]de|german.*germany/i,
+    'ru-RU': /ru[-_]ru|russian/i,
   };
   const pattern = langMap[lang] || /pt/i;
   return voices.find(v => pattern.test(v.lang) || pattern.test(v.name)) || voices[0];

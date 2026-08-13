@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
-import path from 'node:path';
+import path from 'path';
 import test from 'node:test';
 import { fileURLToPath } from 'node:url';
 
@@ -11,8 +11,8 @@ const serviceWorkerSource = fs.readFileSync(path.join(root, 'sw.js'), 'utf8');
 const buildValidatorSource = fs.readFileSync(path.join(root, 'scripts/validate-build.mjs'), 'utf8');
 
 test('o app atualiza o Service Worker instalado sem exigir limpeza manual', () => {
-  assert.match(indexSource, /script\.js\?v=2\.1\.13/u);
-  assert.match(scriptSource, /SERVICE_WORKER_VERSION\s*=\s*['"]2\.1\.13['"]/u);
+  assert.match(indexSource, /script\.js\?v=2\.1\.14/u);
+  assert.match(scriptSource, /SERVICE_WORKER_VERSION\s*=\s*['"]2\.1\.14['"]/u);
   assert.match(scriptSource, /serviceWorker\.register\([^)]*\?v=\$\{SERVICE_WORKER_VERSION\}/u);
   assert.match(scriptSource, /updateViaCache\s*:\s*['"]none['"]/u);
   assert.match(scriptSource, /registration\.update\(\)/u);
@@ -28,10 +28,10 @@ test('o app atualiza o Service Worker instalado sem exigir limpeza manual', () =
   );
   assert.match(scriptSource, /if \(controllerChangeHandled\) return/u);
   assert.match(scriptSource, /window\.location\.reload\(\)/u);
-  assert.match(serviceWorkerSource, /CACHE_NAME\s*=\s*['"]aprendizagem-cache-v20['"]/u);
+  assert.match(serviceWorkerSource, /CACHE_NAME\s*=\s*['"]aprendizagem-cache-v21['"]/u);
   assert.match(serviceWorkerSource, /\.\/data\/country-curiosities\.pt-BR\.json/u);
-  assert.match(buildValidatorSource, /script\\\.js\\\?v=2\\\.1\\\.13/u);
-  assert.match(buildValidatorSource, /aprendizagem-cache-v20/u);
+  assert.match(buildValidatorSource, /script\\.js\\.?v=2\\.1\\.14/u);
+  assert.match(buildValidatorSource, /aprendizagem-cache-v21/u);
   assert.match(serviceWorkerSource, /addEventListener\(['"]message['"]/u);
   assert.match(serviceWorkerSource, /skipWaiting\(\)/u);
 });

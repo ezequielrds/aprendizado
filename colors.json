@@ -1,14 +1,14 @@
 [
-    { "name": { "pt-BR": "Vermelho", "en-US": "Red", "es-ES": "Rojo", "de-DE": "Rot" }, "color": "#ef4444" },
-    { "name": { "pt-BR": "Azul", "en-US": "Blue", "es-ES": "Azul", "de-DE": "Blau" }, "color": "#3b82f6" },
-    { "name": { "pt-BR": "Amarelo", "en-US": "Yellow", "es-ES": "Amarillo", "de-DE": "Gelb" }, "color": "#fbbf24" },
-    { "name": { "pt-BR": "Verde", "en-US": "Green", "es-ES": "Verde", "de-DE": "Grün" }, "color": "#22c55e" },
-    { "name": { "pt-BR": "Laranja", "en-US": "Orange", "es-ES": "Naranja", "de-DE": "Orange" }, "color": "#f97316" },
-    { "name": { "pt-BR": "Rosa", "en-US": "Pink", "es-ES": "Rosa", "de-DE": "Rosa" }, "color": "#ec4899" },
-    { "name": { "pt-BR": "Roxo", "en-US": "Purple", "es-ES": "Morado", "de-DE": "Lila" }, "color": "#a855f7" },
-    { "name": { "pt-BR": "Preto", "en-US": "Black", "es-ES": "Negro", "de-DE": "Schwarz" }, "color": "#1f2937" },
-    { "name": { "pt-BR": "Branco", "en-US": "White", "es-ES": "Blanco", "de-DE": "Weiß" }, "color": "#f9fafb" },
-    { "name": { "pt-BR": "Marrom", "en-US": "Brown", "es-ES": "Marrón", "de-DE": "Braun" }, "color": "#92400e" },
-    { "name": { "pt-BR": "Cinza", "en-US": "Gray", "es-ES": "Gris", "de-DE": "Grau" }, "color": "#6b7280" },
-    { "name": { "pt-BR": "Azul claro", "en-US": "Light Blue", "es-ES": "Azul claro", "de-DE": "Hellblau" }, "color": "#7dd3fc" }
+    { "name": { "pt-BR": "Vermelho", "en-US": "Red", "es-ES": "Rojo", "de-DE": "Rot", "ru-RU": "Красный" }, "color": "#ef4444" },
+    { "name": { "pt-BR": "Azul", "en-US": "Blue", "es-ES": "Azul", "de-DE": "Blau", "ru-RU": "Синий" }, "color": "#3b82f6" },
+    { "name": { "pt-BR": "Amarelo", "en-US": "Yellow", "es-ES": "Amarillo", "de-DE": "Gelb", "ru-RU": "Жёлтый" }, "color": "#fbbf24" },
+    { "name": { "pt-BR": "Verde", "en-US": "Green", "es-ES": "Verde", "de-DE": "Grün", "ru-RU": "Зелёный" }, "color": "#22c55e" },
+    { "name": { "pt-BR": "Laranja", "en-US": "Orange", "es-ES": "Naranja", "de-DE": "Orange", "ru-RU": "Оранжевый" }, "color": "#f97316" },
+    { "name": { "pt-BR": "Rosa", "en-US": "Pink", "es-ES": "Rosa", "de-DE": "Rosa", "ru-RU": "Розовый" }, "color": "#ec4899" },
+    { "name": { "pt-BR": "Roxo", "en-US": "Purple", "es-ES": "Morado", "de-DE": "Lila", "ru-RU": "Фиолетовый" }, "color": "#a855f7" },
+    { "name": { "pt-BR": "Preto", "en-US": "Black", "es-ES": "Negro", "de-DE": "Schwarz", "ru-RU": "Чёрный" }, "color": "#1f2937" },
+    { "name": { "pt-BR": "Branco", "en-US": "White", "es-ES": "Blanco", "de-DE": "Weiß", "ru-RU": "Белый" }, "color": "#f9fafb" },
+    { "name": { "pt-BR": "Marrom", "en-US": "Brown", "es-ES": "Marrón", "de-DE": "Braun", "ru-RU": "Коричневый" }, "color": "#92400e" },
+    { "name": { "pt-BR": "Cinza", "en-US": "Gray", "es-ES": "Gris", "de-DE": "Grau", "ru-RU": "Серый" }, "color": "#6b7280" },
+    { "name": { "pt-BR": "Azul claro", "en-US": "Light Blue", "es-ES": "Azul claro", "de-DE": "Hellblau", "ru-RU": "Голубой" }, "color": "#7dd3fc" }
 ]
