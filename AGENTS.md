@@ -117,7 +117,7 @@ state.high              // Recorde de sequência da sessão
 state.totalWords        // Acertos totais acumulados (persistido em localStorage)
 state.sessionWords      // Acertos na sessão atual (resetável)
 state.level             // Nível atual do jogador (calculado a cada 4 acertos)
-state.selectedLanguage  // Idioma selecionado ('pt-BR' | 'en-US' | 'es-ES' | 'de-DE')
+state.selectedLanguage  // Idioma selecionado ('pt-BR' | 'en-US' | 'es-ES' | 'de-DE' | 'ru-RU')
 state.numbersRange      // { min, max } para o modo Números
 state.writingExtraLetters // Quantidade de letras distratoras no modo Escrita
 
@@ -256,7 +256,7 @@ Letras individuais maiúsculas.
 ```json
 [
   {
-    "name": { "pt-BR": "Vermelho", "en-US": "Red", "es-ES": "Rojo", "de-DE": "Rot" },
+    "name": { "pt-BR": "Vermelho", "en-US": "Red", "es-ES": "Rojo", "de-DE": "Rot", "ru-RU": "Красный" },
     "color": "#ef4444"
   }
 ]
@@ -298,6 +298,7 @@ Cada um dos 193 países deve ter uma capital local. As coordenadas são geográf
 | `en-US` | English (US) |
 | `es-ES` | Español (España) |
 | `de-DE` | Deutsch (Deutschland) |
+| `ru-RU` | Русский (Russian) |
 
 O idioma afeta: seleção de voz TTS, nome das cores e nome dos números (0–20).
 Os modos `syllables` e `phrases` **sempre usam `pt-BR`** independente do idioma selecionado.
