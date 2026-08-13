@@ -1,4 +1,4 @@
-const CACHE_NAME = 'aprendizagem-cache-v22';
+const CACHE_NAME = 'aprendizagem-cache-v23';
 const APP_ASSETS = [
   './',
   './index.html',
@@ -279,11 +279,16 @@ self.addEventListener('message', (event) => {
 
 self.addEventListener('install', (event) => {
   event.waitUntil(
-    caches.open(CACHE_NAME).then(async cache => {
+    (async () => {
+      const cache = await caches.open(CACHE_NAME);
       await cache.addAll(APP_ASSETS);
-      await precacheFlags(cache);
+      // Assume o controle assim que o shell do app estiver em cache,
+      // para a atualização ser aplicada (reload) sem esperar as 193 bandeiras.
       self.skipWaiting();
-    })
+      // As bandeiras continuam sendo cacheadas em segundo plano; o app
+      // já recarregou com a nova versão e o fetch handler as recupera sob demanda.
+      await precacheFlags(cache);
+    })()
   );
 });
 

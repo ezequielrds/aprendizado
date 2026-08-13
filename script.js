@@ -35,7 +35,7 @@ initModeListeners();      // Seleção de modo, config Números, config Escrita,
 initWritingGlobals();     // Expõe window.handleLetterClick e window.handleSlotClick
 initFlagsListeners();     // Configuração e partida Bandeiras do Mundo
 
-const SERVICE_WORKER_VERSION = '2.1.15';
+const SERVICE_WORKER_VERSION = '2.1.16';
 const SERVICE_WORKER_RELOAD_KEY = 'aprendizado-sw-reloaded-version';
 let controllerChangeHandled = false;
 
@@ -131,16 +131,17 @@ initGame();
 if ('serviceWorker' in navigator) {
   reloadOnceOnControllerChange();
 
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register(`./sw.js?v=${SERVICE_WORKER_VERSION}`, {
-      updateViaCache: 'none',
-    }).then(registration => {
-      watchServiceWorkerInstallation(registration);
-      return registration.update().then(() => {
-        requestSkipWaiting(registration);
-      });
-    }).catch(err => {
-      console.warn('Service worker registration failed:', err);
+  // Verifica atualização imediatamente ao abrir o PWA (não espera o 'load').
+  // Se houver nova versão, o SW a baixa e a aplica (skipWaiting + reload).
+  // Se estiver offline ou não houver novidade, o cache offline atual é mantido.
+  navigator.serviceWorker.register(`./sw.js?v=${SERVICE_WORKER_VERSION}`, {
+    updateViaCache: 'none',
+  }).then(registration => {
+    watchServiceWorkerInstallation(registration);
+    return registration.update().then(() => {
+      requestSkipWaiting(registration);
     });
+  }).catch(err => {
+    console.warn('Service worker unavailable (offline?):', err);
   });
 }

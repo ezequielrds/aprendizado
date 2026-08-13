@@ -306,7 +306,9 @@ test('o install precacheia as 193 bandeiras em serie antes de solicitar a ativac
   );
   assert.equal(maximumActiveFlagAdds, 1);
   assert.equal(skipWaitingCalled, true);
-  assert.equal(allFlagsCachedWhenSkipWaiting, true);
+  // Shell-first: o skipWaiting roda assim que o shell do app está em cache,
+  // antes das 193 bandeiras terminarem (elas continuam em segundo plano).
+  assert.equal(allFlagsCachedWhenSkipWaiting, false);
   assert.equal(activationOccurred, true);
   assert.equal(activationBeforeInstallFinished, false);
 });
