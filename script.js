@@ -25,6 +25,10 @@ el.speakBtn.style.display     = 'none';
 el.languageSelector.value     = state.selectedLanguage;
 document.body.classList.add('uppercase-mode');
 
+// Exibe a versão do app no cabeçalho (fonte canônica: SERVICE_WORKER_VERSION)
+const appVersionEl = document.getElementById('appVersion');
+if (appVersionEl) appVersionEl.textContent = `v${SERVICE_WORKER_VERSION}`;
+
 // ── 2. Registro de listeners de todos os módulos ──────────────────────────
 
 initSpeechListeners();    // Vozes TTS + expõe window.speakWord
@@ -35,7 +39,7 @@ initModeListeners();      // Seleção de modo, config Números, config Escrita,
 initWritingGlobals();     // Expõe window.handleLetterClick e window.handleSlotClick
 initFlagsListeners();     // Configuração e partida Bandeiras do Mundo
 
-const SERVICE_WORKER_VERSION = '2.1.16';
+const SERVICE_WORKER_VERSION = '2.1.17';
 const SERVICE_WORKER_RELOAD_KEY = 'aprendizado-sw-reloaded-version';
 let controllerChangeHandled = false;
 

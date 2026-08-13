@@ -343,7 +343,21 @@ body {
 }
 
 .logo span {
-  font-size: 22px
+  font-size: 1.6rem;
+}
+
+/* Versão do app no cabeçalho */
+.app-version {
+  align-self: center;
+  margin-left: 8px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  color: var(--muted);
+  background: color-mix(in srgb, var(--muted) 18%, transparent);
+  padding: 2px 8px;
+  border-radius: 999px;
+  white-space: nowrap;
 }
 
 h1 {
