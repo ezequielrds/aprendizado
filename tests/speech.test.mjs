@@ -19,3 +19,11 @@ test('getVoiceForLanguage nao deixa voz pt-BR roubar o russo (ru-RU)', () => {
   // Para ru-RU sem voz russa disponível, retorna undefined (deixa o SO usar a voz padrão ru-RU).
   assert.match(source, /if \(lang === 'ru-RU'\) return undefined/u);
 });
+
+test('modo Letras em ru-RU fala a letra em minusculo (som puro, nao o nome)', () => {
+  const source = fs.readFileSync(path.join(root, 'modules/render.js'), 'utf8');
+  // No branch letters, quando o idioma e ru-RU, o texto falado vira minusculo.
+  assert.match(source, /gameMode === 'letters'/u);
+  assert.match(source, /state\.selectedLanguage === 'ru-RU'/u);
+  assert.match(source, /syllable = syllable\.toLocaleLowerCase\('ru'\)/u);
+});

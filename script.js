@@ -19,7 +19,7 @@ import { initWritingGlobals }  from './modules/writing.js';
 import { initFlagsListeners }  from './modules/flags.js';
 
 // ── Constantes de versão (devem vir antes de qualquer uso) ─────────────────
-const SERVICE_WORKER_VERSION = '2.1.19';
+const SERVICE_WORKER_VERSION = '2.1.20';
 const SERVICE_WORKER_RELOAD_KEY = 'aprendizado-sw-reloaded-version';
 let controllerChangeHandled = false;
 

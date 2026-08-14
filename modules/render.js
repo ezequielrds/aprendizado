@@ -95,6 +95,12 @@ export function handleSyllableClick(e) {
     syllable = parts[index];
   } else if (state.gameMode === 'letters') {
     syllable = text;
+    // No alfabeto cirílico (ru-RU), a voz TTS lê uma letra MAIÚSCULA isolada
+    // como o *nome* da letra (ex.: "Е" vira "ye"/explicação) em vez do som.
+    // Falando a minúscula, o motor entrega o fonema puro (só a letra).
+    if (state.selectedLanguage === 'ru-RU') {
+      syllable = syllable.toLocaleLowerCase('ru');
+    }
   } else if (state.gameMode === 'numbers') {
     syllable = e.target.dataset.speak || text;
   } else if (state.gameMode === 'colors') {

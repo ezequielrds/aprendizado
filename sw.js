@@ -1,4 +1,4 @@
-const CACHE_NAME = 'aprendizagem-cache-v26';
+const CACHE_NAME = 'aprendizagem-cache-v27';
 const APP_ASSETS = [
   './',
   './index.html',
