@@ -11,7 +11,7 @@
   <title>Aprendizado</title>
   <link rel="manifest" href="manifest.webmanifest">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
-  <link rel="stylesheet" href="styles.css?v=1.1.1">
+  <link rel="stylesheet" href="styles.css?v=1.2.0">
 </head>
 
 <body>
@@ -151,6 +151,13 @@
           <span class="mode-text">
             <strong>Números</strong>
             <small>Praticar números</small>
+          </span>
+        </button>
+        <button id="modeMathBtn" class="mode-btn">
+          <span class="mode-icon">🧮</span>
+          <span class="mode-text">
+            <strong>Matemática</strong>
+            <small>10 níveis de contas e desafios</small>
           </span>
         </button>
         <button id="modeColorsBtn" class="mode-btn">
@@ -343,7 +350,67 @@
     </div>
   </div>
 
-  <script type="module" src="script.js?v=2.1.20"></script>
+  <div id="mathGame" class="math-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="mathGameTitle">
+    <div class="math-shell">
+      <header class="math-header">
+        <button id="mathHomeBtn" class="btn-ghost math-home-btn" type="button">← Início</button>
+        <div class="math-title-block">
+          <span class="math-kicker">MISSÃO</span>
+          <h2 id="mathGameTitle">Matemática</h2>
+        </div>
+        <div class="math-round-summary" aria-live="polite">
+          <strong id="mathQuestionCount">Desafio 1 de 8</strong>
+          <span>Acertos: <b id="mathScoreDisplay">0</b></span>
+        </div>
+      </header>
+
+      <main id="mathPlayingView" class="math-playing-view">
+        <section class="math-statusbar" aria-label="Progresso da missão de matemática">
+          <div class="math-status-chip">
+            <span>Nível</span>
+            <strong id="mathLevelDisplay">1 / 10</strong>
+          </div>
+          <div class="math-status-chip math-status-progress">
+            <div class="math-progress-label">
+              <span>Progresso do nível</span>
+              <strong id="mathProgressText">0 / 8 acertos</strong>
+            </div>
+            <div class="math-progress-bar" aria-hidden="true">
+              <div id="mathProgressFill" class="math-progress-fill"></div>
+            </div>
+          </div>
+        </section>
+
+        <section class="math-board panel" aria-live="polite">
+          <div id="mathMascot" class="math-mascot" aria-label="Mascote do nível">🐶</div>
+          <div class="math-level-copy">
+            <span class="math-kicker">DESAFIO DO NÍVEL</span>
+            <h3 id="mathLevelTitle">Somas iguais</h3>
+            <p id="mathLevelDescription">Comece somando números iguais.</p>
+          </div>
+          <p id="mathQuestionType" class="math-question-type">Escolha a resposta correta</p>
+          <div id="mathExpression" class="math-expression" aria-label="Conta atual">2 + 2 = ?</div>
+          <div id="mathAnswerZone" class="math-answer-zone"></div>
+          <p id="mathFeedback" class="math-feedback" role="status" aria-live="assertive"></p>
+          <p class="math-rule">Cada nível só termina com 8 acertos: 4 de escolha e 4 digitadas.</p>
+        </section>
+      </main>
+
+      <section id="mathResultView" class="math-result-view hidden" aria-labelledby="mathResultTitle">
+        <div class="math-result-icon" aria-hidden="true">🏆</div>
+        <span class="math-kicker">MISSÃO CONCLUÍDA</span>
+        <h2 id="mathResultTitle">Você virou mestre da matemática!</h2>
+        <div class="math-result-total"><span id="mathResultScore">80</span><small>acertos na missão</small></div>
+        <p id="mathResultMessage" class="math-result-message"></p>
+        <div class="math-result-actions">
+          <button id="mathNewGameBtn" class="btn-primary" type="button">Jogar de novo</button>
+          <button id="mathResultHomeBtn" class="btn-ghost" type="button">Voltar ao início</button>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <script type="module" src="script.js?v=2.2.0"></script>
 </body>
 
 </html>

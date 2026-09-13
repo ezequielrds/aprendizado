@@ -192,7 +192,7 @@ export function initGameListeners() {
   // ── Atalhos de teclado ────────────────────────────────────────────────────
   window.addEventListener('keydown', e => {
     if (['INPUT', 'TEXTAREA'].includes(document.activeElement.tagName)) return;
-    if (state.gameMode === 'writing' || state.gameMode === 'flags') return; // modos com interação própria
+    if (state.gameMode === 'writing' || state.gameMode === 'flags' || state.gameMode === 'math') return; // modos com interação própria
     if (e.key === 'Enter') {
       e.preventDefault();
       el.correctBtn.click();

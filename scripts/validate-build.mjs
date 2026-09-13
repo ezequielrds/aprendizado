@@ -82,8 +82,8 @@ for (const moduleFile of moduleFiles) {
 assert.match(index, /id="modeFlagsBtn"/);
 assert.match(index, /id="flagsMapTrigger"/);
 assert.match(index, /id="flagsMapPanel"[^>]*role="dialog"/u);
-assert.match(index, /script\.js\?v=2\.1\.20/);
-assert.match(serviceWorker, /aprendizagem-cache-v27/);
+assert.match(index, /script\.js\?v=2\.2\.0/);
+assert.match(serviceWorker, /aprendizagem-cache-v28/);
 assert.match(serviceWorker, /\.\/data\/countries\.json/);
 assert.match(serviceWorker, /\.\/data\/country-curiosities\.pt-BR\.json/);
 assert.match(appAssets, /\.\/data\/world-map\.js/);
@@ -103,5 +103,9 @@ assert.match(serviceWorker, /await cache\.add\(asset\)/u);
 assert.match(serviceWorker, /let flagFetchQueue = Promise\.resolve\(\)/u);
 assert.match(serviceWorker, /flagFetchQueue\.then\(fetchTask, fetchTask\)/u);
 assert.ok(Number.isInteger(preloadCount) && preloadCount <= 2, 'preload deve limitar-se a uma ou duas bandeiras');
+assert.match(index, /id="modeMathBtn"/u);
+assert.match(index, /id="mathGame"[^>]*role="dialog"/u);
+assert.match(appAssets, /\.\/modules\/mathLogic\.js/u);
+assert.match(appAssets, /\.\/modules\/math\.js/u);
 
 console.log(`Build valido: ${countries.length} paises, ${svgFiles.length} bandeiras locais, ${moduleFiles.length} modulos verificados.`);

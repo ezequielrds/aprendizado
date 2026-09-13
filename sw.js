@@ -1,4 +1,4 @@
-const CACHE_NAME = 'aprendizagem-cache-v27';
+const CACHE_NAME = 'aprendizagem-cache-v28';
 const APP_ASSETS = [
   './',
   './index.html',
@@ -31,6 +31,8 @@ const APP_ASSETS = [
   './modules/flagsLogic.js',
   './modules/flagsMapLogic.js',
   './modules/flags.js',
+  './modules/mathLogic.js',
+  './modules/math.js',
   // Áudios
   './audio/Aprender com você é divertido.mp3',
   './audio/Cada tentativa te deixa mais forte.mp3',

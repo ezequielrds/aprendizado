@@ -1,0 +1,50 @@
+name: Publicar prévia do GitHub Pages
+
+on:
+  push:
+    branches:
+      - main
+      - codex/math-module
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Baixar versão estável
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          path: site
+
+      - name: Baixar versão de prévia
+        uses: actions/checkout@v4
+        with:
+          ref: codex/math-module
+          path: preview
+
+      - name: Montar site com prévia
+        run: |
+          mkdir -p site/previews/math-module
+          rsync -a --delete --exclude='.git' preview/ site/previews/math-module/
+
+      - name: Configurar GitHub Pages
+        uses: actions/configure-pages@v5
+
+      - name: Enviar artefato do site
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./site
+
+      - name: Publicar no GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

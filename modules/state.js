@@ -9,8 +9,20 @@ export const state = {
   dbCountries: [],
 
   // Modo de jogo
-  gameMode: 'syllables', // 'syllables' | 'phrases' | 'letters' | 'numbers' | 'colors' | 'writing' | 'flags'
+  gameMode: 'syllables', // 'syllables' | 'phrases' | 'letters' | 'numbers' | 'colors' | 'writing' | 'flags' | 'math'
   numbersRange: { min: 0, max: 10 },
+
+  // Estado da partida Matemática
+  mathLevel: 1,
+  mathCorrectInLevel: 0,
+  mathScore: 0,
+  mathMistakes: 0,
+  mathQuestion: null,
+  mathLastSignature: '',
+  mathQuestionStatus: 'idle', // 'idle' | 'answering' | 'transitioning' | 'finished'
+  mathGameStarted: false,
+  mathRunId: 0,
+  mathPreviousGameMode: 'syllables',
 
   // Estado do modo Escrita
   writingExtraLetters: 2,
@@ -149,6 +161,7 @@ export const el = {
   modePhrasesBtn:   document.getElementById('modePhrasesBtn'),
   modeLettersBtn:   document.getElementById('modeLettersBtn'),
   modeNumbersBtn:   document.getElementById('modeNumbersBtn'),
+  modeMathBtn:      document.getElementById('modeMathBtn'),
   modeColorsBtn:    document.getElementById('modeColorsBtn'),
   numbersConfig:    document.getElementById('numbersConfig'),
   minNumber:        document.getElementById('minNumber'),
@@ -208,4 +221,24 @@ export const el = {
   flagsHintCount:    document.getElementById('flagsHintCount'),
   flagsPercent:      document.getElementById('flagsPercent'),
   flagsResultMessage:document.getElementById('flagsResultMessage'),
+  mathGame:          document.getElementById('mathGame'),
+  mathHomeBtn:       document.getElementById('mathHomeBtn'),
+  mathPlayingView:   document.getElementById('mathPlayingView'),
+  mathResultView:    document.getElementById('mathResultView'),
+  mathLevelDisplay:  document.getElementById('mathLevelDisplay'),
+  mathMascot:        document.getElementById('mathMascot'),
+  mathLevelTitle:    document.getElementById('mathLevelTitle'),
+  mathLevelDescription: document.getElementById('mathLevelDescription'),
+  mathProgressFill:  document.getElementById('mathProgressFill'),
+  mathProgressText:  document.getElementById('mathProgressText'),
+  mathQuestionCount: document.getElementById('mathQuestionCount'),
+  mathScoreDisplay:  document.getElementById('mathScoreDisplay'),
+  mathQuestionType:  document.getElementById('mathQuestionType'),
+  mathExpression:    document.getElementById('mathExpression'),
+  mathAnswerZone:    document.getElementById('mathAnswerZone'),
+  mathFeedback:      document.getElementById('mathFeedback'),
+  mathResultScore:   document.getElementById('mathResultScore'),
+  mathResultMessage: document.getElementById('mathResultMessage'),
+  mathNewGameBtn:    document.getElementById('mathNewGameBtn'),
+  mathResultHomeBtn: document.getElementById('mathResultHomeBtn'),
 };
