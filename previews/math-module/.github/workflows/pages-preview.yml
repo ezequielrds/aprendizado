@@ -1,0 +1,44 @@
+name: Publicar prévia do GitHub Pages
+
+on:
+  push:
+    branches:
+      - main
+      - codex/math-module
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: github-pages-preview
+  cancel-in-progress: true
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Baixar versão estável
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          path: site
+
+      - name: Baixar versão de prévia
+        uses: actions/checkout@v4
+        with:
+          ref: codex/math-module
+          path: preview
+
+      - name: Montar site com prévia
+        run: |
+          mkdir -p site/previews/math-module
+          rsync -a --delete --exclude='.git' preview/ site/previews/math-module/
+
+      - name: Publicar no branch do Pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_branch: gh-pages
+          publish_dir: ./site
+          keep_files: false
