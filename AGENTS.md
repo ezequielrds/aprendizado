@@ -55,6 +55,8 @@ leitura/
 │   ├── flagsLogic.js       # Regras puras de Bandeiras do Mundo
 │   ├── flagsMapLogic.js    # Status permitido, contexto e viewport do mapa
 │   └── flags.js            # UI, estado e fluxo da partida de bandeiras
+│   ├── mathLogic.js        # Regras puras, níveis e geração de contas
+│   └── math.js             # UI, estado e fluxo da partida de Matemática
 │
 ├── words.json              # Lista de palavras silabadas (ex.: "ca-sa", "bo-la")
 ├── phrases.json            # Lista de frases (ex.: "O gato mia")
@@ -93,6 +95,8 @@ mode.js       ← state, deck, ui, game, render
 flagsLogic.js ← random
 flagsMapLogic.js ← (nenhum import — regras puras de mapa)
 flags.js      ← state, ui, flagsLogic, flagsMapLogic, data/world-map.js
+mathLogic.js  ← random
+math.js       ← state, audio, mathLogic
 script.js     ← todos os módulos acima
 ```
 
@@ -107,7 +111,7 @@ Todo o estado mutável do jogo vive em um único objeto exportado `state`. Qualq
 ### Propriedades principais
 
 ```js
-state.gameMode          // Modo ativo: 'syllables' | 'phrases' | 'letters' | 'numbers' | 'colors' | 'writing' | 'flags'
+state.gameMode          // Modo ativo: 'syllables' | 'phrases' | 'letters' | 'numbers' | 'colors' | 'writing' | 'flags' | 'math'
 state.words             // Array de itens ativos no deck (formato interno varia por modo — ver seção 6)
 state.deck              // Array de índices embaralhados de state.words
 state.idx               // Posição atual no deck
@@ -149,6 +153,14 @@ state.flagsPreloadedAssets  // assets das proximas bandeiras ja solicitados pela
 state.flagsStatus           // 'playing' | 'correct' | 'revealed'
 state.flagsMapOpen          // se o dialogo regional esta visivel
 state.flagsMapReturnFocus   // elemento que abriu o painel e recebe o foco ao fecha-lo
+
+// Estado da partida Matemática
+state.mathLevel             // nível atual da missão (1–10)
+state.mathCorrectInLevel    // respostas corretas no nível atual (0–8)
+state.mathScore             // total de acertos da missão atual
+state.mathQuestion          // { type: 'choice'|'input', problem } da rodada atual
+state.mathQuestionStatus    // 'idle' | 'answering' | 'transitioning' | 'finished'
+state.mathGameStarted       // controla a tela independente de Matemática
 ```
 
 O objeto `el` (também em `state.js`) contém todas as referências DOM pré-capturadas via `getElementById`. Sempre use `el.nomeDoElemento` em vez de chamar `document.getElementById` diretamente nos módulos.
@@ -167,6 +179,7 @@ O objeto `el` (também em `state.js`) contém todas as referências DOM pré-cap
 | `numbers` | Gerado dinamicamente | String numérica: `"0"`, `"1"`, ..., `"10"` |
 | `colors` | `colors.json` | JSON serializado: `JSON.stringify({ name: {...}, color: "#..." })` |
 | `writing` | `writing.json` | JSON serializado: `JSON.stringify({ word: "GATO", image: "🐱" })` |
+| `math` | Gerado dinamicamente | Partida independente: 10 níveis, 8 acertos em cada nível |
 
 > ⚠️ Nos modos `colors` e `writing`, os itens são armazenados como **strings JSON** em `state.words`. Ao renderizar, é necessário fazer `JSON.parse(text)` para recuperar o objeto.
 
@@ -229,6 +242,12 @@ checkWritingAnswer()                 [writing.js]
 Depois de `flagsStatus` mudar para `correct` ou `revealed`, o botão da bandeira habilita o diálogo de localização. Em `playing`, inclusive após erro ou dica parcial, o botão permanece desabilitado. `flagsMapLogic.js` escolhe o alvo e vários países de contexto apenas para calcular a `viewBox` regional inicial; o renderer sempre desenha as **256 geometrias do atlas local**, com o alvo por último e em vermelho e os demais países em branco — inclusive quando aparecem apenas cortados na borda da viewport. Ao afastar até o limite, a `viewBox` é exatamente o atlas mundial `0 0 1010 666`. Uma cópia de continuidade do atlas só é desenhada quando a viewport cruza o antimeridiano, preservando o contexto de ilhas como Kiribati sem duplicar o mapa-múndi. A UI guarda a viewport-base, o foco visual do país-alvo, sua capital e o nível de zoom; os controles **− Afastar** e **+ Aproximar** recalculam a `viewBox` sem acumular arredondamentos. Ao aproximar, o foco combinado mantém tanto o alvo quanto a capital visíveis, e o fechamento limpa esse estado temporário. Nada disso altera pontuação, índice, resposta ou controles da próxima rodada.
 
 O SVG é criado pela UI com paths do único atlas `data/world-map.js`, sem `<script>`, `fetch` ou URL remota inserida. O país-alvo usa somente sua geometria vermelha; **nunca** criar marcador circular vermelho ou `.flags-map-target-marker`. Cada registro em `data/countries.json` possui uma capital offline (`namePtBr`, `latitude`, `longitude`), obtida de `P36` e `P625` da Wikidata em 2026-08-03 e embutida no arquivo estático. `getFlagMapCapitalPoint` projeta essas coordenadas na Mercator do atlas; o ponto preto `.flags-map-capital-marker` e o texto `.flags-map-capital-label` são a única exceção circular e ficam sobre a capital, inclusive no antimeridiano. O diálogo possui botão de fechamento, controles de zoom associados ao SVG, Escape, legenda textual e mantém o foco sem movê-lo ao trocar de rodada.
+
+### 8.2. Matemática — fluxo especial
+
+Matemática é uma partida independente em tela cheia, como Bandeiras. Ela não usa o deck global nem altera `totalWords`: a própria missão exibe seus pontos e nível. São **10 níveis**, cada um com **8 respostas corretas obrigatórias**; as posições alternam entre múltipla escolha e resposta digitada, garantindo exatamente 4 de cada tipo por nível. Um erro não incrementa pontos nem progresso e gera uma nova conta do mesmo tipo. Assim, alcançar o nível 10 exige concluir os nove níveis anteriores com 8 acertos cada; finalizar a missão requer 80 acertos.
+
+Os níveis progridem de somas iguais até operações mistas: soma, subtração, multiplicação e divisão exata. O primeiro desafio do nível 10 é `37 + 86`, e as demais posições desse nível alternam as quatro operações. `mathLogic.js` deve permanecer livre de DOM e concentrar a geração das contas e das alternativas, para testes determinísticos.
 
 ---
 
@@ -337,6 +356,7 @@ Todos os módulos em `modules/*.js` e o atlas `data/world-map.js` precisam estar
 - Sempre modificar `state.x` para alterar estado (nunca criar variáveis locais soltas que deveriam ser globais).
 - Usar `el.nomeDoElemento` para acessar o DOM (evitar `document.getElementById` nos módulos).
 - Ao adicionar um novo modo de jogo: atualizar `setMode()` em `mode.js`, `renderWord()` em `render.js`, `stripHyphens()` e `getWordDifficulty()` em `render.js`, e os listeners em `game.js`.
+- Para modos em tela cheia e com fluxo próprio (como Bandeiras e Matemática), não encaixar o fluxo no deck global; registrar o módulo em `script.js`, os elementos em `state.js`, os assets no `sw.js` e excluir o modo dos atalhos genéricos de `game.js`.
 - Ao adicionar um novo JSON de dados: carregar em `initGame()` no `script.js` e adicionar a propriedade correspondente em `state.js`.
 - **Ao modificar qualquer arquivo `.js`, incrementar a versão do `<script>` em `index.html` e o `CACHE_NAME` em `sw.js`** (ver seção 13.1).
 - Manter o `AGENTS.md` atualizado ao fazer mudanças estruturais.
