@@ -17,6 +17,7 @@ export const state = {
   mathLevel: 0,
   mathScore: 0,
   mathMistakes: 0,
+  mathAnswered: 0,
   mathQuestion: null,
   mathLastSignature: '',
   mathQuestionStatus: 'idle', // 'idle' | 'answering' | 'transitioning'
@@ -225,7 +226,6 @@ export const el = {
   mathOperationGrid: document.getElementById('mathOperationGrid'),
   mathConfigOperationDescription: document.getElementById('mathConfigOperationDescription'),
   mathLevelGrid:     document.getElementById('mathLevelGrid'),
-  confirmMathBtn:    document.getElementById('confirmMathBtn'),
   cancelMathBtn:     document.getElementById('cancelMathBtn'),
   mathGame:          document.getElementById('mathGame'),
   mathHomeBtn:       document.getElementById('mathHomeBtn'),

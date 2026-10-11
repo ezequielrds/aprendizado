@@ -20,7 +20,7 @@ import { initFlagsListeners }  from './modules/flags.js';
 import { initMathListeners }   from './modules/math.js';
 
 // ── Constantes de versão (devem vir antes de qualquer uso) ─────────────────
-const SERVICE_WORKER_VERSION = '2.3.3';
+const SERVICE_WORKER_VERSION = '2.3.5';
 const SERVICE_WORKER_RELOAD_KEY = 'aprendizado-sw-reloaded-version';
 let controllerChangeHandled = false;
 

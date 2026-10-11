@@ -75,8 +75,28 @@ export const MATH_OPERATIONS = [
   },
 ];
 
-/** Quantos acertos disparam uma festa sem interromper o treino. */
+/** Quantos pontos disparam uma festa sem interromper o treino. */
 export const MATH_CELEBRATION_EVERY = 10;
+
+/** Pontos ganhos por acerto. */
+export const MATH_POINTS_CORRECT = 1;
+
+/** Pontos perdidos por erro (nunca abaixo de zero). */
+export const MATH_POINTS_WRONG = 2;
+
+/**
+ * Aplica o resultado de uma resposta à pontuação: acerto soma um ponto,
+ * erro tira dois, com piso em zero.
+ * @param {number} score Pontuação atual
+ * @param {boolean} wasCorrect Se a resposta estava correta
+ * @returns {number}
+ */
+export function scoreMathAnswer(score, wasCorrect) {
+  const current = Number(score) || 0;
+  return wasCorrect
+    ? current + MATH_POINTS_CORRECT
+    : Math.max(0, current - MATH_POINTS_WRONG);
+}
 
 function normalizedRandom(random) {
   const value = Number(random());
@@ -230,7 +250,7 @@ export function mathProblemSignature(problem) {
 /**
  * Tipo de resposta de cada posição do treino. Alternar os formatos torna a
  * prática mais leve: posições pares são múltipla escolha, ímpares digitadas.
- * @param {number} questionIndex Índice de acertos no treino (0, 1, 2, …)
+ * @param {number} questionIndex Índice de pontos no treino (0, 1, 2, …)
  * @returns {'choice'|'input'}
  */
 export function getMathQuestionType(questionIndex) {

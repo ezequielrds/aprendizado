@@ -11,7 +11,7 @@
   <title>Aprendizado</title>
   <link rel="manifest" href="manifest.webmanifest">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
-  <link rel="stylesheet" href="styles.css?v=1.2.2">
+  <link rel="stylesheet" href="styles.css?v=1.2.3">
 </head>
 
 <body>
@@ -357,7 +357,7 @@
     <div class="mode-card math-config-card">
       <div class="math-config-icon" aria-hidden="true">🧮</div>
       <h2 id="mathConfigTitle">Matemática</h2>
-      <p class="math-config-intro">Escolha a operação e o nível para treinar. Depois só aparecem contas desse nível!</p>
+      <p class="math-config-intro">Escolha a operação e toque no nível para começar o treino!</p>
       <fieldset class="math-operation-options">
         <legend>Operação</legend>
         <div id="mathOperationGrid" class="math-operation-grid"></div>
@@ -368,10 +368,9 @@
         <div id="mathLevelGrid" class="math-level-grid"></div>
       </fieldset>
       <div class="math-config-actions">
-        <button id="confirmMathBtn" class="btn-primary" type="button">Começar treino ✓</button>
         <button id="cancelMathBtn" class="btn-ghost" type="button">Voltar</button>
       </div>
-      <p class="math-config-note">Errou? Sem problema: vem outra conta do mesmo nível, sem perder o treino.</p>
+      <p class="math-config-note">Acertou, +1 ponto. Errou, −2 pontos (nunca abaixo de zero).</p>
     </div>
   </div>
 
@@ -388,7 +387,7 @@
         </div>
         <div class="math-round-summary" aria-live="polite">
           <strong id="mathQuestionCount">Pergunta 1</strong>
-          <span>Acertos: <b id="mathScoreDisplay">0</b></span>
+          <span>Pontos: <b id="mathScoreDisplay">0</b></span>
         </div>
       </header>
 
@@ -400,8 +399,8 @@
           </div>
           <div class="math-status-chip math-status-progress">
             <div class="math-progress-label">
-              <span>Acertos neste nível</span>
-              <strong id="mathProgressText">0 acertos</strong>
+              <span>Pontos neste nível</span>
+              <strong id="mathProgressText">0 pontos</strong>
             </div>
             <div class="math-progress-bar" aria-hidden="true">
               <div id="mathProgressFill" class="math-progress-fill"></div>
@@ -420,13 +419,13 @@
           <div id="mathExpression" class="math-expression" aria-label="Conta atual">2 + 2 = ?</div>
           <div id="mathAnswerZone" class="math-answer-zone"></div>
           <p id="mathFeedback" class="math-feedback" role="status" aria-live="assertive"></p>
-          <p class="math-rule">Só aparecem contas deste nível. A cada 10 acertos tem festa! 🎉</p>
+          <p class="math-rule">Acertou, +1 ponto. Errou, −2 pontos. A cada 10 pontos tem festa! 🎉</p>
         </section>
       </main>
     </div>
   </div>
 
-  <script type="module" src="script.js?v=2.3.3"></script>
+  <script type="module" src="script.js?v=2.3.5"></script>
 </body>
 
 </html>

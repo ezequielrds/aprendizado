@@ -2374,9 +2374,11 @@ summary:focus-visible {
   line-height: 1.4;
 }
 
-.math-level-btn.selected {
-  border-color: #f0abfc;
-  background: rgba(192, 38, 211, .22);
+.math-level-btn .math-level-go {
+  margin-top: 6px;
+  color: #f0abfc;
+  font-size: 13px;
+  font-weight: 850;
 }
 
 .math-config-actions {

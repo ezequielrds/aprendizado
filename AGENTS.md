@@ -157,8 +157,9 @@ state.flagsMapReturnFocus   // elemento que abriu o painel e recebe o foco ao fe
 // Estado do treino de Matemática (operação + nível escolhidos)
 state.mathOperation         // 'addition' | 'subtraction' | 'multiplication' | 'division'
 state.mathLevel             // índice do nível dentro da operação (0-based)
-state.mathScore             // acertos do treino atual (sem fim, festa a cada 10)
+state.mathScore             // pontos do treino atual (sem fim, festa a cada 10)
 state.mathMistakes          // erros do treino atual
+state.mathAnswered          // perguntas respondidas no treino atual
 state.mathQuestion          // { type: 'choice'|'input', problem } da rodada atual
 state.mathQuestionStatus    // 'idle' | 'answering' | 'transitioning'
 state.mathGameStarted       // controla a tela independente de Matemática
@@ -246,7 +247,7 @@ O SVG é criado pela UI com paths do único atlas `data/world-map.js`, sem `<scr
 
 ### 8.2. Matemática — fluxo especial
 
-Matemática é um treino independente em tela cheia, como Bandeiras. Ela não usa o deck global nem altera `totalWords`: a criança escolhe primeiro a **operação** (Soma, Subtração, Multiplicação ou Divisão) e depois o **nível** na tela de configuração (`mathConfig`); o treino (`startMathGame`) gera contas somente daquele nível, sem fim e sem trocar de conteúdo sozinho. Um erro não pontua e gera outra conta do mesmo nível. A cada 10 acertos há festa (`MATH_CELEBRATION_EVERY`) e o mascote evolui. O botão 🔄 Níveis volta à configuração mantendo o treino pausado; ← Início volta ao menu inicial.
+Matemática é um treino independente em tela cheia, como Bandeiras. Ela não usa o deck global nem altera `totalWords`: a criança escolhe primeiro a **operação** (Soma, Subtração, Multiplicação ou Divisão) e depois o **nível** na tela de configuração (`mathConfig`) — cada cartão de nível já é o botão de iniciar (um toque abre o treino); o treino (`startMathGame`) gera contas somente daquele nível, sem fim e sem trocar de conteúdo sozinho. Acerto soma 1 ponto, erro tira 2 (com piso em zero) e gera outra conta do mesmo nível — como −2 preserva a paridade, o erro repete o mesmo formato de pergunta (escolha/digitada). A cada 10 pontos há festa (`MATH_CELEBRATION_EVERY`) e o mascote evolui. O botão 🔄 Níveis volta à configuração mantendo o treino pausado; ← Início volta ao menu inicial.
 
 - **Soma** (5 níveis): até 5, até 10, dezena + unidade, sem vai-um, com vai-um.
 - **Subtração** (5 níveis): até 5, até 10, dezenas exatas, sem empréstimo, com empréstimo.

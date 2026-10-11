@@ -4,6 +4,8 @@ import test from 'node:test';
 import {
   MATH_CELEBRATION_EVERY,
   MATH_OPERATIONS,
+  MATH_POINTS_CORRECT,
+  MATH_POINTS_WRONG,
   buildMathChoices,
   generateMathProblem,
   getMathLevel,
@@ -12,6 +14,7 @@ import {
   getMathQuestionType,
   isCorrectMathAnswer,
   mathProblemSignature,
+  scoreMathAnswer,
 } from '../modules/mathLogic.js';
 
 const deterministicRandom = () => 0.37;
@@ -159,6 +162,16 @@ test('a validação aceita somente o resultado inteiro correto', () => {
   assert.equal(isCorrectMathAnswer('42,0', problem), false);
 });
 
-test('a festa acontece a cada dez acertos sem encerrar o treino', () => {
+test('a festa acontece a cada dez pontos sem encerrar o treino', () => {
   assert.equal(MATH_CELEBRATION_EVERY, 10);
+});
+
+test('acerto soma um ponto, erro tira dois, com piso em zero', () => {
+  assert.equal(MATH_POINTS_CORRECT, 1);
+  assert.equal(MATH_POINTS_WRONG, 2);
+  assert.equal(scoreMathAnswer(0, true), 1);
+  assert.equal(scoreMathAnswer(9, true), 10);
+  assert.equal(scoreMathAnswer(5, false), 3);
+  assert.equal(scoreMathAnswer(1, false), 0);
+  assert.equal(scoreMathAnswer(0, false), 0);
 });
