@@ -358,6 +358,10 @@ Todos os módulos em `modules/*.js` e o atlas `data/world-map.js` precisam estar
 
 Quando um SW novo termina de instalar e fica `waiting` com um controller ativo (ou seja, não é a primeira instalação), o `script.js` exibe o botão **⬆ Atualizar** (`#updateAppBtn`, escondido com `hidden`) no cabeçalho — nada recarrega sozinho. O toque chama `SKIP_WAITING` no worker pendente e o `controllerchange` recarrega o app uma única vez (guardas `controllerChangeHandled` + `sessionStorage`). Nunca reintroduzir `skipWaiting` automático na detecção (`updatefound`/`statechange`): a troca de versão no meio de uma partida assustaria a criança.
 
+### Menus sem caixa
+
+`#modeSelection` e `#mathConfig` não usam o visual de cartão centralizado (`.mode-card` com fundo/borda): o CSS os transforma em seções estáticas de página (`position: static`, sem fundo) e o `body:has(...)` esconde o `.app` enquanto estão abertos, para o jogo não aparecer atrás. Não reintroduzir overlay-caixa nesses dois; os demais configs (Números, Escrita, Bandeiras) continuam como overlays compactos.
+
 ---
 
 ## 13. Convenções e regras para modificações

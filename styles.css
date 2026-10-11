@@ -830,6 +830,41 @@ footer {
   display: none
 }
 
+/* Menu principal e config da Matemática sem caixa: o conteúdo rola na
+   própria página em vez de ficar preso num cartão de overlay. */
+#modeSelection,
+#mathConfig {
+  position: static;
+  display: block;
+  padding: 24px 16px 64px;
+  background: none;
+  backdrop-filter: none;
+  overflow: visible;
+}
+
+#modeSelection.hidden,
+#mathConfig.hidden {
+  display: none;
+}
+
+#modeSelection .mode-card,
+#mathConfig .mode-card {
+  width: min(640px, 100%);
+  max-height: none;
+  margin: 0 auto;
+  padding: 8px 0 0;
+  border: none;
+  background: none;
+  box-shadow: none;
+  overflow: visible;
+}
+
+/* Enquanto o menu/config está aberto, esconde o jogo que ficaria atrás. */
+body:has(#modeSelection:not(.hidden)) .app,
+body:has(#mathConfig:not(.hidden)) .app {
+  display: none;
+}
+
 .mode-card {
   background: var(--card);
   border: 1px solid rgba(255, 255, 255, .1);
