@@ -1,18 +1,23 @@
 import { state, el, mascots } from './state.js';
 import { playEncouragement, playSuccessSound } from './audio.js';
 import {
-  MATH_LEVEL_COUNT,
-  MATH_QUESTIONS_PER_LEVEL,
+  MATH_CELEBRATION_EVERY,
+  MATH_OPERATIONS,
   buildMathChoices,
   generateMathProblem,
   getMathLevel,
+  getMathOperation,
   getMathQuestionType,
   isCorrectMathAnswer,
-  isMathLevelComplete,
   mathProblemSignature,
 } from './mathLogic.js';
 
 // ── Estado e renderização do modo Matemática ──────────────────────────────
+// A criança escolhe operação + nível na tela de configuração; o treino gera
+// contas somente daquele nível, sem fim e sem trocar de conteúdo sozinho.
+
+let pendingOperation = 'addition';
+let pendingLevel = 0;
 
 function setMathFeedback(message = '', kind = '') {
   el.mathFeedback.textContent = message;
@@ -31,17 +36,18 @@ function scheduleForActiveRun(callback, delay) {
 }
 
 function updateMathStatus() {
-  const levelData = getMathLevel(state.mathLevel);
-  const progress = state.mathCorrectInLevel / MATH_QUESTIONS_PER_LEVEL;
-  const currentQuestion = Math.min(state.mathCorrectInLevel + 1, MATH_QUESTIONS_PER_LEVEL);
+  const operation = getMathOperation(state.mathOperation);
+  const level = getMathLevel(operation.id, state.mathLevel);
+  const answered = state.mathScore + state.mathMistakes;
+  const cycle = state.mathScore % MATH_CELEBRATION_EVERY;
 
-  el.mathLevelDisplay.textContent = `${state.mathLevel} / ${MATH_LEVEL_COUNT}`;
-  el.mathMascot.textContent = mascots[state.mathLevel - 1] || '🏆';
-  el.mathLevelTitle.textContent = levelData.title;
-  el.mathLevelDescription.textContent = levelData.description;
-  el.mathProgressFill.style.width = `${progress * 100}%`;
-  el.mathProgressText.textContent = `${state.mathCorrectInLevel} / ${MATH_QUESTIONS_PER_LEVEL} acertos`;
-  el.mathQuestionCount.textContent = `Desafio ${currentQuestion} de ${MATH_QUESTIONS_PER_LEVEL}`;
+  el.mathLevelDisplay.textContent = `${operation.title} ${level.index + 1}/${operation.levels.length}`;
+  el.mathMascot.textContent = mascots[Math.floor(state.mathScore / MATH_CELEBRATION_EVERY) % mascots.length];
+  el.mathLevelTitle.textContent = level.title;
+  el.mathLevelDescription.textContent = level.description;
+  el.mathProgressFill.style.width = `${(state.mathScore === 0 ? 0 : cycle === 0 ? 100 : cycle * (100 / MATH_CELEBRATION_EVERY))}%`;
+  el.mathProgressText.textContent = `${state.mathScore} acerto${state.mathScore === 1 ? '' : 's'}`;
+  el.mathQuestionCount.textContent = `Pergunta ${answered + 1}`;
   el.mathScoreDisplay.textContent = state.mathScore;
 
   const typeText = state.mathQuestion?.type === 'choice'
@@ -118,46 +124,18 @@ function renderMathQuestion() {
 
 function loadNextMathQuestion() {
   const problem = generateMathProblem({
+    operation: state.mathOperation,
     level: state.mathLevel,
-    questionIndex: state.mathCorrectInLevel,
     previousSignature: state.mathLastSignature,
   });
 
   state.mathQuestion = {
-    type: getMathQuestionType(state.mathCorrectInLevel),
+    type: getMathQuestionType(state.mathScore),
     problem,
   };
   state.mathLastSignature = mathProblemSignature(problem);
   state.mathQuestionStatus = 'answering';
   renderMathQuestion();
-}
-
-function finishMathGame() {
-  state.mathGameStarted = false;
-  state.mathQuestionStatus = 'finished';
-  el.mathPlayingView.classList.add('hidden');
-  el.mathResultView.classList.remove('hidden');
-  el.mathResultScore.textContent = state.mathScore;
-  el.mathResultMessage.textContent = `Você acertou as 80 contas necessárias e concluiu os 10 níveis. Que conquista!`;
-  playEncouragement();
-}
-
-function advanceAfterCorrectAnswer() {
-  if (isMathLevelComplete(state.mathCorrectInLevel)) {
-    if (state.mathLevel === MATH_LEVEL_COUNT) {
-      finishMathGame();
-      return;
-    }
-
-    state.mathLevel++;
-    state.mathCorrectInLevel = 0;
-    loadNextMathQuestion();
-    setMathFeedback(`Novo nível! Agora é a vez de ${getMathLevel(state.mathLevel).title.toLowerCase()}.`, 'level-up');
-    playEncouragement();
-    return;
-  }
-
-  loadNextMathQuestion();
 }
 
 function submitMathAnswer(value) {
@@ -175,31 +153,124 @@ function submitMathAnswer(value) {
 
   if (isCorrect) {
     state.mathScore++;
-    state.mathCorrectInLevel++;
     el.mathExpression.classList.add('correct');
     updateMathStatus();
-    setMathFeedback('Muito bem! +1 acerto ⭐', 'correct');
-    playSuccessSound();
 
-    scheduleForActiveRun(advanceAfterCorrectAnswer, 700);
+    if (state.mathScore % MATH_CELEBRATION_EVERY === 0) {
+      setMathFeedback(`Demais! ${state.mathScore} acertos treinando ${getMathLevel(state.mathOperation, state.mathLevel).title.toLowerCase()}! 🎉`, 'level-up');
+      playEncouragement();
+    } else {
+      setMathFeedback('Muito bem! +1 acerto ⭐', 'correct');
+      playSuccessSound();
+    }
+
+    scheduleForActiveRun(loadNextMathQuestion, 700);
     return;
   }
 
   state.mathMistakes++;
   el.mathExpression.classList.add('wrong');
-  setMathFeedback('Ainda não. Sem ponto desta vez — vamos para outra conta!', 'wrong');
+  setMathFeedback('Ainda não. Sem problema — vem aí outra conta desse nível!', 'wrong');
   scheduleForActiveRun(loadNextMathQuestion, 900);
 }
 
+// ── Tela de configuração (operação + nível) ───────────────────────────────
+
+function renderMathOperationButtons() {
+  el.mathOperationGrid.replaceChildren();
+  for (const operation of MATH_OPERATIONS) {
+    const button = document.createElement('button');
+    button.type = 'button';
+    button.className = 'math-operation-btn';
+    button.dataset.operation = operation.id;
+    button.setAttribute('aria-pressed', 'false');
+    const icon = document.createElement('span');
+    icon.className = 'math-operation-icon';
+    icon.setAttribute('aria-hidden', 'true');
+    icon.textContent = operation.icon;
+    const label = document.createElement('strong');
+    label.textContent = operation.title;
+    button.append(icon, label);
+    button.addEventListener('click', () => {
+      pendingOperation = operation.id;
+      pendingLevel = 0;
+      renderMathConfig();
+    });
+    el.mathOperationGrid.append(button);
+  }
+}
+
+function renderMathConfig() {
+  const operation = getMathOperation(pendingOperation);
+  pendingOperation = operation.id;
+  if (pendingLevel < 0 || pendingLevel >= operation.levels.length) pendingLevel = 0;
+  const selected = operation.levels[pendingLevel];
+
+  el.mathOperationGrid.querySelectorAll('.math-operation-btn').forEach(button => {
+    const isSelected = button.dataset.operation === operation.id;
+    button.classList.toggle('selected', isSelected);
+    button.setAttribute('aria-pressed', String(isSelected));
+  });
+
+  el.mathConfigOperationDescription.textContent = operation.description;
+  el.mathLevelGrid.replaceChildren();
+  operation.levels.forEach((entry, index) => {
+    const button = document.createElement('button');
+    button.type = 'button';
+    button.className = `math-level-btn${index === pendingLevel ? ' selected' : ''}`;
+    button.setAttribute('aria-pressed', String(index === pendingLevel));
+    button.innerHTML = `<strong></strong><small></small>`;
+    button.querySelector('strong').textContent = entry.title;
+    button.querySelector('small').textContent = entry.description;
+    button.addEventListener('click', () => {
+      pendingLevel = index;
+      renderMathConfig();
+    });
+    el.mathLevelGrid.append(button);
+  });
+
+  el.confirmMathBtn.textContent = `Começar: ${operation.title} · ${selected.title} ✓`;
+}
+
 /**
- * Inicia uma nova partida de Matemática com dez níveis sequenciais.
+ * Abre a escolha de operação e nível. Se um treino estiver em andamento, o
+ * botão "Voltar" retorna ao treino em vez de ir ao menu inicial.
  */
-export function startMathGame() {
+export function openMathConfig() {
+  pendingOperation = state.mathOperation;
+  pendingLevel = state.mathLevel;
+  state.mathRunId++;
+  el.modeSelection.classList.add('hidden');
+  el.mathGame.classList.add('hidden');
+  el.mathConfig.classList.remove('hidden');
+  renderMathOperationButtons();
+  renderMathConfig();
+}
+
+function closeMathConfig() {
+  el.mathConfig.classList.add('hidden');
+  if (state.mathGameStarted && state.mathQuestion) {
+    el.mathGame.classList.remove('hidden');
+  } else {
+    state.gameMode = state.mathPreviousGameMode || 'syllables';
+    el.modeSelection.classList.remove('hidden');
+  }
+}
+
+/**
+ * Inicia um treino contínuo somente com contas do nível escolhido.
+ * @param {string} operationId
+ * @param {number} levelIndex
+ */
+export function startMathGame(operationId, levelIndex) {
+  const operation = getMathOperation(operationId);
+  const level = getMathLevel(operation.id, levelIndex);
+
   state.mathRunId++;
   if (state.gameMode !== 'math') state.mathPreviousGameMode = state.gameMode;
   state.gameMode = 'math';
-  state.mathLevel = 1;
-  state.mathCorrectInLevel = 0;
+  state.mathOperation = operation.id;
+  state.mathLevel = level.index;
   state.mathScore = 0;
   state.mathMistakes = 0;
   state.mathQuestion = null;
@@ -208,9 +279,8 @@ export function startMathGame() {
   state.mathGameStarted = true;
 
   el.modeSelection.classList.add('hidden');
+  el.mathConfig.classList.add('hidden');
   el.mathGame.classList.remove('hidden');
-  el.mathPlayingView.classList.remove('hidden');
-  el.mathResultView.classList.add('hidden');
   loadNextMathQuestion();
 }
 
@@ -220,7 +290,7 @@ function showModeSelection() {
   state.mathQuestionStatus = 'idle';
   state.gameMode = state.mathPreviousGameMode || 'syllables';
   el.mathGame.classList.add('hidden');
-  el.mathResultView.classList.add('hidden');
+  el.mathConfig.classList.add('hidden');
   el.modeSelection.classList.remove('hidden');
 }
 
@@ -228,8 +298,9 @@ function showModeSelection() {
  * Registra os controles do modo Matemática.
  */
 export function initMathListeners() {
-  el.modeMathBtn.addEventListener('click', startMathGame);
+  el.modeMathBtn.addEventListener('click', openMathConfig);
+  el.confirmMathBtn.addEventListener('click', () => startMathGame(pendingOperation, pendingLevel));
+  el.cancelMathBtn.addEventListener('click', closeMathConfig);
   el.mathHomeBtn.addEventListener('click', showModeSelection);
-  el.mathNewGameBtn.addEventListener('click', startMathGame);
-  el.mathResultHomeBtn.addEventListener('click', showModeSelection);
+  el.mathLevelsBtn.addEventListener('click', openMathConfig);
 }

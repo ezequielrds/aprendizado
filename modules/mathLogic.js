@@ -1,53 +1,78 @@
 import { fisherYates } from './random.js';
 
 // ── Regras puras do modo Matemática ───────────────────────────────────────
+// As quatro operações são separadas (soma, subtração, multiplicação e
+// divisão) e cada uma tem seus próprios níveis. A criança escolhe uma
+// operação e um nível, e treina somente contas daquele nível — sem
+// progressão automática para outros conteúdos.
 
-export const MATH_LEVEL_COUNT = 10;
-export const MATH_QUESTIONS_PER_LEVEL = 8;
-export const MATH_QUESTIONS_PER_TYPE = 4;
+function tableLevels(prefix, titleFor, descriptionFor, tables) {
+  return tables.map(number => ({
+    id: `${prefix}-${number}`,
+    table: number,
+    title: titleFor(number),
+    description: descriptionFor(number),
+  }));
+}
 
-export const MATH_LEVELS = [
+const MULTIPLICATION_TABLES = [2, 3, 4, 5, 6, 7, 8, 9, 10];
+const DIVISION_TABLES = [2, 3, 4, 5, 6, 7, 8, 9, 10];
+
+export const MATH_OPERATIONS = [
   {
-    title: 'Somas iguais',
-    description: 'Comece somando números iguais.',
+    id: 'addition',
+    symbol: '+',
+    title: 'Soma',
+    icon: '➕',
+    description: 'Juntar quantidades com o sinal de mais.',
+    levels: [
+      { id: 'up-to-5', title: 'Somando até 5', description: 'Somas pequenas, que cabem numa mão.' },
+      { id: 'up-to-10', title: 'Somando até 10', description: 'Somas com resultado até 10.' },
+      { id: 'ten-and-unit', title: 'Dezena + unidade', description: 'Uma dezena junto com uma unidade, como 30 + 4.' },
+      { id: 'no-carry', title: 'Sem vai-um', description: 'Dois números sem precisar levar para a dezena.' },
+      { id: 'carry', title: 'Com vai-um', description: 'Somas em que a unidade passa de 10.' },
+    ],
   },
   {
-    title: 'Somas diferentes',
-    description: 'Agora some números diferentes de um algarismo.',
+    id: 'subtraction',
+    symbol: '-',
+    title: 'Subtração',
+    icon: '➖',
+    description: 'Tirar quantidades com o sinal de menos.',
+    levels: [
+      { id: 'up-to-5', title: 'Tirando até 5', description: 'Subtrações pequenas, com números até 5.' },
+      { id: 'up-to-10', title: 'Tirando até 10', description: 'Subtrações com números até 10.' },
+      { id: 'round-tens', title: 'Dezenas exatas', description: 'Dezenas cheias, como 50 − 20.' },
+      { id: 'no-borrow', title: 'Sem empréstimo', description: 'Subtrações sem precisar pedir emprestado.' },
+      { id: 'borrow', title: 'Com empréstimo', description: 'Subtrações pedindo uma dezena emprestada.' },
+    ],
   },
   {
-    title: 'Dezenas e unidades',
-    description: 'Uma dezena junto com uma unidade.',
-  },
-  {
-    title: 'Somas sem vai-um',
-    description: 'Some números de dois algarismos com calma.',
-  },
-  {
-    title: 'Somas com vai-um',
-    description: 'Hora de levar uma unidade para a dezena.',
-  },
-  {
-    title: 'Subtração simples',
-    description: 'Tire quantidades sem precisar pedir emprestado.',
-  },
-  {
-    title: 'Subtração com empréstimo',
-    description: 'Desafie-se a pedir uma dezena emprestada.',
-  },
-  {
+    id: 'multiplication',
+    symbol: '×',
     title: 'Multiplicação',
-    description: 'Pratique as tabuadas de 2 até 5.',
+    icon: '✖️',
+    description: 'Treine uma tabuada de cada vez.',
+    levels: [
+      ...tableLevels('table', number => `Tabuada do ${number}`, number => `Só contas com o número ${number}, como ${number} × 4.`, MULTIPLICATION_TABLES),
+      { id: 'mixed', title: 'Tabuada misturada', description: 'Tabuadas de 2 a 10 misturadas.' },
+    ],
   },
   {
-    title: 'Divisão exata',
-    description: 'Divida em partes iguais, sem resto.',
-  },
-  {
-    title: 'Grande desafio',
-    description: 'Misture as quatro operações para chegar ao topo!',
+    id: 'division',
+    symbol: '÷',
+    title: 'Divisão',
+    icon: '➗',
+    description: 'Divisões sempre exatas, sem resto.',
+    levels: [
+      ...tableLevels('by', number => `Dividindo por ${number}`, number => `Só divisões por ${number}, sempre exatas.`, DIVISION_TABLES),
+      { id: 'mixed', title: 'Divisão misturada', description: 'Divisores de 2 a 10 misturados, sempre exatos.' },
+    ],
   },
 ];
+
+/** Quantos acertos disparam uma festa sem interromper o treino. */
+export const MATH_CELEBRATION_EVERY = 10;
 
 function normalizedRandom(random) {
   const value = Number(random());
@@ -74,22 +99,28 @@ function orderedAddition(left, right, random) {
     : makeProblem(right, '+', left);
 }
 
-function equalAddition(random) {
-  const value = randomInt(1, 5, random);
-  return makeProblem(value, '+', value);
+function sumUpTo(max, random) {
+  const left = randomInt(0, max, random);
+  const right = randomInt(0, max - left, random);
+  return orderedAddition(left, right, random);
 }
 
-function differentAddition(random) {
-  const left = randomInt(1, 9, random);
-  let right = randomInt(1, 9, random);
-  if (right === left) right = right === 9 ? 1 : right + 1;
-  return orderedAddition(left, right, random);
+function subtractUpTo(max, random) {
+  const left = randomInt(0, max, random);
+  const right = randomInt(0, left, random);
+  return makeProblem(left, '-', right);
 }
 
 function tenAndUnitAddition(random) {
   const ten = randomInt(1, 9, random) * 10;
   const unit = randomInt(1, 9, random);
   return orderedAddition(ten, unit, random);
+}
+
+function roundTensSubtraction(random) {
+  const leftTens = randomInt(1, 9, random);
+  const rightTens = randomInt(0, leftTens - 1, random);
+  return makeProblem(leftTens * 10, '-', rightTens * 10);
 }
 
 function noCarryAddition(random) {
@@ -132,16 +163,54 @@ function multiplication(random, minFactor = 2, maxFactor = 5) {
     : makeProblem(right, '×', left);
 }
 
+function fixedTableMultiplication(table, random) {
+  const other = randomInt(0, 10, random);
+  return normalizedRandom(random) < 0.5
+    ? makeProblem(table, '×', other)
+    : makeProblem(other, '×', table);
+}
+
 function exactDivision(random, minDivisor = 2, maxDivisor = 10, maxQuotient = 10) {
   const divisor = randomInt(minDivisor, maxDivisor, random);
-  const quotient = randomInt(2, maxQuotient, random);
+  const quotient = randomInt(1, maxQuotient, random);
   return makeProblem(divisor * quotient, '÷', divisor);
 }
 
-function challengeAddition(random) {
-  const left = randomInt(20, 89, random);
-  const right = randomInt(11, 89, random);
-  return orderedAddition(left, right, random);
+function fixedDivisorDivision(divisor, random) {
+  const quotient = randomInt(0, 10, random);
+  return makeProblem(divisor * quotient, '÷', divisor);
+}
+
+function additionForLevel(levelId, random) {
+  switch (levelId) {
+    case 'up-to-5': return sumUpTo(5, random);
+    case 'up-to-10': return sumUpTo(10, random);
+    case 'ten-and-unit': return tenAndUnitAddition(random);
+    case 'no-carry': return noCarryAddition(random);
+    case 'carry': return carryAddition(random);
+    default: return sumUpTo(10, random);
+  }
+}
+
+function subtractionForLevel(levelId, random) {
+  switch (levelId) {
+    case 'up-to-5': return subtractUpTo(5, random);
+    case 'up-to-10': return subtractUpTo(10, random);
+    case 'round-tens': return roundTensSubtraction(random);
+    case 'no-borrow': return noBorrowSubtraction(random);
+    case 'borrow': return borrowingSubtraction(random);
+    default: return subtractUpTo(10, random);
+  }
+}
+
+function multiplicationForLevel(levelId, table, random) {
+  if (levelId === 'mixed') return multiplication(random, 2, 10);
+  return fixedTableMultiplication(table, random);
+}
+
+function divisionForLevel(levelId, table, random) {
+  if (levelId === 'mixed') return exactDivision(random, 2, 10, 10);
+  return fixedDivisorDivision(table, random);
 }
 
 /**
@@ -155,9 +224,9 @@ export function mathProblemSignature(problem) {
 }
 
 /**
- * Tipo de resposta de cada posição do nível. Alternar os formatos torna a
- * partida mais leve e garante quatro perguntas de cada tipo.
- * @param {number} questionIndex Índice de acertos no nível (0–7)
+ * Tipo de resposta de cada posição do treino. Alternar os formatos torna a
+ * prática mais leve: posições pares são múltipla escolha, ímpares digitadas.
+ * @param {number} questionIndex Índice de acertos no treino (0, 1, 2, …)
  * @returns {'choice'|'input'}
  */
 export function getMathQuestionType(questionIndex) {
@@ -165,72 +234,82 @@ export function getMathQuestionType(questionIndex) {
 }
 
 /**
- * Retorna a definição visual e pedagógica de um nível.
- * @param {number} level
- * @returns {{title: string, description: string}}
+ * Retorna a definição de uma operação, com fallback para a soma.
+ * @param {string} operationId
+ * @returns {{id: string, symbol: string, title: string, icon: string, description: string, levels: Array}}
  */
-export function getMathLevel(level) {
-  const normalizedLevel = Math.min(Math.max(Math.floor(Number(level) || 1), 1), MATH_LEVEL_COUNT);
-  return MATH_LEVELS[normalizedLevel - 1];
+export function getMathOperation(operationId) {
+  return MATH_OPERATIONS.find(operation => operation.id === operationId)
+    || MATH_OPERATIONS[0];
 }
 
-function createProblemForLevel(level, questionIndex, previousSignature, random) {
-  switch (level) {
-    case 1: return equalAddition(random);
-    case 2: return differentAddition(random);
-    case 3: return tenAndUnitAddition(random);
-    case 4: return noCarryAddition(random);
-    case 5: return carryAddition(random);
-    case 6: return noBorrowSubtraction(random);
-    case 7: return borrowingSubtraction(random);
-    case 8: return multiplication(random);
-    case 9: return exactDivision(random);
-    case 10: {
-      // O primeiro desafio do último nível entrega explicitamente a progressão
-      // pedida: 37 + 86. Em uma nova tentativa ele vira outra soma difícil.
-      if (questionIndex === 0 && previousSignature !== '37+86') {
-        return makeProblem(37, '+', 86);
-      }
+/**
+ * Quantos níveis a operação informada possui.
+ * @param {string} operationId
+ * @returns {number}
+ */
+export function getMathLevelCount(operationId) {
+  return getMathOperation(operationId).levels.length;
+}
 
-      switch (questionIndex % 4) {
-        case 0: return challengeAddition(random);
-        case 1: return borrowingSubtraction(random);
-        case 2: return multiplication(random, 6, 10);
-        default: return exactDivision(random, 4, 10, 12);
-      }
-    }
-    default: return equalAddition(random);
+/**
+ * Retorna a definição visual e pedagógica de um nível dentro da operação.
+ * @param {string} operationId
+ * @param {number|string} level Índice do nível (ou id do nível)
+ * @returns {{index: number, id: string, title: string, description: string}}
+ */
+export function getMathLevel(operationId, level) {
+  const operation = getMathOperation(operationId);
+  let index = typeof level === 'string'
+    ? operation.levels.findIndex(entry => entry.id === level)
+    : Math.floor(Number(level));
+  if (!Number.isInteger(index) || index < 0 || index >= operation.levels.length) index = 0;
+  const entry = operation.levels[index];
+  return { index, id: entry.id, title: entry.title, description: entry.description, table: entry.table };
+}
+
+function createProblemForLevel(operationId, levelId, table, random) {
+  switch (operationId) {
+    case 'addition': return additionForLevel(levelId, random);
+    case 'subtraction': return subtractionForLevel(levelId, random);
+    case 'multiplication': return multiplicationForLevel(levelId, table, random);
+    case 'division': return divisionForLevel(levelId, table, random);
+    default: return additionForLevel(levelId, random);
   }
 }
 
 /**
- * Gera uma conta adequada ao nível. Se o jogador acabou de errar, tenta
- * entregar uma conta diferente, mantendo o mesmo tipo de resposta.
+ * Gera uma conta do nível escolhido. Se o jogador acabou de errar, tenta
+ * entregar uma conta diferente, mantendo o mesmo nível.
  * @param {object} options
- * @param {number} options.level
- * @param {number} options.questionIndex
+ * @param {string} [options.operation]
+ * @param {number|string} [options.level]
  * @param {string} [options.previousSignature]
  * @param {() => number} [options.random]
  * @returns {{left: number, operator: string, right: number, answer: number}}
  */
 export function generateMathProblem({
-  level,
-  questionIndex = 0,
+  operation = 'addition',
+  level = 0,
   previousSignature = '',
   random = Math.random,
 } = {}) {
-  const normalizedLevel = Math.min(Math.max(Math.floor(Number(level) || 1), 1), MATH_LEVEL_COUNT);
+  const operationId = getMathOperation(operation).id;
+  const resolved = getMathLevel(operationId, level);
 
   for (let attempt = 0; attempt < 24; attempt++) {
-    const problem = createProblemForLevel(normalizedLevel, questionIndex, previousSignature, random);
+    const problem = createProblemForLevel(operationId, resolved.id, resolved.table, random);
     if (mathProblemSignature(problem) !== previousSignature) return problem;
   }
 
   // Fallback determinístico para geradores de teste ou ambientes que devolvem
   // sempre o mesmo número aleatório.
-  const fallback = createProblemForLevel(normalizedLevel, questionIndex + 1, '', () => 0.73);
-  if (mathProblemSignature(fallback) !== previousSignature) return fallback;
-  return makeProblem(19, '+', 28);
+  for (const fallbackRandom of [() => 0.13, () => 0.71, () => 0.97]) {
+    const problem = createProblemForLevel(operationId, resolved.id, resolved.table, fallbackRandom);
+    if (mathProblemSignature(problem) !== previousSignature) return problem;
+  }
+
+  return createProblemForLevel(operationId, resolved.id, resolved.table, () => 0.5);
 }
 
 /**
@@ -279,8 +358,4 @@ export function buildMathChoices(problem, random = Math.random) {
 export function isCorrectMathAnswer(value, problem) {
   const text = String(value ?? '').trim();
   return /^-?\d+$/u.test(text) && Number(text) === Number(problem.answer);
-}
-
-export function isMathLevelComplete(correctAnswers) {
-  return Number(correctAnswers) >= MATH_QUESTIONS_PER_LEVEL;
 }

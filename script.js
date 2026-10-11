@@ -20,7 +20,7 @@ import { initFlagsListeners }  from './modules/flags.js';
 import { initMathListeners }   from './modules/math.js';
 
 // ── Constantes de versão (devem vir antes de qualquer uso) ─────────────────
-const SERVICE_WORKER_VERSION = '2.2.0';
+const SERVICE_WORKER_VERSION = '2.3.1';
 const SERVICE_WORKER_RELOAD_KEY = 'aprendizado-sw-reloaded-version';
 let controllerChangeHandled = false;
 
@@ -47,28 +47,52 @@ initFlagsListeners();     // Configuração e partida Bandeiras do Mundo
 initMathListeners();      // Partida Matemática: níveis, respostas e progressão
 
 function requestSkipWaiting(registration) {
-  if (registration.waiting) {
+  if (registration?.waiting) {
     registration.waiting.postMessage({ type: 'SKIP_WAITING' });
   }
 }
 
+let pendingUpdateRegistration = null;
+const updateAppBtn = document.getElementById('updateAppBtn');
+
+if (updateAppBtn) {
+  updateAppBtn.addEventListener('click', () => {
+    if (!pendingUpdateRegistration) return;
+    updateAppBtn.disabled = true;
+    updateAppBtn.textContent = 'Atualizando…';
+    requestSkipWaiting(pendingUpdateRegistration);
+  });
+}
+
+/**
+ * Exibe o botão "⬆ Atualizar": há um worker novo instalado esperando para
+ * assumir. Só aparece quando já existe um controller (ou seja, não é a
+ * primeira instalação — nela o worker ativa sozinho).
+ */
+function showUpdateButton(registration) {
+  if (!updateAppBtn || !registration?.waiting) return;
+  pendingUpdateRegistration = registration;
+  updateAppBtn.hidden = false;
+}
+
 function watchServiceWorkerInstallation(registration) {
+  // Um worker já esperando (ex.: baixado numa visita anterior) libera o botão.
+  if (registration.waiting && navigator.serviceWorker.controller) {
+    showUpdateButton(registration);
+  }
+
   const observedWorkers = new WeakSet();
   const observeInstallingWorker = () => {
-    requestSkipWaiting(registration);
     const worker = registration.installing;
     if (!worker || observedWorkers.has(worker)) return;
 
     observedWorkers.add(worker);
     worker.addEventListener('statechange', () => {
-      if (worker.state === 'installed') {
-        requestSkipWaiting(registration);
+      // 'installed' com controller ativo = nova versão pronta, aguardando o toque do usuário.
+      if (worker.state === 'installed' && navigator.serviceWorker.controller) {
+        showUpdateButton(registration);
       }
     });
-
-    if (worker.state === 'installed') {
-      requestSkipWaiting(registration);
-    }
   };
 
   registration.addEventListener('updatefound', observeInstallingWorker);
@@ -139,14 +163,18 @@ if ('serviceWorker' in navigator) {
   reloadOnceOnControllerChange();
 
   // Verifica atualização imediatamente ao abrir o PWA (não espera o 'load').
-  // Se houver nova versão, o SW a baixa e a aplica (skipWaiting + reload).
+  // Se houver nova versão, o SW a baixa e o botão "⬆ Atualizar" aparece no
+  // cabeçalho — nada muda sozinho na tela da criança. Ao tocar no botão, o
+  // SW novo assume (skipWaiting) e o app recarrega via 'controllerchange'.
   // Se estiver offline ou não houver novidade, o cache offline atual é mantido.
   navigator.serviceWorker.register(`./sw.js?v=${SERVICE_WORKER_VERSION}`, {
     updateViaCache: 'none',
   }).then(registration => {
     watchServiceWorkerInstallation(registration);
     return registration.update().then(() => {
-      requestSkipWaiting(registration);
+      if (registration.waiting && navigator.serviceWorker.controller) {
+        showUpdateButton(registration);
+      }
     });
   }).catch(err => {
     console.warn('Service worker unavailable (offline?):', err);

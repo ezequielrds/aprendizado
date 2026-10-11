@@ -82,8 +82,8 @@ for (const moduleFile of moduleFiles) {
 assert.match(index, /id="modeFlagsBtn"/);
 assert.match(index, /id="flagsMapTrigger"/);
 assert.match(index, /id="flagsMapPanel"[^>]*role="dialog"/u);
-assert.match(index, /script\.js\?v=2\.2\.0/);
-assert.match(serviceWorker, /aprendizagem-cache-v28/);
+assert.match(index, /script\.js\?v=2\.3\.1/);
+assert.match(serviceWorker, /aprendizagem-cache-v30/);
 assert.match(serviceWorker, /\.\/data\/countries\.json/);
 assert.match(serviceWorker, /\.\/data\/country-curiosities\.pt-BR\.json/);
 assert.match(appAssets, /\.\/data\/world-map\.js/);
@@ -105,6 +105,8 @@ assert.match(serviceWorker, /flagFetchQueue\.then\(fetchTask, fetchTask\)/u);
 assert.ok(Number.isInteger(preloadCount) && preloadCount <= 2, 'preload deve limitar-se a uma ou duas bandeiras');
 assert.match(index, /id="modeMathBtn"/u);
 assert.match(index, /id="mathGame"[^>]*role="dialog"/u);
+assert.match(index, /id="mathConfig"[^>]*role="dialog"/u);
+assert.match(index, /id="updateAppBtn"/u);
 assert.match(appAssets, /\.\/modules\/mathLogic\.js/u);
 assert.match(appAssets, /\.\/modules\/math\.js/u);
 

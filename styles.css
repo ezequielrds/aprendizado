@@ -512,6 +512,35 @@ button:active {
   background: rgba(255, 255, 255, .06)
 }
 
+/* Botão de atualização: escondido até que um SW novo esteja esperando */
+.btn-update {
+  border: 1px solid rgba(74, 222, 128, .55);
+  border-radius: 999px;
+  background: linear-gradient(180deg, #16a34a, #15803d);
+  color: #f0fdf4;
+  font-size: .8rem;
+  font-weight: 800;
+  padding: 6px 12px;
+  cursor: pointer;
+  white-space: nowrap;
+  animation: update-pulse 1.6s ease-in-out infinite;
+}
+
+.btn-update[hidden] {
+  display: none;
+}
+
+.btn-update:disabled {
+  cursor: wait;
+  opacity: .7;
+  animation: none;
+}
+
+@keyframes update-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(74, 222, 128, .55); }
+  50% { box-shadow: 0 0 0 8px rgba(74, 222, 128, 0); }
+}
+
 .stars {
   display: flex;
   gap: 4px;
@@ -1861,6 +1890,13 @@ summary:focus-visible {
   justify-self: start;
 }
 
+.math-header-buttons {
+  display: flex;
+  justify-self: start;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
 .math-title-block {
   text-align: center;
 }
@@ -1872,8 +1908,7 @@ summary:focus-visible {
   letter-spacing: .18em;
 }
 
-.math-title-block h2,
-.math-result-view h2 {
+.math-title-block h2 {
   margin: 4px 0 0;
   color: #fdf4ff;
   font-size: clamp(22px, 4vw, 34px);
@@ -2123,57 +2158,125 @@ summary:focus-visible {
   line-height: 1.45;
 }
 
-.math-result-view {
-  width: min(640px, 100%);
-  margin: auto;
-  padding: clamp(24px, 6vw, 52px) clamp(18px, 5vw, 50px);
-  border: 1px solid rgba(244, 114, 182, .28);
-  border-radius: 28px;
-  background: linear-gradient(145deg, rgba(126, 34, 206, .55), rgba(42, 14, 61, .96));
-  box-shadow: var(--shadow);
-  text-align: center;
+.math-config-card {
+  background: linear-gradient(145deg, #3b0764, #111827 78%);
 }
 
-.math-result-icon {
-  margin-bottom: 16px;
+.math-config-icon {
   font-size: 64px;
   line-height: 1;
+  margin-bottom: 16px;
   filter: drop-shadow(0 8px 12px rgba(0, 0, 0, .3));
 }
 
-.math-result-total {
-  display: grid;
-  gap: 0;
-  margin: 24px 0;
-  color: #fef08a;
-  font-size: clamp(48px, 12vw, 84px);
-  font-weight: 900;
-  line-height: .95;
-}
-
-.math-result-total small {
-  color: #e9d5ff;
-  font-size: 14px;
-  font-weight: 650;
-  line-height: 1.4;
-}
-
-.math-result-message {
-  min-height: 24px;
-  color: #f5d0fe;
+.math-config-intro,
+.math-config-note {
+  color: var(--muted);
   line-height: 1.55;
 }
 
-.math-result-actions {
+.math-operation-options,
+.math-level-options {
+  border: 1px solid rgba(240, 171, 252, .2);
+  border-radius: 18px;
+  padding: 18px;
+  margin: 24px 0 0;
+  text-align: left;
+}
+
+.math-operation-options legend,
+.math-level-options legend {
+  padding: 0 8px;
+  color: #f0abfc;
+  font-weight: 800;
+}
+
+.math-config-operation-description {
+  color: var(--muted);
+  font-size: 14px;
+  margin: 0 0 14px;
+}
+
+.math-operation-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.math-operation-btn {
+  display: grid;
+  justify-items: center;
+  gap: 6px;
+  min-height: 84px;
+  padding: 12px 8px;
+  border: 2px solid transparent;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, .06);
+  color: var(--text);
+  cursor: pointer;
+  font-size: 15px;
+}
+
+.math-operation-btn .math-operation-icon {
+  font-size: 30px;
+  line-height: 1;
+}
+
+.math-operation-btn.selected {
+  border-color: #f0abfc;
+  background: rgba(192, 38, 211, .22);
+}
+
+.math-level-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.math-level-btn {
+  display: grid;
+  gap: 4px;
+  min-height: 72px;
+  padding: 12px;
+  border: 2px solid transparent;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, .06);
+  color: var(--text);
+  cursor: pointer;
+  text-align: left;
+}
+
+.math-level-btn strong {
+  font-size: 15px;
+}
+
+.math-level-btn small {
+  color: var(--muted);
+  font-size: 12.5px;
+  line-height: 1.4;
+}
+
+.math-level-btn.selected {
+  border-color: #f0abfc;
+  background: rgba(192, 38, 211, .22);
+}
+
+.math-config-actions {
   display: flex;
   justify-content: center;
   gap: 10px;
   flex-wrap: wrap;
-  margin-top: 28px;
+  margin-top: 24px;
 }
 
-.math-result-actions button {
+.math-config-actions button {
   min-width: 170px;
+}
+
+.math-config-note {
+  margin-top: 18px;
+  font-size: 14px;
+  text-align: center;
 }
 
 @keyframes math-pop {

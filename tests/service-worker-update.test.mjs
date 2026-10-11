@@ -11,8 +11,8 @@ const serviceWorkerSource = fs.readFileSync(path.join(root, 'sw.js'), 'utf8');
 const buildValidatorSource = fs.readFileSync(path.join(root, 'scripts/validate-build.mjs'), 'utf8');
 
 test('o app atualiza o Service Worker instalado sem exigir limpeza manual', () => {
-  assert.match(indexSource, /script\.js\?v=2\.2\.0/u);
-  assert.match(scriptSource, /SERVICE_WORKER_VERSION\s*=\s*['"]2\.2\.0['"]/u);
+  assert.match(indexSource, /script\.js\?v=2\.3\.1/u);
+  assert.match(scriptSource, /SERVICE_WORKER_VERSION\s*=\s*['"]2\.3\.1['"]/u);
   assert.match(scriptSource, /serviceWorker\.register\([^)]*\?v=\$\{SERVICE_WORKER_VERSION\}/u);
   assert.match(scriptSource, /updateViaCache\s*:\s*['"]none['"]/u);
   assert.match(scriptSource, /registration\.update\(\)/u);
@@ -22,16 +22,24 @@ test('o app atualiza o Service Worker instalado sem exigir limpeza manual', () =
   assert.match(scriptSource, /registration\.installing/u);
   assert.match(scriptSource, /updatefound/u);
   assert.match(scriptSource, /statechange/u);
-  assert.match(
-    scriptSource,
-    /const observeInstallingWorker = \(\) => \{\s*requestSkipWaiting\(registration\);\s*const worker = registration\.installing/u,
-  );
   assert.match(scriptSource, /if \(controllerChangeHandled\) return/u);
   assert.match(scriptSource, /window\.location\.reload\(\)/u);
-  assert.match(serviceWorkerSource, /CACHE_NAME\s*=\s*['"]aprendizagem-cache-v28['"]/u);
+  assert.match(serviceWorkerSource, /CACHE_NAME\s*=\s*['"]aprendizagem-cache-v30['"]/u);
   assert.match(serviceWorkerSource, /\.\/data\/country-curiosities\.pt-BR\.json/u);
-  assert.match(buildValidatorSource, /script\\.js\\.?v=2\\.2\\.0/u);
-  assert.match(buildValidatorSource, /aprendizagem-cache-v28/u);
+  assert.match(buildValidatorSource, /script\\.js\\.?v=2\\.3\\.1/u);
+  assert.match(buildValidatorSource, /aprendizagem-cache-v30/u);
   assert.match(serviceWorkerSource, /addEventListener\(['"]message['"]/u);
   assert.match(serviceWorkerSource, /skipWaiting\(\)/u);
+});
+
+test('a nova versão é aplicada por um botão visível, não por reload automático', () => {
+  assert.match(indexSource, /id="updateAppBtn"/u);
+  assert.match(indexSource, /id="updateAppBtn"[^>]*\bhidden\b/u);
+  assert.match(scriptSource, /showUpdateButton\(registration\)/u);
+  assert.match(scriptSource, /pendingUpdateRegistration/u);
+  assert.match(scriptSource, /updateAppBtn\.addEventListener\(['"]click['"]/u);
+  assert.match(scriptSource, /requestSkipWaiting\(pendingUpdateRegistration\)/u);
+  assert.match(scriptSource, /worker\.state === ['"]installed['"]/u);
+  assert.match(scriptSource, /navigator\.serviceWorker\.controller/u);
+  assert.match(buildValidatorSource, /id="updateAppBtn"/u);
 });

@@ -33,6 +33,9 @@
             <option value="de-DE">🇩🇪 Deutsch</option>
             <option value="ru-RU">🇷🇺 Русский</option>
           </select>
+          <button id="updateAppBtn" class="btn-update" type="button" hidden
+            title="Nova versão disponível — tocar para atualizar"
+            aria-label="Atualizar aplicativo para a nova versão">⬆ Atualizar</button>
           <button id="changeModeBtn" class="btn-ghost btn-sm" title="Mudar modo de jogo"
             aria-label="Mudar modo de jogo">🔄 Trocar</button>
           <button id="toggleCaseBtn" class="btn-ghost btn-sm" title="Alternar Maiúsculas/Minúsculas"
@@ -157,7 +160,7 @@
           <span class="mode-icon">🧮</span>
           <span class="mode-text">
             <strong>Matemática</strong>
-            <small>10 níveis de contas e desafios</small>
+            <small>Soma, subtração, tabuada e divisão</small>
           </span>
         </button>
         <button id="modeColorsBtn" class="mode-btn">
@@ -350,30 +353,55 @@
     </div>
   </div>
 
+  <div id="mathConfig" class="mode-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="mathConfigTitle">
+    <div class="mode-card math-config-card">
+      <div class="math-config-icon" aria-hidden="true">🧮</div>
+      <h2 id="mathConfigTitle">Matemática</h2>
+      <p class="math-config-intro">Escolha a operação e o nível para treinar. Depois só aparecem contas desse nível!</p>
+      <fieldset class="math-operation-options">
+        <legend>Operação</legend>
+        <div id="mathOperationGrid" class="math-operation-grid"></div>
+      </fieldset>
+      <fieldset class="math-level-options">
+        <legend>Nível</legend>
+        <p id="mathConfigOperationDescription" class="math-config-operation-description"></p>
+        <div id="mathLevelGrid" class="math-level-grid"></div>
+      </fieldset>
+      <div class="math-config-actions">
+        <button id="confirmMathBtn" class="btn-primary" type="button">Começar treino ✓</button>
+        <button id="cancelMathBtn" class="btn-ghost" type="button">Voltar</button>
+      </div>
+      <p class="math-config-note">Errou? Sem problema: vem outra conta do mesmo nível, sem perder o treino.</p>
+    </div>
+  </div>
+
   <div id="mathGame" class="math-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="mathGameTitle">
     <div class="math-shell">
       <header class="math-header">
-        <button id="mathHomeBtn" class="btn-ghost math-home-btn" type="button">← Início</button>
+        <div class="math-header-buttons">
+          <button id="mathHomeBtn" class="btn-ghost math-home-btn" type="button">← Início</button>
+          <button id="mathLevelsBtn" class="btn-ghost math-levels-btn" type="button">🔄 Níveis</button>
+        </div>
         <div class="math-title-block">
-          <span class="math-kicker">MISSÃO</span>
+          <span class="math-kicker">TREINO</span>
           <h2 id="mathGameTitle">Matemática</h2>
         </div>
         <div class="math-round-summary" aria-live="polite">
-          <strong id="mathQuestionCount">Desafio 1 de 8</strong>
+          <strong id="mathQuestionCount">Pergunta 1</strong>
           <span>Acertos: <b id="mathScoreDisplay">0</b></span>
         </div>
       </header>
 
       <main id="mathPlayingView" class="math-playing-view">
-        <section class="math-statusbar" aria-label="Progresso da missão de matemática">
+        <section class="math-statusbar" aria-label="Progresso do treino de matemática">
           <div class="math-status-chip">
             <span>Nível</span>
-            <strong id="mathLevelDisplay">1 / 10</strong>
+            <strong id="mathLevelDisplay">Soma 1/5</strong>
           </div>
           <div class="math-status-chip math-status-progress">
             <div class="math-progress-label">
-              <span>Progresso do nível</span>
-              <strong id="mathProgressText">0 / 8 acertos</strong>
+              <span>Acertos neste nível</span>
+              <strong id="mathProgressText">0 acertos</strong>
             </div>
             <div class="math-progress-bar" aria-hidden="true">
               <div id="mathProgressFill" class="math-progress-fill"></div>
@@ -382,35 +410,23 @@
         </section>
 
         <section class="math-board panel" aria-live="polite">
-          <div id="mathMascot" class="math-mascot" aria-label="Mascote do nível">🐶</div>
+          <div id="mathMascot" class="math-mascot" aria-label="Mascote do treino">🐶</div>
           <div class="math-level-copy">
-            <span class="math-kicker">DESAFIO DO NÍVEL</span>
-            <h3 id="mathLevelTitle">Somas iguais</h3>
-            <p id="mathLevelDescription">Comece somando números iguais.</p>
+            <span class="math-kicker">TREINO DO NÍVEL</span>
+            <h3 id="mathLevelTitle">Somando até 5</h3>
+            <p id="mathLevelDescription">Somas pequenas, que cabem numa mão.</p>
           </div>
           <p id="mathQuestionType" class="math-question-type">Escolha a resposta correta</p>
           <div id="mathExpression" class="math-expression" aria-label="Conta atual">2 + 2 = ?</div>
           <div id="mathAnswerZone" class="math-answer-zone"></div>
           <p id="mathFeedback" class="math-feedback" role="status" aria-live="assertive"></p>
-          <p class="math-rule">Cada nível só termina com 8 acertos: 4 de escolha e 4 digitadas.</p>
+          <p class="math-rule">Só aparecem contas deste nível. A cada 10 acertos tem festa! 🎉</p>
         </section>
       </main>
-
-      <section id="mathResultView" class="math-result-view hidden" aria-labelledby="mathResultTitle">
-        <div class="math-result-icon" aria-hidden="true">🏆</div>
-        <span class="math-kicker">MISSÃO CONCLUÍDA</span>
-        <h2 id="mathResultTitle">Você virou mestre da matemática!</h2>
-        <div class="math-result-total"><span id="mathResultScore">80</span><small>acertos na missão</small></div>
-        <p id="mathResultMessage" class="math-result-message"></p>
-        <div class="math-result-actions">
-          <button id="mathNewGameBtn" class="btn-primary" type="button">Jogar de novo</button>
-          <button id="mathResultHomeBtn" class="btn-ghost" type="button">Voltar ao início</button>
-        </div>
-      </section>
     </div>
   </div>
 
-  <script type="module" src="script.js?v=2.2.0"></script>
+  <script type="module" src="script.js?v=2.3.1"></script>
 </body>
 
 </html>

@@ -12,14 +12,14 @@ export const state = {
   gameMode: 'syllables', // 'syllables' | 'phrases' | 'letters' | 'numbers' | 'colors' | 'writing' | 'flags' | 'math'
   numbersRange: { min: 0, max: 10 },
 
-  // Estado da partida Matemática
-  mathLevel: 1,
-  mathCorrectInLevel: 0,
+  // Estado do treino de Matemática (operação + nível escolhidos)
+  mathOperation: 'addition',
+  mathLevel: 0,
   mathScore: 0,
   mathMistakes: 0,
   mathQuestion: null,
   mathLastSignature: '',
-  mathQuestionStatus: 'idle', // 'idle' | 'answering' | 'transitioning' | 'finished'
+  mathQuestionStatus: 'idle', // 'idle' | 'answering' | 'transitioning'
   mathGameStarted: false,
   mathRunId: 0,
   mathPreviousGameMode: 'syllables',
@@ -221,10 +221,16 @@ export const el = {
   flagsHintCount:    document.getElementById('flagsHintCount'),
   flagsPercent:      document.getElementById('flagsPercent'),
   flagsResultMessage:document.getElementById('flagsResultMessage'),
+  mathConfig:       document.getElementById('mathConfig'),
+  mathOperationGrid: document.getElementById('mathOperationGrid'),
+  mathConfigOperationDescription: document.getElementById('mathConfigOperationDescription'),
+  mathLevelGrid:     document.getElementById('mathLevelGrid'),
+  confirmMathBtn:    document.getElementById('confirmMathBtn'),
+  cancelMathBtn:     document.getElementById('cancelMathBtn'),
   mathGame:          document.getElementById('mathGame'),
   mathHomeBtn:       document.getElementById('mathHomeBtn'),
+  mathLevelsBtn:     document.getElementById('mathLevelsBtn'),
   mathPlayingView:   document.getElementById('mathPlayingView'),
-  mathResultView:    document.getElementById('mathResultView'),
   mathLevelDisplay:  document.getElementById('mathLevelDisplay'),
   mathMascot:        document.getElementById('mathMascot'),
   mathLevelTitle:    document.getElementById('mathLevelTitle'),
@@ -237,8 +243,4 @@ export const el = {
   mathExpression:    document.getElementById('mathExpression'),
   mathAnswerZone:    document.getElementById('mathAnswerZone'),
   mathFeedback:      document.getElementById('mathFeedback'),
-  mathResultScore:   document.getElementById('mathResultScore'),
-  mathResultMessage: document.getElementById('mathResultMessage'),
-  mathNewGameBtn:    document.getElementById('mathNewGameBtn'),
-  mathResultHomeBtn: document.getElementById('mathResultHomeBtn'),
 };

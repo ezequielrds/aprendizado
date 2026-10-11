@@ -154,12 +154,13 @@ state.flagsStatus           // 'playing' | 'correct' | 'revealed'
 state.flagsMapOpen          // se o dialogo regional esta visivel
 state.flagsMapReturnFocus   // elemento que abriu o painel e recebe o foco ao fecha-lo
 
-// Estado da partida Matemática
-state.mathLevel             // nível atual da missão (1–10)
-state.mathCorrectInLevel    // respostas corretas no nível atual (0–8)
-state.mathScore             // total de acertos da missão atual
+// Estado do treino de Matemática (operação + nível escolhidos)
+state.mathOperation         // 'addition' | 'subtraction' | 'multiplication' | 'division'
+state.mathLevel             // índice do nível dentro da operação (0-based)
+state.mathScore             // acertos do treino atual (sem fim, festa a cada 10)
+state.mathMistakes          // erros do treino atual
 state.mathQuestion          // { type: 'choice'|'input', problem } da rodada atual
-state.mathQuestionStatus    // 'idle' | 'answering' | 'transitioning' | 'finished'
+state.mathQuestionStatus    // 'idle' | 'answering' | 'transitioning'
 state.mathGameStarted       // controla a tela independente de Matemática
 ```
 
@@ -179,7 +180,7 @@ O objeto `el` (também em `state.js`) contém todas as referências DOM pré-cap
 | `numbers` | Gerado dinamicamente | String numérica: `"0"`, `"1"`, ..., `"10"` |
 | `colors` | `colors.json` | JSON serializado: `JSON.stringify({ name: {...}, color: "#..." })` |
 | `writing` | `writing.json` | JSON serializado: `JSON.stringify({ word: "GATO", image: "🐱" })` |
-| `math` | Gerado dinamicamente | Partida independente: 10 níveis, 8 acertos em cada nível |
+| `math` | Gerado dinamicamente | Treino independente: operação + nível escolhidos, só contas daquele nível, sem fim |
 
 > ⚠️ Nos modos `colors` e `writing`, os itens são armazenados como **strings JSON** em `state.words`. Ao renderizar, é necessário fazer `JSON.parse(text)` para recuperar o objeto.
 
@@ -245,9 +246,14 @@ O SVG é criado pela UI com paths do único atlas `data/world-map.js`, sem `<scr
 
 ### 8.2. Matemática — fluxo especial
 
-Matemática é uma partida independente em tela cheia, como Bandeiras. Ela não usa o deck global nem altera `totalWords`: a própria missão exibe seus pontos e nível. São **10 níveis**, cada um com **8 respostas corretas obrigatórias**; as posições alternam entre múltipla escolha e resposta digitada, garantindo exatamente 4 de cada tipo por nível. Um erro não incrementa pontos nem progresso e gera uma nova conta do mesmo tipo. Assim, alcançar o nível 10 exige concluir os nove níveis anteriores com 8 acertos cada; finalizar a missão requer 80 acertos.
+Matemática é um treino independente em tela cheia, como Bandeiras. Ela não usa o deck global nem altera `totalWords`: a criança escolhe primeiro a **operação** (Soma, Subtração, Multiplicação ou Divisão) e depois o **nível** na tela de configuração (`mathConfig`); o treino (`startMathGame`) gera contas somente daquele nível, sem fim e sem trocar de conteúdo sozinho. Um erro não pontua e gera outra conta do mesmo nível. A cada 10 acertos há festa (`MATH_CELEBRATION_EVERY`) e o mascote evolui. O botão 🔄 Níveis volta à configuração mantendo o treino pausado; ← Início volta ao menu inicial.
 
-Os níveis progridem de somas iguais até operações mistas: soma, subtração, multiplicação e divisão exata. O primeiro desafio do nível 10 é `37 + 86`, e as demais posições desse nível alternam as quatro operações. `mathLogic.js` deve permanecer livre de DOM e concentrar a geração das contas e das alternativas, para testes determinísticos.
+- **Soma** (5 níveis): até 5, até 10, dezena + unidade, sem vai-um, com vai-um.
+- **Subtração** (5 níveis): até 5, até 10, dezenas exatas, sem empréstimo, com empréstimo.
+- **Multiplicação** (10 níveis): tabuada do 2 ao 10, uma por nível (fatores 0–10 em ordem aleatória), + misturada.
+- **Divisão** (10 níveis): dividindo por 2 ao 10, sempre exata com resto 0 (quociente 0–10), + misturada.
+
+`mathLogic.js` deve permanecer livre de DOM e concentrar a geração das contas e das alternativas, para testes determinísticos. A fonte canônica das operações e níveis é `MATH_OPERATIONS`; a UI monta os botões de operação/nível a partir dela (lazy, ao abrir a configuração).
 
 ---
 
@@ -347,6 +353,10 @@ const CACHE_NAME = 'aprendizagem-cache-v18'; // ← incrementar a cada deploy
 ```
 
 Todos os módulos em `modules/*.js` e o atlas `data/world-map.js` precisam estar listados no array `APP_ASSETS` do `sw.js`.
+
+### Atualização de versão via botão
+
+Quando um SW novo termina de instalar e fica `waiting` com um controller ativo (ou seja, não é a primeira instalação), o `script.js` exibe o botão **⬆ Atualizar** (`#updateAppBtn`, escondido com `hidden`) no cabeçalho — nada recarrega sozinho. O toque chama `SKIP_WAITING` no worker pendente e o `controllerchange` recarrega o app uma única vez (guardas `controllerChangeHandled` + `sessionStorage`). Nunca reintroduzir `skipWaiting` automático na detecção (`updatefound`/`statechange`): a troca de versão no meio de uma partida assustaria a criança.
 
 ---
 
