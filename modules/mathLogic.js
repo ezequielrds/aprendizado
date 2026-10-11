@@ -23,7 +23,8 @@ export const MATH_OPERATIONS = [
     id: 'addition',
     symbol: '+',
     title: 'Soma',
-    icon: '➕',
+    color: '#22c55e',
+    softColor: 'rgba(34, 197, 94, .16)',
     description: 'Juntar quantidades com o sinal de mais.',
     levels: [
       { id: 'up-to-5', title: 'Somando até 5', description: 'Somas pequenas, que cabem numa mão.' },
@@ -37,7 +38,8 @@ export const MATH_OPERATIONS = [
     id: 'subtraction',
     symbol: '-',
     title: 'Subtração',
-    icon: '➖',
+    color: '#f59e0b',
+    softColor: 'rgba(245, 158, 11, .16)',
     description: 'Tirar quantidades com o sinal de menos.',
     levels: [
       { id: 'up-to-5', title: 'Tirando até 5', description: 'Subtrações pequenas, com números até 5.' },
@@ -51,7 +53,8 @@ export const MATH_OPERATIONS = [
     id: 'multiplication',
     symbol: '×',
     title: 'Multiplicação',
-    icon: '✖️',
+    color: '#8b5cf6',
+    softColor: 'rgba(139, 92, 246, .18)',
     description: 'Treine uma tabuada de cada vez.',
     levels: [
       ...tableLevels('table', number => `Tabuada do ${number}`, number => `Só contas com o número ${number}, como ${number} × 4.`, MULTIPLICATION_TABLES),
@@ -62,7 +65,8 @@ export const MATH_OPERATIONS = [
     id: 'division',
     symbol: '÷',
     title: 'Divisão',
-    icon: '➗',
+    color: '#ec4899',
+    softColor: 'rgba(236, 72, 153, .16)',
     description: 'Divisões sempre exatas, sem resto.',
     levels: [
       ...tableLevels('by', number => `Dividindo por ${number}`, number => `Só divisões por ${number}, sempre exatas.`, DIVISION_TABLES),
@@ -236,7 +240,7 @@ export function getMathQuestionType(questionIndex) {
 /**
  * Retorna a definição de uma operação, com fallback para a soma.
  * @param {string} operationId
- * @returns {{id: string, symbol: string, title: string, icon: string, description: string, levels: Array}}
+ * @returns {{id: string, symbol: string, title: string, color: string, softColor: string, description: string, levels: Array}}
  */
 export function getMathOperation(operationId) {
   return MATH_OPERATIONS.find(operation => operation.id === operationId)

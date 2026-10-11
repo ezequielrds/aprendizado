@@ -2197,34 +2197,98 @@ summary:focus-visible {
   margin: 0 0 14px;
 }
 
+.math-config-card {
+  width: min(640px, 100%);
+}
+
 .math-operation-grid {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 10px;
 }
 
+@media (min-width: 560px) {
+  .math-operation-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
 .math-operation-btn {
+  --op: #a855f7;
+  --op-soft: rgba(168, 85, 247, .16);
   display: grid;
   justify-items: center;
-  gap: 6px;
-  min-height: 84px;
-  padding: 12px 8px;
+  align-content: start;
+  gap: 8px;
+  min-width: 0;
+  min-height: 108px;
+  padding: 14px 8px 12px;
   border: 2px solid transparent;
-  border-radius: 14px;
+  border-radius: 16px;
   background: rgba(255, 255, 255, .06);
   color: var(--text);
   cursor: pointer;
-  font-size: 15px;
+  transition: transform .15s ease, border-color .15s ease, background .15s ease;
 }
 
-.math-operation-btn .math-operation-icon {
-  font-size: 30px;
+.math-operation-btn[data-operation="addition"] {
+  --op: #22c55e;
+  --op-soft: rgba(34, 197, 94, .16);
+}
+
+.math-operation-btn[data-operation="subtraction"] {
+  --op: #f59e0b;
+  --op-soft: rgba(245, 158, 11, .16);
+}
+
+.math-operation-btn[data-operation="multiplication"] {
+  --op: #8b5cf6;
+  --op-soft: rgba(139, 92, 246, .18);
+}
+
+.math-operation-btn[data-operation="division"] {
+  --op: #ec4899;
+  --op-soft: rgba(236, 72, 153, .16);
+}
+
+.math-operation-btn:hover {
+  transform: translateY(-2px);
+  border-color: var(--op);
+}
+
+.math-operation-btn:focus-visible {
+  outline: 3px solid var(--op);
+  outline-offset: 2px;
+}
+
+.math-operation-btn .math-operation-symbol {
+  display: grid;
+  place-items: center;
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  background: var(--op);
+  color: #fff;
+  font-size: 26px;
+  font-weight: 900;
   line-height: 1;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, .35);
+}
+
+.math-operation-btn strong {
+  max-width: 100%;
+  font-size: 13.5px;
+  line-height: 1.25;
+  overflow-wrap: break-word;
 }
 
 .math-operation-btn.selected {
-  border-color: #f0abfc;
-  background: rgba(192, 38, 211, .22);
+  border-color: var(--op);
+  background: var(--op-soft);
+}
+
+.math-operation-btn.selected .math-operation-symbol {
+  box-shadow: 0 0 0 3px var(--op-soft), 0 4px 14px rgba(0, 0, 0, .4);
 }
 
 .math-level-grid {
@@ -2233,9 +2297,17 @@ summary:focus-visible {
   gap: 10px;
 }
 
+@media (max-width: 480px) {
+  .math-level-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
 .math-level-btn {
   display: grid;
   gap: 4px;
+  align-content: start;
+  min-width: 0;
   min-height: 72px;
   padding: 12px;
   border: 2px solid transparent;
@@ -2244,6 +2316,17 @@ summary:focus-visible {
   color: var(--text);
   cursor: pointer;
   text-align: left;
+  transition: transform .15s ease, border-color .15s ease, background .15s ease;
+}
+
+.math-level-btn:hover {
+  transform: translateY(-2px);
+  border-color: #f0abfc;
+}
+
+.math-level-btn:focus-visible {
+  outline: 3px solid #f0abfc;
+  outline-offset: 2px;
 }
 
 .math-level-btn strong {

@@ -29,6 +29,11 @@ test('as quatro operações existem com seus níveis próprios', () => {
   assert.equal(getMathLevelCount('division'), 10);
   assert.equal(getMathOperation('multiplication').levels[0].title, 'Tabuada do 2');
   assert.equal(getMathOperation('division').levels[0].title, 'Dividindo por 2');
+  assert.deepEqual(MATH_OPERATIONS.map(operation => operation.symbol), ['+', '-', '×', '÷']);
+  for (const operation of MATH_OPERATIONS) {
+    assert.match(operation.color, /^#[0-9a-f]{6}$/u);
+    assert.match(operation.softColor, /^rgba\(/u);
+  }
 });
 
 test('operação ou nível inválido cai para a soma inicial', () => {

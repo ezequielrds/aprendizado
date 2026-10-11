@@ -184,13 +184,14 @@ function renderMathOperationButtons() {
     button.className = 'math-operation-btn';
     button.dataset.operation = operation.id;
     button.setAttribute('aria-pressed', 'false');
-    const icon = document.createElement('span');
-    icon.className = 'math-operation-icon';
-    icon.setAttribute('aria-hidden', 'true');
-    icon.textContent = operation.icon;
+    button.setAttribute('aria-label', `${operation.title}: ${operation.description}`);
+    const badge = document.createElement('span');
+    badge.className = 'math-operation-symbol';
+    badge.setAttribute('aria-hidden', 'true');
+    badge.textContent = operation.symbol;
     const label = document.createElement('strong');
     label.textContent = operation.title;
-    button.append(icon, label);
+    button.append(badge, label);
     button.addEventListener('click', () => {
       pendingOperation = operation.id;
       pendingLevel = 0;
